@@ -5,6 +5,7 @@ import LogoutButton from '../components/LogoutButton'
 import SupabaseLogo from '../components/SupabaseLogo'
 import NextJsLogo from '../components/NextJsLogo'
 import DeployButton from '../components/DeployButton'
+import Button from '@mui/material/Button'
 
 export const dynamic = 'force-dynamic'
 
@@ -57,12 +58,9 @@ export default async function Index() {
               <LogoutButton />
             </div>
           ) : (
-            <Link
-              href="/login"
-              className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
-            >
+            <Button variant="outlined" color="primary" href="/login">
               Login
-            </Link>
+            </Button>
           )}
         </div>
       </nav>

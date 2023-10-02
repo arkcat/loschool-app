@@ -1,7 +1,19 @@
+'use client'
+import * as React from 'react';
 import Link from 'next/link'
 import Messages from './messages'
+import { Box, Button, Checkbox, FormControlLabel, Grid, Input, TextField } from '@mui/material'
+import { red } from '@mui/material/colors'
+import { CheckBox } from '@mui/icons-material'
+import { ChangeEvent } from 'react'
 
 export default function Login() {
+  const [checked, setChecked] = React.useState(true);
+  function handleChange(event: ChangeEvent<HTMLInputElement>, checked: boolean): void {
+    console.warn(checked)
+    setChecked(event.target.checked);
+  }
+
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
       <Link
@@ -28,36 +40,44 @@ export default function Login() {
       <form
         className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
         action="/auth/sign-in"
-        method="post"
-      >
-        <label className="text-md" htmlFor="email">
-          Email
-        </label>
-        <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          name="email"
-          placeholder="you@example.com"
+        method="post">
+
+        <TextField
           required
+          id="outlined-required"
+          label="Email"
+          defaultValue="id@loschool.com"
         />
-        <label className="text-md" htmlFor="password">
-          Password
-        </label>
-        <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+        <TextField
+          id="outlined-password-input"
+          label="Password"
           type="password"
-          name="password"
-          placeholder="••••••••"
-          required
+          autoComplete="current-password"
         />
-        <button className="bg-green-700 rounded px-4 py-2 text-white mb-2">
+
+        <Button type="submit" variant="outlined" color="primary">
           Sign In
-        </button>
-        <button
-          formAction="/auth/sign-up"
-          className="border border-gray-700 rounded px-4 py-2 text-black mb-2"
-        >
-          Sign Up
-        </button>
+        </Button>
+
+        <FormControlLabel
+          control={
+            <Checkbox checked={checked} onChange={handleChange} name="Remember Me" />
+          }
+          label="Remember Me"
+        />
+
+        <Grid container>
+          <Grid item xs>
+            <Link href="#">
+              Forgot password?
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link href="#">
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Grid>
+        </Grid>
         <Messages />
       </form>
     </div>
