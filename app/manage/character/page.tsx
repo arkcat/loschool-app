@@ -1,5 +1,6 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
+import SelectMember from '@/components/SelectMember'
 
 export default async function Index() {
   const supabase = createServerComponentClient({ cookies })
@@ -19,6 +20,7 @@ export default async function Index() {
         <h2 className="text-lg font-bold text-center">
           Characters
         </h2>
+        <SelectMember members={members} />
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {characters?.map((character) => {
             let member = members?.find((member) => {
