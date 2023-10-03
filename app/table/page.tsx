@@ -1,6 +1,7 @@
+import type { Database } from '@/lib/database.types'
 
-export default async function Index() {
-  return (
-    <div></div>
-  )  
+type Member = Database['public']['Tables']['Member']['Row']
+
+export default function Page() {
+  return <></>
 }

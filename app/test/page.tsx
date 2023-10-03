@@ -2,7 +2,7 @@
 
 import { supabase } from '@/utils/supabase'
 import { useState, useEffect } from 'react';
-import FilteredData from './filter-page';
+import FilteredData from './server-component';
 import { FormControl, Select, MenuItem } from '@mui/material';
 
 const Page = () => {
