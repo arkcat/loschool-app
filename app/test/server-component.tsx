@@ -3,8 +3,14 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase';
 
-const FilteredData = ({ members, selectedOption }) => {
-    const [filteredData, setFilteredData] = useState([]);
+interface FilteredDataProps {
+    members: any[] | null;
+    selectedOption: string;
+}
+
+const FilteredData: React.FC<FilteredDataProps> = ({ members, selectedOption }) => {
+
+    const [filteredData, setFilteredData] = useState<any[]>([]);
 
     useEffect(() => {
         async function fetchFilteredData() {
@@ -34,7 +40,8 @@ const FilteredData = ({ members, selectedOption }) => {
                 </h2>
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
                     {filteredData?.filter((item) => {
-                        return selectedOption == 0 || selectedOption == item.member_id
+                        const selectedId = parseInt(selectedOption)
+                        return selectedId == 0 || selectedId == item.member_id
                     })?.map((character) => {
                         let member = members?.find((member) => {
                             return member.id == character.member_id
