@@ -83,32 +83,34 @@ export default function MemberSchedulePage() {
   };
 
   const daysOfWeek = ['wed', 'thu', 'fri', 'sat', 'sun', 'mon', 'tue'];
-  const timeSlots = ['10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '01', '02']
+  const timeSlots = ['13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '01', '02']
 
   return (
-    <div style={{padding:'45px'}}>
+    <div style={{ paddingTop: '45px' }}>
       <Typography variant='h3' paddingBottom={3} align='center'>{memberData?.nick_name} 스케쥴</Typography>
 
       {memberData && daysOfWeek.map(day => (
-        <Grid container key={day}>
-          <Grid item xs>
-            <Typography variant="h6" align="center" width={60}>{day.toUpperCase()}</Typography>
+        <Grid container key={day} style={{ border: '2px solid #ccc', marginBottom: '5px' }}>
+          <Grid item xs={12} sm={12} height={35} justifyContent="center" alignItems="center">
+            <Typography variant="h6" align="center"><strong>{day.toUpperCase()}</strong></Typography>
           </Grid>
-          {timeSlots.map(time => (
-            <Grid item key={time}>
-              <ScheduleBox
-                number={time}
-                value={memberData.schedule[day][time]}
-                onClick={() => handleBoxClick(day, time)}
-              />
-            </Grid>
-          ))}
+          <Grid item container xs={12} sm={12} justifyContent="center" alignItems="center" height={35}>
+            {timeSlots.map(time => (
+              <Grid key={time} alignItems={'center'} height={35}>
+                <ScheduleBox
+                  number={time}
+                  value={memberData.schedule[day][time]}
+                  onClick={() => handleBoxClick(day, time)}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </Grid>
       ))}
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '15px'}}>
-      <Button variant="outlined" color="primary" onClick={handleApplyClick}>
-        반영
-      </Button>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
+        <Button variant="outlined" color="primary" onClick={handleApplyClick}>
+          반영
+        </Button>
       </div>
     </div>
   );
