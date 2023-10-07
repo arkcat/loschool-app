@@ -38,7 +38,7 @@ const Page: React.FC<PageProps> = () => {
             <select value={selectedOption} onChange={handleChange}>
               <option value="0">전체</option>
               {options?.map((option) => {
-                return <option value={option.id}>{option.nick_name}</option>
+                return <option key={option.id} value={option.id}>{option.nick_name}</option>
               })}
             </select>
           </FormControl>
