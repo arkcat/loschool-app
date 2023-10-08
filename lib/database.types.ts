@@ -12,8 +12,10 @@ export interface Database {
             Member: {
                 Row: {
                     id: number
+                    uid: string
+                    permission: string
                     nick_name: string
-                    primary_color: string
+                    personal_color: string
                     text_color: string
                     schedule: Json | null
                 }

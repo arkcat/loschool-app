@@ -1,28 +1,33 @@
 import { supabase } from '@/utils/supabase';
 import { Button, Grid, Link, TextField } from '@mui/material';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { userAtom } from '../recoil/userAtom';
+import { useSetRecoilState } from 'recoil';
 
 const LoginForm = ({ onLoginSuccess }: { onLoginSuccess: any }) => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const router = useRouter();
-    
+    const setUser = useSetRecoilState(userAtom);
+
     const handleLogin = async (e: any) => {
         e.preventDefault();
         try {
-          const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
-          if (error) {
-            throw error;
-          }
-          router.push('/dashboard'); // 로그인 성공 시 리다이렉트할 경로
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (error) {
+                throw error;
+            }
+
+            setUser(data.user.id)
+            onLoginSuccess(data.user.id)
         } catch (error: any) {
-          console.error('로그인 오류:', error.message);
+            console.error('로그인 오류:', error.message);
+            alert("로그인에 실패했습니다.")
         }
-      };
+    };
 
     return (
         <form onSubmit={handleLogin}

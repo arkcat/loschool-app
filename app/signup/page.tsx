@@ -1,21 +1,28 @@
 'use client'
+
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase';
 import { Button, Grid, TextField, Typography } from '@mui/material';
-import { Hash } from 'crypto';
-
+import { useRouter } from 'next/navigation'
+import { parseJsonText } from 'typescript';
 const SignUp = () => {
+    const router = useRouter()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [nickname, setNickname] = useState('');
     const [members, setMemebers] = useState<any>([])
+
+    const defaultPermission = 'freshman'
+    const defaultPersonalColor = '#ffffff'
+    const defaultTextColor = '#000000'
+    const defaultSchedule = JSON.parse('{"fri":{"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0,"24":0,"01":0,"02":0},"mon":{"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0,"24":0,"01":0,"02":0},"sat":{"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0,"24":0,"01":0,"02":0},"sun":{"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0,"24":0,"01":0,"02":0},"thu":{"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0,"24":0,"01":0,"02":0},"tue":{"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0,"24":0,"01":0,"02":0},"wed":{"10":0,"11":0,"12":0,"13":0,"14":0,"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"21":0,"22":0,"23":0,"24":0,"01":0,"02":0}}')
 
     useEffect(() => {
         const fetchMembers = async () => {
             console.log("Load members")
             const { data, error } = await supabase
                 .from('Member')
-                .select('id, nick_name, primary_color, text_color')
+                .select('id')
                 .order('id');
             if (error) console.error('Error fetching members:', error);
             else setMemebers(data);
@@ -40,14 +47,16 @@ const SignUp = () => {
         const lastMemeberId = members[members.length - 1].id
 
         console.log(lastMemeberId)
-        // Auth 테이블에 가입 정보 추가
+
         const { data, error: memberError } = await supabase.from('Member').upsert([
             {
                 id: lastMemeberId + 1,
-                uid: user?.id, // Auth 테이블에서 생성된 유저의 ID 사용
+                uid: user?.id,
                 nick_name: nickname,
-                permission: 'freshman'
-                // 다른 멤버 정보 추가
+                permission: defaultPermission,
+                personal_color: defaultPersonalColor,
+                text_color: defaultTextColor,
+                schedule: defaultSchedule
             },
         ]);
 
@@ -57,14 +66,20 @@ const SignUp = () => {
         }
 
         console.log('회원 가입 성공:', data);
+        handleSuccessAddMember()
     };
+
+    const handleSuccessAddMember = () => {
+        alert('회원 가입에 성공했습니다.')
+        router.push('/')
+    }
 
     return (
         <div>
             <Typography variant='h3' paddingBottom={3} paddingTop={3} align='center'>회원 가입 페이지</Typography>
             <form onSubmit={handleSignUp}>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
-                    <Grid xs={12} justifyContent={'center'} alignItems={'center'}>
+                    <Grid item xs={12} justifyContent={'center'} alignItems={'center'}>
                         <Grid paddingBottom={2}>
                             <TextField
                                 type="email"

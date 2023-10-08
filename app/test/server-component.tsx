@@ -46,7 +46,7 @@ const FilteredData: React.FC<FilteredDataProps> = ({ members, selectedOption }) 
                         let member = members?.find((member) => {
                             return member.id == character.member_id
                         })
-                        let bgColor: string = member?.primary_color
+                        let bgColor: string = member?.personal_color
                         let textColor: string = member?.text_color
                         return (
                             <a

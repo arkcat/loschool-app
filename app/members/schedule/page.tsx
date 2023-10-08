@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase';
 import { Button, Grid, Typography } from '@mui/material';
 import ScheduleBox from '@/components/ScheduleBox';
+import { getPlainText } from '@/utils/TextUtils';
 
 interface MemberData {
   id: number;
@@ -18,7 +19,7 @@ interface MemberData {
 
 export default function MemberSchedulePage() {
   const searchParams = useSearchParams();
-  const id = searchParams.get('id') || ""
+  const id = parseInt(getPlainText(searchParams.get('id') || ""))
 
   const [memberData, setMemberData] = useState<MemberData | null>(null);
   const [schedule, setSchedule] = useState<any>();
