@@ -4,15 +4,16 @@ import Link from 'next/link'
 import SupabaseLogo from '../components/SupabaseLogo'
 import NextJsLogo from '../components/NextJsLogo'
 import LoginForm from '@/components/LoginForm'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { supabase } from '@/utils/supabase'
 
 export const dynamic = 'force-dynamic'
 
 export default function Index() {
   const router = useRouter()
   const [showLoginForm, setShowLoginForm] = useState(false)
-
+  const user = useUser()
   const handleLoginSuccess = (id: number) => {
     router.push(`/members/schedule?id=${id}`)
   };
@@ -33,12 +34,18 @@ export default function Index() {
             <strong>로스쿨</strong>
           </p>
           <div className='outlined'>
-            {
+            {user ? (
+              <div>
+                <h1>환영합니다, {user.email} 님!</h1>
+                <button onClick={() => supabase.auth.signOut()}>로그아웃</button>
+              </div>
+            ) : (
               showLoginForm === false ?
                 <div onClick={() => setShowLoginForm(true)}>로그인하기</div> :
                 <div className="loginForm">
-                  <LoginForm onLoginSuccess={handleLoginSuccess}/>
+                  <LoginForm onLoginSuccess={handleLoginSuccess} />
                 </div>
+            )
             }
           </div>
         </div>
@@ -61,3 +68,8 @@ export default function Index() {
     </div>
   )
 }
+
+function useUser() {
+  throw new Error('Function not implemented.')
+}
+

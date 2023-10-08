@@ -1,6 +1,7 @@
-import NextJsLogo from "@/components/NextJsLogo"
-import SupabaseLogo from "@/components/SupabaseLogo"
-import Link from "next/link"
+'use client'
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const resources = [
   {
@@ -26,6 +27,18 @@ const resources = [
   },
 ]
 export default async function Index() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // 권한 확인 로직을 추가
+    const userPermission: string = 'user'; // 예시로 'admin' 권한을 가진 유저로 가정
+
+    if (userPermission !== 'admin') {
+      // 권한이 없는 경우 리디렉션
+      router.push('/'); // 리디렉션할 경로를 지정
+    }
+  }, []);
+
   return (
     <div className="animate-in flex flex-col gap-14 opacity-0 max-w-4xl px-3 py-16 lg:py-24 text-foreground">
       <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />

@@ -1,30 +1,28 @@
 import { supabase } from '@/utils/supabase';
 import { Button, Grid, Link, TextField } from '@mui/material';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const LoginForm = ({ onLoginSuccess }: { onLoginSuccess: any }) => {
-    const [nickname, setNickname] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-
+    const router = useRouter();
+    
     const handleLogin = async (e: any) => {
         e.preventDefault();
-        
-        const { data, error } = await supabase
-            .from('Member')
-            .select('id, nick_name')
-            .eq('nick_name', nickname)
-
-        if (error) {
-            console.error('에러 발생:', error.message);
-            return;
+        try {
+          const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (error) {
+            throw error;
+          }
+          router.push('/dashboard'); // 로그인 성공 시 리다이렉트할 경로
+        } catch (error: any) {
+          console.error('로그인 오류:', error.message);
         }
-
-        if (data.length > 0) {
-            onLoginSuccess(data[0].id);
-        } else {
-            console.error('일치하는 사용자가 없습니다.');
-        }
-    };
+      };
 
     return (
         <form onSubmit={handleLogin}
@@ -32,10 +30,10 @@ const LoginForm = ({ onLoginSuccess }: { onLoginSuccess: any }) => {
             action="/auth/sign-in"
             method="post">
             <TextField
-                type="text"
-                placeholder="닉네임"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
+                type="email"
+                placeholder="이메일"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
             />
             <TextField
@@ -57,7 +55,7 @@ const LoginForm = ({ onLoginSuccess }: { onLoginSuccess: any }) => {
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link href="#">
+                    <Link href="/signup">
                         {"Don't have an account? Sign Up"}
                     </Link>
                 </Grid>
