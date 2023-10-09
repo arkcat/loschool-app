@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase';
-import { Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import ScheduleBox from '@/components/ScheduleBox';
 import { getPlainText } from '@/utils/TextUtils';
 
@@ -19,8 +19,9 @@ interface MemberData {
 
 export default function MemberSchedulePage() {
   const searchParams = useSearchParams();
-  const id = parseInt(getPlainText(searchParams.get('id') || ""))
+  const id = getPlainText(searchParams.get('id') || "")
 
+  console.log(id)
   const [memberData, setMemberData] = useState<MemberData | null>(null);
   const [schedule, setSchedule] = useState<any>();
 
@@ -29,8 +30,8 @@ export default function MemberSchedulePage() {
       try {
         const { data, error } = await supabase
           .from('Member')
-          .select('id, nick_name, schedule')
-          .eq('id', id)
+          .select('id, uid, nick_name, schedule')
+          .eq('uid', id)
           .single();
 
         if (data) {
@@ -71,7 +72,7 @@ export default function MemberSchedulePage() {
       const { data, error } = await supabase
         .from('Member')
         .update({ schedule: schedule })
-        .eq('id', id);
+        .eq('uid', id);
 
       if (error) {
         throw error;
@@ -84,35 +85,44 @@ export default function MemberSchedulePage() {
   };
 
   const daysOfWeek = ['wed', 'thu', 'fri', 'sat', 'sun', 'mon', 'tue'];
-  const timeSlots = ['13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '01', '02']
+  const timeSlots = ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '01', '02']
 
   return (
-    <div style={{ paddingTop: '45px' }}>
-      <Typography variant='h3' paddingBottom={3} align='center'>{memberData?.nick_name} 스케쥴</Typography>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      margin={1}
+    >
 
-      {memberData && daysOfWeek.map(day => (
-        <Grid container key={day} style={{ border: '2px solid #ccc', marginBottom: '5px' }}>
-          <Grid item xs={12} sm={12} height={35} justifyContent="center" alignItems="center">
-            <Typography variant="h6" align="center"><strong>{day.toUpperCase()}</strong></Typography>
+      <Typography variant='h3' paddingBottom={3}>{memberData?.nick_name} 스케쥴</Typography>
+
+      <Box>
+        {memberData && daysOfWeek.map(day => (
+          <Grid key={day} item container justifyContent="center" alignItems="center" border={1} margin={1}>
+            <Grid>
+              <Typography variant="h6" align="center"><strong>{day.toUpperCase()}</strong></Typography>
+            </Grid>
+            <Grid item container justifyContent="center" alignItems="center" height={35}>
+              {timeSlots.map(time => (
+                <Grid key={time} alignItems={'center'} height={35}>
+                  <ScheduleBox
+                    number={time}
+                    value={memberData.schedule[day][time]}
+                    onClick={() => handleBoxClick(day, time)}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
-          <Grid item container xs={12} sm={12} justifyContent="center" alignItems="center" height={35}>
-            {timeSlots.map(time => (
-              <Grid key={time} alignItems={'center'} height={35}>
-                <ScheduleBox
-                  number={time}
-                  value={memberData.schedule[day][time]}
-                  onClick={() => handleBoxClick(day, time)}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </Grid>
-      ))}
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
-        <Button variant="outlined" color="primary" onClick={handleApplyClick}>
-          반영
-        </Button>
-      </div>
-    </div>
+        ))}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
+          <Button variant="outlined" color="primary" onClick={handleApplyClick}>
+            반영
+          </Button>
+        </div>
+      </Box>
+    </Box>
   );
 }

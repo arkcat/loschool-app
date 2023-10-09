@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase'
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from '@mui/material';
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from '@mui/material';
 
 interface PartyData {
   id: number
@@ -62,11 +62,11 @@ const WeeklyPlan = () => {
 
     return (
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 800, border: 1 }}>
-          <Table stickyHeader aria-label="sticky table" style={{overflowX:'auto'}}>
+        <TableContainer sx={{ maxHeight: 800, borderTop: 1, borderRight: 1 }}>
+          <Table stickyHeader aria-label="sticky table" style={{ overflowX: 'auto' }}>
             <TableHead>
               <TableRow>
-                <TableCell align={'center'}>요일</TableCell>
+                <TableCell align={'center'} sx={{ borderLeft: 1 }}>요일</TableCell>
                 {days.map((day, index) => (
                   <TableCell key={index} align={'center'} sx={{ borderLeft: 1 }}>{day}</TableCell>
                 ))}
@@ -78,7 +78,7 @@ const WeeklyPlan = () => {
                   <TableCell
                     key={days[index]}
                     align={'center'}
-                    sx={{ borderLeft: 1}}>{timeSlots[index]}</TableCell>
+                    sx={{ borderLeft: 1 }}>{timeSlots[index]}</TableCell>
                   {daySchedule.schedule.map(hourData => (
                     <StyledTableCell key={hourData.day}
                       align={'center'}
@@ -105,10 +105,16 @@ const WeeklyPlan = () => {
   };
 
   return (
-    <div style={{ padding: '12px' }}>
-      <Typography variant='h3' paddingBottom={3} align='center'>Weekly Plan</Typography>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      margin={1}
+    >
+      <Typography variant='h3' paddingBottom={3} align='center'>이번주 시간표</Typography>
       {generateWeeklyPlan()}
-    </div>
+    </Box>
   );
 
 };

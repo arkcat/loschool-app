@@ -1,0 +1,58 @@
+.table-container {
+    max-height: 600px;
+    /* 필요한 높이에 따라 조절하세요 */
+    border: 1px solid #ccc;
+    /* 테두리 추가 */
+    overflow: hidden;
+    /* 스크롤을 overlap으로 설정 */
+    scrollbar-width: 'thin';
+}
+
+tbody {
+    max-height: 550px;
+    /* 필요한 높이에 따라 조절하세요 */
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead,
+tbody {
+    display: block;
+}
+
+thead {
+    background-color: #f9f9f9;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+}
+
+thead,
+tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+
+tbody td {
+    word-break: break-all;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th:first-child,
+td:first-child {
+    border-left: 1px solid #ddd;
+}

@@ -19,6 +19,15 @@ export interface Database {
                     text_color: string
                     schedule: Json | null
                 }
+            },
+            Party: {
+                Row: {
+                    id: number
+                    raid_id: number
+                    day: number
+                    time: number
+                    member: string[]
+                }
             }
         }
     }
