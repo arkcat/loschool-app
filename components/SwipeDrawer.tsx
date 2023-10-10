@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
@@ -9,15 +10,20 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import CheckBoxIcon from '@mui/icons-material/CheckBoxOutlined';
+import MainIcon from '@mui/icons-material/HomeOutlined'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonthOutlined'
+import ManageMemberIcon from '@mui/icons-material/ManageAccountsOutlined'
+import ManageCharacterIcon from '@mui/icons-material/ManageAccountsSharp'
+import ManageRaidIcon from '@mui/icons-material/ManageSearchOutlined'
+import MenuIcon from '@mui/icons-material/Menu';
 import userAtom from '@/recoil/userAtom';
+
 import { useRecoilState } from 'recoil';
 import { supabase } from '@/utils/supabase';
-import { IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import { useRouter } from 'next/navigation';
 import { getBase64Text } from '@/utils/TextUtils';
 import { useEffect } from 'react';
+import { Typography } from '@mui/material';
 
 type Anchor = 'left';
 
@@ -44,23 +50,23 @@ export default function SwipeableTemporaryDrawer() {
 
     const getLoginMember = async (uid: string) => {
         try {
-          console.log(`fetch members ${uid}`)
-          const { data, error } = await supabase
-            .from('Member')
-            .select('id, uid, nick_name')
-            .eq('uid', uid);
-    
-          if (error) {
-            throw error;
-          }
+            console.log(`fetch members ${uid}`)
+            const { data, error } = await supabase
+                .from('Member')
+                .select('id, uid, nick_name')
+                .eq('uid', uid);
 
-          if (data.length == 1) {
-            setUserState({ id: data[0].uid, name: data[0].nick_name })
-          }
+            if (error) {
+                throw error;
+            }
+
+            if (data.length == 1) {
+                setUserState({ id: data[0].uid, name: data[0].nick_name })
+            }
         } catch (error: any) {
-          console.error('Error updating member:', error.message);
+            console.error('Error updating member:', error.message);
         }
-      };
+    };
 
     const [state, setState] = React.useState({
         top: false,
@@ -133,6 +139,41 @@ export default function SwipeableTemporaryDrawer() {
         )
     }
 
+    const showManageMenuList = () => {
+        return (
+            <List>
+                <ListItem key={'manage member'} disablePadding>
+                    <ListItemButton onClick={() => { router.push('/manage/member') }}>
+                        <ListItemIcon>
+                            <ManageMemberIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'멤버 관리'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={'manage character'} disablePadding>
+                    <ListItemButton onClick={() => {
+                        router.push(`/manage/character`)
+                    }}>
+                        <ListItemIcon>
+                            <ManageCharacterIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'캐릭터 관리'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={'manage raid'} disablePadding>
+                    <ListItemButton onClick={() => {
+                        router.push(`/manage/raid`)
+                    }}>
+                        <ListItemIcon>
+                            <ManageRaidIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'레이드 관리'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        )
+    }
+
     const list = (anchor: Anchor) => (
         <Box
             sx={{ width: 'auto', padding: '20px' }}
@@ -148,13 +189,14 @@ export default function SwipeableTemporaryDrawer() {
                 <ListItem key={'main'} disablePadding>
                     <ListItemButton onClick={() => { router.push('/') }}>
                         <ListItemIcon>
-                            <CalendarMonthIcon />
+                            <MainIcon />
                         </ListItemIcon>
                         <ListItemText primary={'메인 화면'} />
                     </ListItemButton>
                 </ListItem>
             </List>
             {userState.id != '' && showMenuList()}
+            {/*Need check permission*/userState.id != '' && showManageMenuList()}
         </Box>
     );
 
@@ -163,18 +205,20 @@ export default function SwipeableTemporaryDrawer() {
             {(['left'] as const).map((anchor) => (
                 <React.Fragment key={anchor}>
 
-                    <IconButton
+                    <Button
                         color="inherit"
-                        aria-label="open drawer"
                         onClick={toggleDrawer(anchor, true)}
-                        edge="start"
                         sx={{
-                            marginLeft: 2
-                        }}>
-
-                        <MenuIcon />
-
-                    </IconButton>
+                            marginLeft: 2,
+                            '&:hover': {
+                                backgroundColor: 'transparent',
+                            },
+                        }}
+                        disableRipple
+                    >
+                        <MenuIcon sx={{ width: 40, height: 40, margin: 1 }} />
+                        <Typography variant='h4'>{userState.name}</Typography>
+                    </Button>
 
                     <SwipeableDrawer
                         anchor={anchor}

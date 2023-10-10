@@ -4,12 +4,10 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabase'
 import { useRecoilState } from 'recoil';
 import { userAtom } from '../recoil/userAtom';
-import Link from 'next/link'
 import LoginForm from '@/components/LoginForm'
-import UserMenu from '@/components/UserMenu'
-import Button from '@mui/material/Button'
-import WeeklyPlan from './test/page';
 import { Box, Typography } from '@mui/material';
+import Image from 'next/image'
+import logo from './res/logo.png'
 
 export const dynamic = 'force-dynamic'
 
@@ -68,22 +66,27 @@ export default function Index() {
   return (
     <Box
       display="flex"
+      position="relative"
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      height="50vh"
-      gap={5}
-    >
-      <Typography variant="h1" gutterBottom>
-        로스쿨
-      </Typography>
-      <Typography variant="subtitle1">
-        사랑과 존중과 배려가 있는 길드
-      </Typography>
+      height="95vh">
+      <Box
+        display="flex"
+        position="relative"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        height="50vh"
+        gap={5}
+      >
+        <Typography variant="h1" style={{ fontFamily: 'Times New Roman, serif', fontWeight: 'bold' }}>
+          Lo, School
+        </Typography>
 
-      <Box>
-        {
-          !hasUserState() &&
+        <Box>
+          {
+            !hasUserState() &&
             (
               <div className='outlined'>
                 {showLoginForm === false ?
@@ -94,10 +97,17 @@ export default function Index() {
                 }
               </div>
             )
-        }
+          }
+        </Box>
+      </Box>
+
+      <Box position={'absolute'} bottom={0} marginBottom={5}>
+        <Image
+          src={logo}
+          width="150" height="50"
+          alt="Logo" />
       </Box>
     </Box>
-
   )
 }
 

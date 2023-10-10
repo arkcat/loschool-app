@@ -1,5 +1,5 @@
 import { supabase } from '@/utils/supabase';
-import { Box, Button, Grid, Link, TextField } from '@mui/material';
+import { Box, Button, Link, TextField } from '@mui/material';
 import { useState } from 'react';
 import { userAtom } from '../recoil/userAtom';
 import { useSetRecoilState } from 'recoil';
@@ -56,7 +56,7 @@ const LoginForm = ({ onLoginSuccess }: { onLoginSuccess: any }) => {
                     required
                 />
 
-                <Button type="submit" variant="outlined" color="primary">
+                <Button type="submit" variant="contained" color="primary">
                     로그인
                 </Button>
 

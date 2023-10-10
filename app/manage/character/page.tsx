@@ -1,9 +1,9 @@
 'use client'
 
 import { supabase } from '@/utils/supabase'
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect } from 'react';
 import FilteredData from './filter-page';
-import { FormControl, Select, MenuItem } from '@mui/material';
+import { FormControl, Select, MenuItem, Typography, Box } from '@mui/material';
 
 interface PageProps { }
 
@@ -21,24 +21,24 @@ const Page: React.FC<PageProps> = () => {
     fetchOptions();
   }, []);
 
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (e: any) => {
+    console.log(e.target.value)
     setSelectedOption(e.target.value);
   };
 
   return (
-    <div>
-      <h1>페이지</h1>
+    <Box textAlign="center">
+      <Typography variant="h1" align={'center'} margin={2}>Characters</Typography>
       <FormControl>
-        <select value={selectedOption} onChange={handleChange}>
-          <option value="0">전체</option>
+        <Select value={selectedOption} onChange={handleChange}>
+          <MenuItem value="0">전체</MenuItem>
           {options?.map((option) => {
-            return <option value={option.id}>{option.nick_name}</option>
+            return <MenuItem value={option.id}>{option.nick_name}</MenuItem>
           })}
-        </select>
+        </Select>
       </FormControl>
-      {/* 선택된 드롭다운 값으로 데이터 필터링 */}
       <FilteredData members={options} selectedOption={selectedOption} />
-    </div>
+    </Box>
   );
 };
 

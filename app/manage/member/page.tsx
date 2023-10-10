@@ -2,6 +2,7 @@
 
 import { getBase64Text } from '@/utils/TextUtils';
 import { supabase } from '@/utils/supabase';
+import { Grid, Box, Typography, Card, CardContent, Button, Popover } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -10,6 +11,8 @@ export const dynamic = 'force-dynamic'
 export default function Index() {
   const router = useRouter()
   const [members, setMembers] = useState<any>([]);
+
+  const [clickMember, setClickMember] = useState<any>(null);
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -24,41 +27,79 @@ export default function Index() {
     fetchMembers();
   }, []);
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleMenuItemClick = (action: any) => {
+    handleClose();
+    switch (action) {
+      case 'details':
+        router.push(`/members/details?id=${getBase64Text(String(clickMember.id))}`);
+        break;
+      case 'edit':
+        break;
+      case 'delete':
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
-    <div className="animate-in flex flex-col gap-14 opacity-0 max-w-4xl px-3 py-16 lg:py-24 text-foreground">
-      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
-      <div className="flex flex-col gap-8 text-foreground">
-        <h2 className="text-lg font-bold text-center">
-          Members
-        </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-6 gap-2">
+    <Box padding={2}>
+      <Typography variant="h2" align={'center'} margin={2}>Members</Typography>
+      <Box>
+        <Grid container spacing={2}>
           {members?.map((member: any) => {
-            let bgColor: string = member.personal_color
-            let textColor: string = member.text_color
+            let bgColor = member.personal_color;
+            let textColor = member.text_color;
+
             return (
-              <a
-                onClick={() => { router.push(`/members/details?id=${getBase64Text(String(member.id))}`) }}
-                key={member.id}
-                className="relative flex flex-col group rounded-lg border p-6 hover:border-foreground"
-                target="_blank"
-                rel="noreferrer"
-                style={{ backgroundColor: bgColor, color: textColor }}
-              >
-                <h3 className="font-bold mb-2  min-h-[20px] lg:min-h-[30px]">
-                  {member.nick_name}
-                </h3>
-                <div className="flex flex-col grow gap-1 justify-between">
-                  <p className="text-sm">{bgColor}</p>
-                  <p className="text-sm">{textColor}</p>
-                  <p className="text-sm">{member.permission}</p>
-                </div>
-              </a>
-            )
-          })
-          }
-        </div>
-      </div>
-    </div>
-  )
+              <Grid item xs={6} lg={2} key={member.id}>
+                <Card onClick={() => { router.push(`/members/details?id=${getBase64Text(String(member.id))}`); }} style={{ backgroundColor: bgColor, color: textColor }}>
+                  <CardContent>
+                    <Typography variant="h4" className="font-bold mb-2 min-h-[20px] lg:min-h-[30px]">
+                      {member.nick_name}
+                    </Typography>
+                    {/* <SettingIcon onClick={(event) => { setClickMember(member); handleMenuClick(event) }} /> */}
+                    <Box marginTop={2}>
+                      <Typography variant="body2">{bgColor}</Typography>
+                      <Typography variant="body2">{textColor}</Typography>
+                      <Typography variant="body2">{member.permission}</Typography>
+                    </Box>
+                  </CardContent>
+                  <Popover
+                    open={Boolean(anchorEl)}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                  >
+                    <Box p={2}>
+                      <Button onClick={() => handleMenuItemClick('details')}>Details</Button>
+                      <Button onClick={() => handleMenuItemClick('edit')}>Edit</Button>
+                      <Button onClick={() => handleMenuItemClick('delete')}>Delete</Button>
+                    </Box>
+                  </Popover>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Box>
+    </Box>
+  );
 }
