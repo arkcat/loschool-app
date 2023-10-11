@@ -7,7 +7,8 @@ import { FormControl, Select, MenuItem, Typography, Box } from '@mui/material'
 
 interface PageProps { }
 
-const Page: React.FC<PageProps> = () => {
+export default function CharactersPage(props: PageProps) {
+
   const [options, setOptions] = useState<any[]>([])
   const [selectedOption, setSelectedOption] = useState<string>('')
 
@@ -27,7 +28,7 @@ const Page: React.FC<PageProps> = () => {
   }
 
   return (
-    <Box textAlign="center">
+    <Box display="flex" flexDirection="column" alignItems="center">
       <Typography variant="h1" align={'center'} margin={2}>Characters</Typography>
       <FormControl>
         <Select value={selectedOption} onChange={handleChange}>
@@ -41,5 +42,3 @@ const Page: React.FC<PageProps> = () => {
     </Box>
   )
 }
-
-export default Page

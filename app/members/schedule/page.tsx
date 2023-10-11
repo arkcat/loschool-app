@@ -21,7 +21,6 @@ export default function MemberSchedulePage() {
   const searchParams = useSearchParams()
   const id = getPlainText(searchParams.get('id') || "")
 
-  console.log(id)
   const [memberData, setMemberData] = useState<MemberData | null>(null)
   const [schedule, setSchedule] = useState<any>()
 
@@ -38,8 +37,6 @@ export default function MemberSchedulePage() {
           setMemberData(data)
           setSchedule(data.schedule)
         }
-
-        console.log(memberData)
 
         if (error) {
           throw error

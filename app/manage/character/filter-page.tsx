@@ -7,9 +7,11 @@ interface FilteredDataProps {
     selectedOption: string
 }
 
-const FilteredData: React.FC<FilteredDataProps> = ({ members, selectedOption }) => {
+export default function CharactersFilterPage(props: FilteredDataProps) {
 
     const [filteredData, setFilteredData] = useState<any[]>([])
+
+    const { members, selectedOption } = props
 
     useEffect(() => {
         async function fetchFilteredData() {
@@ -31,41 +33,41 @@ const FilteredData: React.FC<FilteredDataProps> = ({ members, selectedOption }) 
         }
     }, [selectedOption])
 
+
+    function makeCharacterCard(character: any) {
+        const member = members?.find((member) => {
+            return member.id == character.member_id
+        })
+        const bgColor: string = member?.personal_color
+        const textColor: string = member?.text_color
+        return (
+            <Grid item xs={6} lg={3} key={member.id}>
+                <Card key={character.id} style={{ backgroundColor: bgColor, color: textColor }} >
+                    <CardContent>
+                        <Typography variant="h5">{character.char_name}</Typography>
+                        <Box>
+                            <Typography variant="body1">{character.char_class}</Typography>
+                            <Typography variant="body1">{character.char_level}</Typography>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Grid>
+        )
+    }
+
     return (
         <Box padding={2}>
             <Grid container spacing={2}>
-                {filteredData?.filter((item) => {
-                    const selectedId = parseInt(selectedOption)
-                    return selectedId == item.member_id
-                })?.map((character) => {
-                    let member = members?.find((member) => {
-                        return member.id == character.member_id
+                {
+                    filteredData?.filter((item) => {
+                        const selectedId = parseInt(selectedOption)
+                        return selectedId == item.member_id
+                    })?.map((character) => {
+
+                        return makeCharacterCard(character)
                     })
-                    let bgColor: string = member?.personal_color
-                    let textColor: string = member?.text_color
-                    return (
-                        <Grid item xs={6} lg={2} key={member.id}>
-                            <Card key={character.id} style={{ backgroundColor: bgColor, color: textColor }} >
-                                <CardContent>
-                                    <Typography variant="h5">
-                                        {character.char_name}
-                                    </Typography>
-                                    <Box >
-                                        <Typography variant="body1">
-                                            {character.char_class}
-                                        </Typography>
-                                        <Typography variant="body1">
-                                            {character.char_level}
-                                        </Typography>
-                                    </Box>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    )
-                })}
+                }
             </Grid>
         </Box>
     )
 }
-
-export default FilteredData

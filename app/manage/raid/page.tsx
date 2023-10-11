@@ -1,42 +1,50 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
+'use client'
 
+import { Box, Typography, Grid, Card, CardContent } from '@mui/material'
+import { supabase } from '@/utils/supabase'
+import { useEffect, useState } from 'react'
 export const dynamic = 'force-dynamic'
 
-export default async function Index() {
-  const supabase = createServerComponentClient({ cookies })
+function makeRaidCard(raidId: number, raidName: string) {
+  return (<Grid item xs={6} lg={4} key={raidId}>
+    <Card>
+      <CardContent>
+        <Typography variant="h6">
+          {raidName}
+        </Typography>
+      </CardContent>
+    </Card>
+  </Grid>)
+}
 
-  const {
-    data: raids
-  } = await supabase.from("Raid").select().order('id')
+export default function RaidPage() {
 
-  console.log(raids)
+  const [raids, setRaids] = useState<any>([])
+
+  useEffect(() => {
+    const fetchRaid = async () => {
+      const { data, error } = await supabase
+        .from("Raid")
+        .select()
+        .order('id')
+
+      if (error) console.error('Error fetching raids:', error)
+      else setRaids(data)
+    }
+
+    fetchRaid()
+  }, [])
+
   return (
-    <div className="animate-in flex flex-col gap-14 opacity-0 max-w-4xl px-3 py-16 lg:py-24 text-foreground">
-      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
-      <div className="flex flex-col gap-8 text-foreground">
-        <h2 className="text-lg font-bold text-center">
-          Raid
-        </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          {
-            raids?.map((raid) => {
-              return (
-                <a
-                  key={raid.id}
-                  className="relative flex flex-col group rounded-lg border p-6 hover:border-foreground"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <h3 className="font-bold mb-2  min-h-[40px] lg:min-h-[60px]">
-                    {raid.raid_name}
-                  </h3>
-                </a>
-              )
-            })
-          }
-        </div>
-      </div>
-    </div>
+    <Box padding={2}>
+      <Typography variant="h2" align={'center'} margin={2}>Raid</Typography>
+      <Box>
+        <Grid container spacing={2}>
+          {raids?.map((raid: any) => {
+            return makeRaidCard(raid.id, raid.raid_name)
+          })}
+        </Grid>
+      </Box>
+    </Box>
   )
 }

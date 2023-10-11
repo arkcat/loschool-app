@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { userAtom } from '../recoil/userAtom'
 import { useSetRecoilState } from 'recoil'
 
-const LoginForm = ({ onLoginSuccess }: { onLoginSuccess: any }) => {
+export default function LoginForm(onLoginSuccess: any) {
+
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
 
@@ -54,7 +55,7 @@ const LoginForm = ({ onLoginSuccess }: { onLoginSuccess: any }) => {
                     required
                 />
 
-                <Button type="submit" variant="contained" color="primary">11</Button>
+                <Button type="submit" variant="contained" color="primary" disableFocusRipple>11</Button>
 
                 <Link href="/signup">
                     {"계정이 없으시면 회원 가입을 해주세요"}
@@ -63,5 +64,3 @@ const LoginForm = ({ onLoginSuccess }: { onLoginSuccess: any }) => {
         </form>
     )
 }
-
-export default LoginForm

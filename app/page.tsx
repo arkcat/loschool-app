@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
 
 export default function Index() {
   const [showLoginForm, setShowLoginForm] = useState(false)
-  const [userState, setUserState] = useRecoilState<any|null>(userAtom)
+  const [userState, setUserState] = useRecoilState<any | null>(userAtom)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -59,22 +59,14 @@ export default function Index() {
 
   return (
     <Box
-      display="flex"
-      position="relative"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      height="95vh">
+      display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" height="95vh"
+    >
       <Box
-        display="flex"
-        position="relative"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        height="50vh"
-        gap={5}
+        display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" gap={5} marginTop={-25}
       >
-        <Typography variant="h1" style={{ fontFamily: 'Times New Roman, serif', fontWeight: 'bold' }}>
+        <Typography
+          variant="h1" style={{ fontFamily: 'Times New Roman, serif', fontWeight: 'bold' }}
+        >
           Lo, School
         </Typography>
 

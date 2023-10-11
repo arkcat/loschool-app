@@ -29,7 +29,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   }
 }))
 
-const WeeklyPlan = () => {
+interface PageProps { }
+
+export default function WeeklyPlan(props: PageProps) {
   const [partyData, setPartyData] = useState<PartyData[]>([])
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const WeeklyPlan = () => {
     fetchPartyData()
   }, [])
 
-  const generateWeeklyPlan = () => {
+  function generateWeeklyPlan() {
     const days = ['수', '목', '금', '토', '일', '월', '화']
     const timeSlots = ['13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '01', '02']
     const weeklyPlan = []
@@ -118,5 +120,3 @@ const WeeklyPlan = () => {
   )
 
 }
-
-export default WeeklyPlan

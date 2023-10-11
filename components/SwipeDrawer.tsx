@@ -111,7 +111,7 @@ export default function SwipeableTemporaryDrawer() {
                 alignItems="center"
                 justifyContent="center">
                 <h1>환영합니다, {userState.nick_name} 님!</h1>
-                <Button variant='contained' onClick={handleLogout}>ㅅㄱㅇ</Button>
+                <Button variant='contained' onClick={handleLogout} disableFocusRipple>ㅅㄱㅇ</Button>
             </Box>
         )
     }
@@ -129,7 +129,7 @@ export default function SwipeableTemporaryDrawer() {
                 </ListItem>
                 <ListItem key={'raid'} disablePadding>
                     <ListItemButton onClick={() => {
-                        router.push(`/members/schedule?id=${getBase64Text(userState.member_id)}`)
+                        router.push(`/members/schedule?id=${getBase64Text(userState.uid)}`)
                     }}>
                         <ListItemIcon>
                             <CheckBoxIcon />

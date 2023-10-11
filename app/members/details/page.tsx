@@ -53,7 +53,7 @@ export default function MemberDetailPage() {
         throw error
       }
 
-      console.log('Member 정보가 업데이트되었습니다.')
+      alert("멤버 정보가 저장되었습니다.")
     } catch (error: any) {
       console.error('Error updating member:', error.message)
     }
