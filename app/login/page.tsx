@@ -1,5 +1,5 @@
 'use client'
-import * as React from 'react';
+import * as React from 'react'
 import Link from 'next/link'
 import Messages from './messages'
 import { Box, Button, Checkbox, FormControlLabel, Grid, Input, TextField } from '@mui/material'
@@ -8,10 +8,10 @@ import { CheckBox } from '@mui/icons-material'
 import { ChangeEvent } from 'react'
 
 export default function Login() {
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = React.useState(true)
   function handleChange(event: ChangeEvent<HTMLInputElement>, checked: boolean): void {
     console.warn(checked)
-    setChecked(event.target.checked);
+    setChecked(event.target.checked)
   }
 
   return (

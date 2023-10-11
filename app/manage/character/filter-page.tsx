@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '@/utils/supabase';
-import { Box, Typography, Card, CardContent, Grid } from '@mui/material';
+import { useState, useEffect } from 'react'
+import { supabase } from '@/utils/supabase'
+import { Box, Typography, Card, CardContent, Grid } from '@mui/material'
 
 interface FilteredDataProps {
-    members: any[] | null;
-    selectedOption: string;
+    members: any[] | null
+    selectedOption: string
 }
 
 const FilteredData: React.FC<FilteredDataProps> = ({ members, selectedOption }) => {
 
-    const [filteredData, setFilteredData] = useState<any[]>([]);
+    const [filteredData, setFilteredData] = useState<any[]>([])
 
     useEffect(() => {
         async function fetchFilteredData() {
@@ -17,19 +17,19 @@ const FilteredData: React.FC<FilteredDataProps> = ({ members, selectedOption }) 
                 .from('Character')
                 .select()
                 .eq('member_id', parseInt(selectedOption))
-                .order('id');
+                .order('id')
 
             if (data) {
-                setFilteredData(data);
+                setFilteredData(data)
             }
         }
 
         if (selectedOption) {
-            fetchFilteredData();
+            fetchFilteredData()
         } else {
-            setFilteredData([]);
+            setFilteredData([])
         }
-    }, [selectedOption]);
+    }, [selectedOption])
 
     return (
         <Box padding={2}>
@@ -65,7 +65,7 @@ const FilteredData: React.FC<FilteredDataProps> = ({ members, selectedOption }) 
                 })}
             </Grid>
         </Box>
-    );
-};
+    )
+}
 
-export default FilteredData;
+export default FilteredData

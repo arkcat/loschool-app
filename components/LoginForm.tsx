@@ -1,33 +1,31 @@
-import { supabase } from '@/utils/supabase';
-import { Box, Button, Link, TextField } from '@mui/material';
-import { useState } from 'react';
-import { userAtom } from '../recoil/userAtom';
-import { useSetRecoilState } from 'recoil';
+import { supabase } from '@/utils/supabase'
+import { Box, Button, Link, TextField } from '@mui/material'
+import { useState } from 'react'
+import { userAtom } from '../recoil/userAtom'
+import { useSetRecoilState } from 'recoil'
 
 const LoginForm = ({ onLoginSuccess }: { onLoginSuccess: any }) => {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const setUser = useSetRecoilState(userAtom);
+    const [email, setEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
 
     const handleLogin = async (e: any) => {
-        e.preventDefault();
+        e.preventDefault()
         try {
             const { data, error } = await supabase.auth.signInWithPassword({
                 email,
                 password,
-            });
+            })
 
             if (error) {
-                throw error;
+                throw error
             }
 
-            setUser({ id: data.user.id, name: '' })
             onLoginSuccess(data.user.id)
         } catch (error: any) {
-            console.error('로그인 오류:', error.message);
+            console.error('로그인 오류:', error.message)
             alert("로그인에 실패했습니다.")
         }
-    };
+    }
 
     return (
         <form onSubmit={handleLogin}
@@ -56,16 +54,14 @@ const LoginForm = ({ onLoginSuccess }: { onLoginSuccess: any }) => {
                     required
                 />
 
-                <Button type="submit" variant="contained" color="primary">
-                    로그인
-                </Button>
+                <Button type="submit" variant="contained" color="primary">11</Button>
 
                 <Link href="/signup">
                     {"계정이 없으시면 회원 가입을 해주세요"}
                 </Link>
             </Box>
         </form>
-    );
-};
+    )
+}
 
-export default LoginForm;
+export default LoginForm

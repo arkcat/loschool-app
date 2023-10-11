@@ -1,19 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { supabase } from '@/utils/supabase';
-import { Box, Button, Grid, MenuItem, Select, TextField, Typography } from '@mui/material';
-import { getPlainText } from '@/utils/TextUtils';
-import { supabaseAdmin } from '@/utils/supabaseAdmin';
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { supabase } from '@/utils/supabase'
+import { Box, Button, Grid, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { getPlainText } from '@/utils/TextUtils'
+import { supabaseAdmin } from '@/utils/supabaseAdmin'
 
 export default function MemberDetailPage() {
   const router = useRouter()
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()
   const id = parseInt(getPlainText(searchParams.get('id') || ""))
 
-  const [member, setMember] = useState<any>(null);
-  const [selectedOption, setSelectedOption] = useState('freshman');
+  const [member, setMember] = useState<any>(null)
+  const [selectedOption, setSelectedOption] = useState('freshman')
 
   useEffect(() => {
     const fetchMember = async () => {
@@ -21,7 +21,7 @@ export default function MemberDetailPage() {
         .from('Member')
         .select()
         .eq('id', id)
-        .single();
+        .single()
 
       if (error) { console.error('Error fetching member:', error) }
       else {
@@ -30,12 +30,12 @@ export default function MemberDetailPage() {
           setSelectedOption(data.permission)
         }
       }
-    };
+    }
 
     if (id) {
-      fetchMember();
+      fetchMember()
     }
-  }, [id]);
+  }, [id])
 
   const handleUpdateMember = async () => {
     try {
@@ -47,31 +47,31 @@ export default function MemberDetailPage() {
           text_color: member?.text_color,
           permission: member?.permission
         })
-        .eq('id', id);
+        .eq('id', id)
 
       if (error) {
-        throw error;
+        throw error
       }
 
-      console.log('Member 정보가 업데이트되었습니다.');
+      console.log('Member 정보가 업데이트되었습니다.')
     } catch (error: any) {
-      console.error('Error updating member:', error.message);
+      console.error('Error updating member:', error.message)
     }
-  };
+  }
 
   const deletePromises = async (uid: string) => {
     const { error: deleteError } = await supabase
       .from('Member')
       .delete()
-      .eq('uid', uid);
+      .eq('uid', uid)
 
     if (deleteError) {
-      throw deleteError;
+      throw deleteError
     }
-  };
+  }
 
   const deleteMember = async (name: string, uid: string) => {
-    const { data, error } = await supabaseAdmin.auth.admin.deleteUser(uid);
+    const { data, error } = await supabaseAdmin.auth.admin.deleteUser(uid)
     if (error) {
       console.error("유저 삭제 실패")
       return
@@ -148,12 +148,12 @@ export default function MemberDetailPage() {
         </Button>
 
         <Button variant='contained' onClick={() => {
-          const shouldDelete = window.confirm(`[${member.nick_name}] 정말로 삭제하시겠습니까?`);
+          const shouldDelete = window.confirm(`[${member.nick_name}] 정말로 삭제하시겠습니까?`)
           if (shouldDelete) {
             deleteMember(member.nick_name, member.uid)
           }
         }}>멤버삭제</Button>
       </Box>
     </Box>
-  );
+  )
 }

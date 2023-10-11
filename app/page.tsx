@@ -2,67 +2,61 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabase'
-import { useRecoilState } from 'recoil';
-import { userAtom } from '../recoil/userAtom';
+import { useRecoilState } from 'recoil'
+import { userAtom } from '../recoil/userAtom'
 import LoginForm from '@/components/LoginForm'
-import { Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
 import logo from './res/logo.png'
 
 export const dynamic = 'force-dynamic'
 
 export default function Index() {
-  const [member, setMember] = useState<any>([]);
   const [showLoginForm, setShowLoginForm] = useState(false)
-  const [userState, setUserState] = useRecoilState(userAtom);
+  const [userState, setUserState] = useRecoilState<any|null>(userAtom)
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         console.log(`fetch user session ${userState}`)
-        const authSession = supabase.auth.getSession();
-        console.log(authSession)
+        const authSession = supabase.auth.getSession()
         const currentSession = (await authSession).data.session
+        console.log(`session = ${currentSession}`)
         if (currentSession !== null) {
-          setUserState({ id: currentSession.user.id, name: member.nick_name });
           handleUpdateMember(currentSession.user.id)
         } else {
-          setUserState({ id: '', name: '' });
+          setUserState(null)
         }
       } catch (error: any) {
-        console.error('사용자 정보 가져오기 오류:', error.message);
+        console.error('사용자 정보 가져오기 오류:', error.message)
       }
-    };
+    }
 
-    fetchUser();
-  }, []);
+    fetchUser()
+  }, [])
 
   const handleUpdateMember = async (uid: string) => {
     try {
-      console.log(`fetch members ${uid}`)
+      console.log(`handle member update: ${uid}`)
       const { data, error } = await supabase
         .from('Member')
-        .select('id, uid, nick_name')
-        .eq('uid', uid);
+        .select()
+        .eq('uid', uid)
 
       if (error) {
-        throw error;
+        throw error
       }
 
-      console.log('Member 정보가 업데이트되었습니다.');
-      if (data.length == 1) {
-        setMember(data[0])
-        setUserState({ id: data[0].uid, name: data[0].nick_name })
+      console.log('Member 정보가 업데이트되었습니다.', data)
+      if (data.length > 0) {
+        setUserState(data[0])
         setShowLoginForm(false)
       }
     } catch (error: any) {
-      console.error('Error updating member:', error.message);
+      console.error('Error updating member:', error.message)
     }
-  };
-
-  function hasUserState(): boolean {
-    return userState.id != ''
   }
+
   return (
     <Box
       display="flex"
@@ -86,11 +80,11 @@ export default function Index() {
 
         <Box>
           {
-            !hasUserState() &&
+            !userState &&
             (
               <div className='outlined'>
                 {showLoginForm === false ?
-                  <div onClick={() => setShowLoginForm(true)}>로그인하기</div> :
+                  <div onClick={() => setShowLoginForm(true)}>로그인</div> :
                   <div className="loginForm">
                     <LoginForm onLoginSuccess={handleUpdateMember} />
                   </div>

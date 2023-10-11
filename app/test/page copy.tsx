@@ -1,7 +1,7 @@
 
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabase'
 import './planner.css'
 
@@ -14,34 +14,34 @@ interface PartyData {
 }
 
 const WeeklyPlan = () => {
-  const [partyData, setPartyData] = useState<PartyData[]>([]);
+  const [partyData, setPartyData] = useState<PartyData[]>([])
 
   useEffect(() => {
     const fetchPartyData = async () => {
-      const { data, error } = await supabase.from('Party').select('*'); // Party 테이블에서 데이터 가져오기
+      const { data, error } = await supabase.from('Party').select('*') // Party 테이블에서 데이터 가져오기
       if (error) {
-        console.error('Error fetching party data:', error);
+        console.error('Error fetching party data:', error)
       } else {
-        setPartyData(data as PartyData[]);
+        setPartyData(data as PartyData[])
       }
-    };
+    }
 
-    fetchPartyData();
-  }, []);
+    fetchPartyData()
+  }, [])
 
   const generateWeeklyPlan = () => {
-    const days = ['월', '화', '수', '목', '금', '토', '일'];
+    const days = ['월', '화', '수', '목', '금', '토', '일']
     const timeSlots = ['13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '01', '02']
-    const weeklyPlan = [];
+    const weeklyPlan = []
 
     for (let j = 13; j <= 26; j++) {
-      const hourData = partyData.filter(party => party.time === j);
-      const daySchedule = [];
+      const hourData = partyData.filter(party => party.time === j)
+      const daySchedule = []
       for (let i = 0; i < 7; i++) {
-        const dayData = hourData.filter(party => party.day === i);
-        daySchedule.push({ day: days[i], parties: dayData });
+        const dayData = hourData.filter(party => party.day === i)
+        daySchedule.push({ day: days[i], parties: dayData })
       }
-      weeklyPlan.push({ hour: j, schedule: daySchedule });
+      weeklyPlan.push({ hour: j, schedule: daySchedule })
     }
 
     console.log(weeklyPlan)
@@ -80,15 +80,15 @@ const WeeklyPlan = () => {
           </tbody>
         </table>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div style={{ padding: '12px' }}>
       <h1>Weekly Plan</h1>
       {generateWeeklyPlan()}
     </div>
-  );
-};
+  )
+}
 
-export default WeeklyPlan;
+export default WeeklyPlan

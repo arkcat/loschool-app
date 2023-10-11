@@ -1,56 +1,56 @@
 'use client'
 
-import { getBase64Text } from '@/utils/TextUtils';
-import { supabase } from '@/utils/supabase';
-import { Grid, Box, Typography, Card, CardContent, Button, Popover } from '@mui/material';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { getBase64Text } from '@/utils/TextUtils'
+import { supabase } from '@/utils/supabase'
+import { Grid, Box, Typography, Card, CardContent, Button, Popover } from '@mui/material'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export const dynamic = 'force-dynamic'
 
 export default function Index() {
   const router = useRouter()
-  const [members, setMembers] = useState<any>([]);
+  const [members, setMembers] = useState<any>([])
 
-  const [clickMember, setClickMember] = useState<any>(null);
+  const [clickMember, setClickMember] = useState<any>(null)
 
   useEffect(() => {
     const fetchMembers = async () => {
       const { data, error } = await supabase
         .from('Member')
         .select()
-        .order('id');
-      if (error) console.error('Error fetching members:', error);
-      else setMembers(data);
-    };
+        .order('id')
+      if (error) console.error('Error fetching members:', error)
+      else setMembers(data)
+    }
 
-    fetchMembers();
-  }, []);
+    fetchMembers()
+  }, [])
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null)
 
   const handleMenuClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleMenuItemClick = (action: any) => {
-    handleClose();
+    handleClose()
     switch (action) {
       case 'details':
-        router.push(`/members/details?id=${getBase64Text(String(clickMember.id))}`);
-        break;
+        router.push(`/members/details?id=${getBase64Text(String(clickMember.id))}`)
+        break
       case 'edit':
-        break;
+        break
       case 'delete':
-        break;
+        break
       default:
-        break;
+        break
     }
-  };
+  }
 
   return (
     <Box padding={2}>
@@ -58,17 +58,17 @@ export default function Index() {
       <Box>
         <Grid container spacing={2}>
           {members?.map((member: any) => {
-            let bgColor = member.personal_color;
-            let textColor = member.text_color;
+            let bgColor = member.personal_color
+            let textColor = member.text_color
 
             return (
               <Grid item xs={6} lg={2} key={member.id}>
-                <Card onClick={() => { router.push(`/members/details?id=${getBase64Text(String(member.id))}`); }} style={{ backgroundColor: bgColor, color: textColor }}>
+                <Card onClick={() => { router.push(`/members/details?id=${getBase64Text(String(member.id))}`) }} style={{ backgroundColor: bgColor, color: textColor }}>
                   <CardContent>
                     <Typography variant="h4" className="font-bold mb-2 min-h-[20px] lg:min-h-[30px]">
                       {member.nick_name}
                     </Typography>
-                    {/* <SettingIcon onClick={(event) => { setClickMember(member); handleMenuClick(event) }} /> */}
+                    {/* <SettingIcon onClick={(event) => { setClickMember(member) handleMenuClick(event) }} /> */}
                     <Box marginTop={2}>
                       <Typography variant="body2">{bgColor}</Typography>
                       <Typography variant="body2">{textColor}</Typography>
@@ -96,10 +96,10 @@ export default function Index() {
                   </Popover>
                 </Card>
               </Grid>
-            );
+            )
           })}
         </Grid>
       </Box>
     </Box>
-  );
+  )
 }

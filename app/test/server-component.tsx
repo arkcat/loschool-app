@@ -1,35 +1,35 @@
 // pages/FilteredData.js
 
-import { useState, useEffect } from 'react';
-import { supabase } from '@/utils/supabase';
+import { useState, useEffect } from 'react'
+import { supabase } from '@/utils/supabase'
 
 interface FilteredDataProps {
-    members: any[] | null;
-    selectedOption: string;
+    members: any[] | null
+    selectedOption: string
 }
 
 const FilteredData: React.FC<FilteredDataProps> = ({ members, selectedOption }) => {
 
-    const [filteredData, setFilteredData] = useState<any[]>([]);
+    const [filteredData, setFilteredData] = useState<any[]>([])
 
     useEffect(() => {
         async function fetchFilteredData() {
             let { data, error } = await supabase
                 .from('Character')
                 .select().order('id')
-            //.filter('member_id', 'eq', selectedOption);
+            //.filter('member_id', 'eq', selectedOption)
 
             if (data) {
-                setFilteredData(data);
+                setFilteredData(data)
             }
         }
 
         if (selectedOption) {
-            fetchFilteredData();
+            fetchFilteredData()
         } else {
-            setFilteredData([]); // 선택된 값이 없을 경우 데이터 초기화
+            setFilteredData([]) // 선택된 값이 없을 경우 데이터 초기화
         }
-    }, [selectedOption]);
+    }, [selectedOption])
 
     return (
         <div className="animate-in flex flex-col gap-14 opacity-0 max-w-4xl px-3 py-16 lg:py-24 text-foreground">
@@ -70,7 +70,7 @@ const FilteredData: React.FC<FilteredDataProps> = ({ members, selectedOption }) 
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default FilteredData;
+export default FilteredData

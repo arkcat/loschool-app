@@ -1,52 +1,63 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import Box from '@mui/material/Box';
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import CheckBoxIcon from '@mui/icons-material/CheckBoxOutlined';
+import Box from '@mui/material/Box'
+import SwipeableDrawer from '@mui/material/SwipeableDrawer'
+import Button from '@mui/material/Button'
+import List from '@mui/material/List'
+import Divider from '@mui/material/Divider'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import CheckBoxIcon from '@mui/icons-material/CheckBoxOutlined'
 import MainIcon from '@mui/icons-material/HomeOutlined'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonthOutlined'
 import ManageMemberIcon from '@mui/icons-material/ManageAccountsOutlined'
 import ManageCharacterIcon from '@mui/icons-material/ManageAccountsSharp'
 import ManageRaidIcon from '@mui/icons-material/ManageSearchOutlined'
-import MenuIcon from '@mui/icons-material/Menu';
-import userAtom from '@/recoil/userAtom';
+import MenuIcon from '@mui/icons-material/Menu'
+import userAtom from '@/recoil/userAtom'
 
-import { useRecoilState } from 'recoil';
-import { supabase } from '@/utils/supabase';
-import { useRouter } from 'next/navigation';
-import { getBase64Text } from '@/utils/TextUtils';
-import { useEffect } from 'react';
-import { Typography } from '@mui/material';
+import { useRecoilState } from 'recoil'
+import { supabase } from '@/utils/supabase'
+import { useRouter } from 'next/navigation'
+import { getBase64Text } from '@/utils/TextUtils'
+import { useEffect } from 'react'
+import { Typography } from '@mui/material'
 
-type Anchor = 'left';
+type Anchor = 'left'
 
 export default function SwipeableTemporaryDrawer() {
+    const [state, setState] = React.useState({
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+    })
+    
+    const router = useRouter()
+    
+    const [userState, setUserState] = useRecoilState<any|null>(userAtom)
+
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 console.log(`fetch user session ${userState}`)
-                const authSession = supabase.auth.getSession();
+                const authSession = supabase.auth.getSession()
                 console.log(authSession)
                 const currentSession = (await authSession).data.session
                 if (currentSession !== null) {
                     getLoginMember(currentSession.user.id)
                 } else {
-                    setUserState({ id: '', name: '' });
+                    setUserState(null)
                 }
             } catch (error: any) {
-                console.error('사용자 정보 가져오기 오류:', error.message);
+                console.error('사용자 정보 가져오기 오류:', error.message)
             }
-        };
+        }
 
-        fetchUser();
-    }, []);
+        fetchUser()
+    }, [])
 
     const getLoginMember = async (uid: string) => {
         try {
@@ -54,35 +65,27 @@ export default function SwipeableTemporaryDrawer() {
             const { data, error } = await supabase
                 .from('Member')
                 .select('id, uid, nick_name')
-                .eq('uid', uid);
+                .eq('uid', uid)
 
             if (error) {
-                throw error;
+                throw error
             }
 
             if (data.length == 1) {
-                setUserState({ id: data[0].uid, name: data[0].nick_name })
+                setUserState(data[0])
             }
         } catch (error: any) {
-            console.error('Error updating member:', error.message);
+            console.error('Error updating member:', error.message)
         }
-    };
-
-    const [state, setState] = React.useState({
-        top: false,
-        left: false,
-        bottom: false,
-        right: false,
-    });
-    const router = useRouter();
-    const [userState, setUserState] = useRecoilState(userAtom);
+    }
 
     async function handleLogout() {
-        const { error } = await supabase.auth.signOut();
+        const { error } = await supabase.auth.signOut()
         if (error) {
-            console.error('로그아웃 오류:', error.message);
+            console.error('로그아웃 오류:', error.message)
         } else {
-            setUserState({ id: '', name: '' })
+            setUserState(null)
+            router.push('/')
         }
     }
 
@@ -95,11 +98,11 @@ export default function SwipeableTemporaryDrawer() {
                     ((event as React.KeyboardEvent).key === 'Tab' ||
                         (event as React.KeyboardEvent).key === 'Shift')
                 ) {
-                    return;
+                    return
                 }
 
-                setState({ ...state, [anchor]: open });
-            };
+                setState({ ...state, [anchor]: open })
+            }
 
     const showLoginBox = () => {
         return (
@@ -107,8 +110,8 @@ export default function SwipeableTemporaryDrawer() {
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center">
-                <h1>환영합니다, {userState.name} 님!</h1>
-                <Button variant='contained' onClick={handleLogout}>로그아웃</Button>
+                <h1>환영합니다, {userState.nick_name} 님!</h1>
+                <Button variant='contained' onClick={handleLogout}>ㅅㄱㅇ</Button>
             </Box>
         )
     }
@@ -126,8 +129,7 @@ export default function SwipeableTemporaryDrawer() {
                 </ListItem>
                 <ListItem key={'raid'} disablePadding>
                     <ListItemButton onClick={() => {
-                        console.log(userState.id)
-                        router.push(`/members/schedule?id=${getBase64Text(userState.id)}`)
+                        router.push(`/members/schedule?id=${getBase64Text(userState.member_id)}`)
                     }}>
                         <ListItemIcon>
                             <CheckBoxIcon />
@@ -181,7 +183,7 @@ export default function SwipeableTemporaryDrawer() {
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
         >
-            {userState.id != '' ? showLoginBox() : <h1>로그인해주세요</h1>}
+            {userState ? showLoginBox() : <h1>로그인해주세요</h1>}
 
             <Divider sx={{ padding: '10px' }} />
 
@@ -195,10 +197,10 @@ export default function SwipeableTemporaryDrawer() {
                     </ListItemButton>
                 </ListItem>
             </List>
-            {userState.id != '' && showMenuList()}
-            {/*Need check permission*/userState.id != '' && showManageMenuList()}
+            {(userState?.permission == 'senior' || userState?.permission == 'professor') && showMenuList()}
+            {userState?.permission == 'professor' && showManageMenuList()}
         </Box>
-    );
+    )
 
     return (
         <div>
@@ -217,7 +219,7 @@ export default function SwipeableTemporaryDrawer() {
                         disableRipple
                     >
                         <MenuIcon sx={{ width: 40, height: 40, margin: 1 }} />
-                        <Typography variant='h4'>{userState.name}</Typography>
+                        <Typography variant='h4'>{userState?.nick_name}</Typography>
                     </Button>
 
                     <SwipeableDrawer
@@ -231,5 +233,5 @@ export default function SwipeableTemporaryDrawer() {
                 </React.Fragment>
             ))}
         </div>
-    );
+    )
 }

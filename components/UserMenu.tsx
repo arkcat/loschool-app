@@ -1,7 +1,7 @@
 'use client'
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 const resources = [
     {
@@ -28,7 +28,7 @@ const resources = [
   ]
 
   export default function UserMenu() {
-    const router = useRouter();
+    const router = useRouter()
   
     return (
       <div>

@@ -1,9 +1,9 @@
 
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabase'
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from '@mui/material'
 
 interface PartyData {
   id: number
@@ -21,43 +21,43 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
   },
-}));
+}))
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   }
-}));
+}))
 
 const WeeklyPlan = () => {
-  const [partyData, setPartyData] = useState<PartyData[]>([]);
+  const [partyData, setPartyData] = useState<PartyData[]>([])
 
   useEffect(() => {
     const fetchPartyData = async () => {
-      const { data, error } = await supabase.from('Party').select('*');
+      const { data, error } = await supabase.from('Party').select('*')
       if (error) {
-        console.error('Error fetching party data:', error);
+        console.error('Error fetching party data:', error)
       } else {
-        setPartyData(data as PartyData[]);
+        setPartyData(data as PartyData[])
       }
-    };
+    }
 
-    fetchPartyData();
-  }, []);
+    fetchPartyData()
+  }, [])
 
   const generateWeeklyPlan = () => {
-    const days = ['수', '목', '금', '토', '일', '월', '화'];
+    const days = ['수', '목', '금', '토', '일', '월', '화']
     const timeSlots = ['13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '01', '02']
-    const weeklyPlan = [];
+    const weeklyPlan = []
 
     for (let j = 13; j <= 26; j++) {
-      const hourData = partyData.filter(party => party.time === j);
-      const daySchedule = [];
+      const hourData = partyData.filter(party => party.time === j)
+      const daySchedule = []
       for (let i = 0; i < 7; i++) {
-        const dayData = hourData.filter(party => party.day === i);
-        daySchedule.push({ day: days[i], parties: dayData });
+        const dayData = hourData.filter(party => party.day === i)
+        daySchedule.push({ day: days[i], parties: dayData })
       }
-      weeklyPlan.push({ hour: j, schedule: daySchedule });
+      weeklyPlan.push({ hour: j, schedule: daySchedule })
     }
 
     return (
@@ -101,16 +101,16 @@ const WeeklyPlan = () => {
           </Table>
         </TableContainer>
       </Paper>
-    );
-  };
+    )
+  }
 
   return (
     <div style={{ padding: '12px' }}>
       <Typography variant='h3' paddingBottom={3} align='center'>Weekly Plan</Typography>
       {generateWeeklyPlan()}
     </div>
-  );
+  )
 
-};
+}
 
-export default WeeklyPlan;
+export default WeeklyPlan

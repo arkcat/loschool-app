@@ -9,22 +9,22 @@ export const dynamic = 'force-dynamic'
 interface PageProps { }
 
 const Page: React.FC<PageProps> = () => {
-  const [options, setOptions] = useState<any[]>([]);
-  const [selectedOption, setSelectedOption] = useState<string>('');
+  const [options, setOptions] = useState<any[]>([])
+  const [selectedOption, setSelectedOption] = useState<string>('')
 
   useEffect(() => {
     async function fetchOptions() {
       const { data, error } = await supabase.from('Member').select().order('id')
       if (data) {
-        setOptions(data);
+        setOptions(data)
       }
     }
-    fetchOptions();
-  }, []);
+    fetchOptions()
+  }, [])
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(e.target.value);
-  };
+    setSelectedOption(e.target.value)
+  }
 
   return (
     <div className="animate-in flex flex-col gap-14 opacity-0 max-w-4xl px-3 py-16 lg:py-24 text-foreground">
@@ -46,6 +46,6 @@ const Page: React.FC<PageProps> = () => {
       </div>
     </div>
   )
-};
+}
 
-export default Page;
+export default Page

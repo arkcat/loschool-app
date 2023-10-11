@@ -1,8 +1,8 @@
 'use client'
 
 import './globals.css'
-import { RecoilRoot } from 'recoil';
-import SwipeDrawer from '@/components/SwipeDrawer';
+import { RecoilRoot } from 'recoil'
+import SwipeDrawer from '@/components/SwipeDrawer'
 
 export default function RootLayout({
   children,

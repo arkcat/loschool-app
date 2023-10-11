@@ -1,41 +1,41 @@
 'use client'
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '@/utils/supabase';
-import Link from 'next/link';
-import { Button, Stack, Typography } from '@mui/material';
-import { getBase64Text } from '@/utils/TextUtils';
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/utils/supabase'
+import Link from 'next/link'
+import { Button, Stack, Typography } from '@mui/material'
+import { getBase64Text } from '@/utils/TextUtils'
 import { supabaseAdmin } from '@/utils/supabaseAdmin'
 
 export default function MembersPage() {
     const router = useRouter()
-    const [members, setMembers] = useState<any>([]);
+    const [members, setMembers] = useState<any>([])
 
     useEffect(() => {
         const fetchMembers = async () => {
             const { data, error } = await supabase
                 .from('Member')
                 .select('id, uid, nick_name, personal_color, text_color')
-                .order('id');
-            if (error) console.error('Error fetching members:', error);
-            else setMembers(data);
-        };
+                .order('id')
+            if (error) console.error('Error fetching members:', error)
+            else setMembers(data)
+        }
 
-        fetchMembers();
-    }, []);
+        fetchMembers()
+    }, [])
 
     const updateMemberList = async () => {
         const { data, error } = await supabase
             .from('Member')
             .select('id, uid, nick_name, personal_color, text_color')
-            .order('id');
-        if (error) console.error('Error fetching members:', error);
-        else setMembers(data);
+            .order('id')
+        if (error) console.error('Error fetching members:', error)
+        else setMembers(data)
     }
 
     const deleteMember = async (name: string, uid: string) => {
-        const { data, error } = await supabaseAdmin.auth.admin.deleteUser(uid);
+        const { data, error } = await supabaseAdmin.auth.admin.deleteUser(uid)
         if (error) {
             console.error("유저 삭제 실패")
             return
@@ -45,16 +45,16 @@ export default function MembersPage() {
             const { error: deleteError } = await supabase
                 .from('Member')
                 .delete()
-                .eq('uid', uid);
+                .eq('uid', uid)
 
             if (deleteError) {
-                throw deleteError;
+                throw deleteError
             }
 
             updateMemberList()
-        });
+        })
 
-        await Promise.all(deletePromises);
+        await Promise.all(deletePromises)
 
         console.log(`${name} 유저 삭제`)
     }
@@ -75,7 +75,7 @@ export default function MembersPage() {
                             }}>스케쥴</Typography>
 
                             <Button onClick={() => {
-                                const shouldDelete = window.confirm(`[${member.nick_name}] 정말로 삭제하시겠습니까?`);
+                                const shouldDelete = window.confirm(`[${member.nick_name}] 정말로 삭제하시겠습니까?`)
                                 if (shouldDelete) {
                                     deleteMember(member.nick_name, member.uid)
                                 }
@@ -85,5 +85,5 @@ export default function MembersPage() {
                 ))}
             </ul>
         </div>
-    );
+    )
 }

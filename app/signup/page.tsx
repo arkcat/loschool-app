@@ -1,15 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react';
-import { supabase } from '@/utils/supabase';
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import { useEffect, useState } from 'react'
+import { supabase } from '@/utils/supabase'
+import { Button, Grid, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import { parseJsonText } from 'typescript';
+import { parseJsonText } from 'typescript'
 const SignUp = () => {
     const router = useRouter()
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [nickname, setNickname] = useState('');
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [nickname, setNickname] = useState('')
     const [members, setMemebers] = useState<any>([])
 
     const defaultPermission = 'freshman'
@@ -23,25 +23,25 @@ const SignUp = () => {
             const { data, error } = await supabase
                 .from('Member')
                 .select('id')
-                .order('id');
-            if (error) console.error('Error fetching members:', error);
-            else setMemebers(data);
-        };
+                .order('id')
+            if (error) console.error('Error fetching members:', error)
+            else setMemebers(data)
+        }
 
-        fetchMembers();
-    }, []);
+        fetchMembers()
+    }, [])
 
     const handleSignUp = async (e: any) => {
-        e.preventDefault();
+        e.preventDefault()
 
         const { data: { user }, error } = await supabase.auth.signUp({
             email,
             password,
-        });
+        })
 
         if (error) {
-            console.error('회원 가입 에러:', error.message);
-            return;
+            console.error('회원 가입 에러:', error.message)
+            return
         }
 
         const lastMemeberId = members[members.length - 1].id
@@ -58,16 +58,16 @@ const SignUp = () => {
                 text_color: defaultTextColor,
                 schedule: defaultSchedule
             },
-        ]);
+        ])
 
         if (memberError) {
-            console.error('멤버 정보 추가 에러:', memberError.message);
-            return;
+            console.error('멤버 정보 추가 에러:', memberError.message)
+            return
         }
 
-        console.log('회원 가입 성공:', data);
+        console.log('회원 가입 성공:', data)
         handleSuccessAddMember()
-    };
+    }
 
     const handleSuccessAddMember = () => {
         alert('회원 가입에 성공했습니다.')
@@ -114,7 +114,7 @@ const SignUp = () => {
                 </div>
             </form>
         </div>
-    );
-};
+    )
+}
 
-export default SignUp;
+export default SignUp

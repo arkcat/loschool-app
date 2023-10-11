@@ -1,29 +1,29 @@
 'use client'
 
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { supabase } from '@/utils/supabase';
-import { Box, Button, Grid, Typography } from '@mui/material';
-import ScheduleBox from '@/components/ScheduleBox';
-import { getPlainText } from '@/utils/TextUtils';
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { supabase } from '@/utils/supabase'
+import { Box, Button, Grid, Typography } from '@mui/material'
+import ScheduleBox from '@/components/ScheduleBox'
+import { getPlainText } from '@/utils/TextUtils'
 
 interface MemberData {
-  id: number;
-  nick_name: string;
+  id: number
+  nick_name: string
   schedule: {
     [day: string]: {
-      [hour: string]: number;
-    };
-  };
+      [hour: string]: number
+    }
+  }
 }
 
 export default function MemberSchedulePage() {
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()
   const id = getPlainText(searchParams.get('id') || "")
 
   console.log(id)
-  const [memberData, setMemberData] = useState<MemberData | null>(null);
-  const [schedule, setSchedule] = useState<any>();
+  const [memberData, setMemberData] = useState<MemberData | null>(null)
+  const [schedule, setSchedule] = useState<any>()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +32,7 @@ export default function MemberSchedulePage() {
           .from('Member')
           .select('id, uid, nick_name, schedule')
           .eq('uid', id)
-          .single();
+          .single()
 
         if (data) {
           setMemberData(data)
@@ -42,16 +42,16 @@ export default function MemberSchedulePage() {
         console.log(memberData)
 
         if (error) {
-          throw error;
+          throw error
         }
 
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error)
       }
-    };
+    }
 
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   const handleBoxClick = async (day: string, hour: string) => {
     console.log({ day }, { hour })
@@ -61,30 +61,30 @@ export default function MemberSchedulePage() {
         ...schedule[day],
         [hour]: schedule[day][hour] === 0 ? 1 : 0,
       },
-    };
-    setSchedule(updatedSchedule);
+    }
+    setSchedule(updatedSchedule)
 
     console.log(updatedSchedule)
-  };
+  }
 
   const handleApplyClick = async () => {
     try {
       const { data, error } = await supabase
         .from('Member')
         .update({ schedule: schedule })
-        .eq('uid', id);
+        .eq('uid', id)
 
       if (error) {
-        throw error;
+        throw error
       }
 
-      console.log('Schedule updated successfully:', data);
+      console.log('Schedule updated successfully:', data)
     } catch (error) {
-      console.error('Error updating schedule:', error);
+      console.error('Error updating schedule:', error)
     }
-  };
+  }
 
-  const daysOfWeek = ['wed', 'thu', 'fri', 'sat', 'sun', 'mon', 'tue'];
+  const daysOfWeek = ['wed', 'thu', 'fri', 'sat', 'sun', 'mon', 'tue']
   const timeSlots = ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '01', '02']
 
   return (
@@ -124,5 +124,5 @@ export default function MemberSchedulePage() {
         </div>
       </Box>
     </Box>
-  );
+  )
 }
