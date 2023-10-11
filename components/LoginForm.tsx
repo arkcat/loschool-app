@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { userAtom } from '../recoil/userAtom'
 import { useSetRecoilState } from 'recoil'
 
-export default function LoginForm(onLoginSuccess: any) {
+export default function LoginForm({ onLoginSuccess }: { onLoginSuccess: any }) {
 
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
