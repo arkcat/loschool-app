@@ -12,10 +12,11 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
     const [filteredData, setFilteredData] = useState<any[]>([])
 
     const { members, selectedOption } = props
+    const [colorInfo, SetColorInfo] = useState<any>({})
 
     useEffect(() => {
         async function fetchFilteredData() {
-            let { data, error } = await supabase
+            const { data, error } = await supabase
                 .from('Character')
                 .select()
                 .eq('member_id', parseInt(selectedOption))
@@ -33,7 +34,6 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
         }
     }, [selectedOption])
 
-
     function makeCharacterCard(character: any) {
         const member = members?.find((member) => {
             return member.id == character.member_id
@@ -41,8 +41,8 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
         const bgColor: string = member?.personal_color
         const textColor: string = member?.text_color
         return (
-            <Grid item xs={6} lg={3} key={member.id}>
-                <Card key={character.id} style={{ backgroundColor: bgColor, color: textColor }} >
+            <Grid item xs={6} lg={3} key={character.id}>
+                <Card style={{ backgroundColor: bgColor, color: textColor }} >
                     <CardContent>
                         <Typography variant="h5">{character.char_name}</Typography>
                         <Box>

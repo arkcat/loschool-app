@@ -34,22 +34,23 @@ export default function SwipeableTemporaryDrawer() {
         bottom: false,
         right: false,
     })
-    
+
     const router = useRouter()
-    
-    const [userState, setUserState] = useRecoilState<any|null>(userAtom)
+
+    const [userState, setUserState] = useRecoilState<any | null>(userAtom)
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                console.log(`fetch user session ${userState}`)
-                const authSession = supabase.auth.getSession()
-                console.log(authSession)
-                const currentSession = (await authSession).data.session
-                if (currentSession !== null) {
-                    getLoginMember(currentSession.user.id)
-                } else {
-                    setUserState(null)
+                if (!userState) {
+                    const authSession = supabase.auth.getSession()
+                    console.log(authSession)
+                    const currentSession = (await authSession).data.session
+                    if (currentSession !== null) {
+                        getLoginMember(currentSession.user.id)
+                    } else {
+                        setUserState(null)
+                    }
                 }
             } catch (error: any) {
                 console.error('사용자 정보 가져오기 오류:', error.message)
@@ -120,21 +121,27 @@ export default function SwipeableTemporaryDrawer() {
         return (
             <List>
                 <ListItem key={'weekly'} disablePadding>
-                    <ListItemButton onClick={() => { router.push('/calendar') }}>
+                    <ListItemButton onClick={() => { router.push(`/calendar?id=${getBase64Text(userState.uid)}`) }}>
                         <ListItemIcon>
                             <CalendarMonthIcon />
                         </ListItemIcon>
                         <ListItemText primary={'이번주 시간표'} />
                     </ListItemButton>
                 </ListItem>
-                <ListItem key={'raid'} disablePadding>
-                    <ListItemButton onClick={() => {
-                        router.push(`/members/schedule?id=${getBase64Text(userState.uid)}`)
-                    }}>
+                <ListItem key={'schedule'} disablePadding>
+                    <ListItemButton onClick={() => { router.push(`/members/schedule?id=${getBase64Text(userState.uid)}`) }}>
                         <ListItemIcon>
                             <CheckBoxIcon />
                         </ListItemIcon>
                         <ListItemText primary={'스케쥴 관리'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={'attend'} disablePadding>
+                    <ListItemButton onClick={() => { router.push(`/members/attend?id=${getBase64Text(userState.uid)}`) }}>
+                        <ListItemIcon>
+                            <CheckBoxIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'출석부'} />
                     </ListItemButton>
                 </ListItem>
             </List>

@@ -19,13 +19,15 @@ export default function Index() {
     const fetchUser = async () => {
       try {
         console.log(`fetch user session ${userState}`)
-        const authSession = supabase.auth.getSession()
-        const currentSession = (await authSession).data.session
-        console.log(`session = ${currentSession}`)
-        if (currentSession !== null) {
-          handleUpdateMember(currentSession.user.id)
-        } else {
-          setUserState(null)
+        if (!userState) {
+          const authSession = supabase.auth.getSession()
+          const currentSession = (await authSession).data.session
+          console.log(`session = ${currentSession}`)
+          if (currentSession !== null) {
+            handleUpdateMember(currentSession.user.id)
+          } else {
+            setUserState(null)
+          }
         }
       } catch (error: any) {
         console.error('사용자 정보 가져오기 오류:', error.message)
@@ -37,20 +39,21 @@ export default function Index() {
 
   const handleUpdateMember = async (uid: string) => {
     try {
-      console.log(`handle member update: ${uid}`)
-      const { data, error } = await supabase
-        .from('Member')
-        .select()
-        .eq('uid', uid)
+      if (!userState) {
+        console.log(`handle member update: ${uid}`)
+        const { data, error } = await supabase
+          .from('Member')
+          .select()
+          .eq('uid', uid)
 
-      if (error) {
-        throw error
-      }
+        if (error) {
+          throw error
+        }
 
-      console.log('Member 정보가 업데이트되었습니다.', data)
-      if (data.length > 0) {
-        setUserState(data[0])
-        setShowLoginForm(false)
+        if (data.length > 0) {
+          setUserState(data[0])
+          setShowLoginForm(false)
+        }
       }
     } catch (error: any) {
       console.error('Error updating member:', error.message)

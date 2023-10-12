@@ -75,7 +75,7 @@ export default function MemberSchedulePage() {
         throw error
       }
 
-      console.log('Schedule updated successfully:', data)
+      alert("스케쥴 저장에 성공했습니다.")
     } catch (error) {
       console.error('Error updating schedule:', error)
     }

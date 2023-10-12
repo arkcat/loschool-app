@@ -4,6 +4,8 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabase'
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from '@mui/material'
+import { useSearchParams } from 'next/navigation'
+import { getPlainText } from '@/utils/TextUtils'
 
 interface PartyData {
   id: number
@@ -32,6 +34,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 interface PageProps { }
 
 export default function WeeklyPlan(props: PageProps) {
+  
+  const searchParams = useSearchParams()
+  const id = getPlainText(searchParams.get('id') || "")
+  
   const [partyData, setPartyData] = useState<PartyData[]>([])
 
   useEffect(() => {
