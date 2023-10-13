@@ -12,7 +12,6 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
     const [filteredData, setFilteredData] = useState<any[]>([])
 
     const { members, selectedOption } = props
-    const [colorInfo, SetColorInfo] = useState<any>({})
 
     useEffect(() => {
         async function fetchFilteredData() {

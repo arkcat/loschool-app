@@ -3,6 +3,7 @@
 import { Box, Typography, Grid, Card, CardContent } from '@mui/material'
 import { supabase } from '@/utils/supabase'
 import { useEffect, useState } from 'react'
+import { RaidData } from '@/lib/database.types'
 export const dynamic = 'force-dynamic'
 
 function makeRaidCard(raidId: number, raidName: string) {
@@ -19,7 +20,7 @@ function makeRaidCard(raidId: number, raidName: string) {
 
 export default function RaidPage() {
 
-  const [raids, setRaids] = useState<any>([])
+  const [raids, setRaids] = useState<RaidData[]>([])
 
   useEffect(() => {
     const fetchRaid = async () => {

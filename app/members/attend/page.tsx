@@ -5,19 +5,13 @@ import { supabase } from '@/utils/supabase'
 import { useSearchParams } from 'next/navigation'
 import { getPlainText } from '@/utils/TextUtils'
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Button, Typography } from '@mui/material'
-import ScheduleBox from '@/components/ScheduleBox'
+import { RaidData } from '@/lib/database.types'
 
-interface RaidData {
-    id: number
-    raid_name: string
-    raid_level: number
-    raid_group: number[]
-}
 export default function AttendancePage() {
     const searchParams = useSearchParams()
     const id = getPlainText(searchParams.get('id') || "")
 
-    const [characters, setCharacters] = useState<any[]>([])
+    const [characters, setCharacters] = useState<CharacterData[]>([])
     const [raids, setRaids] = useState<RaidData[]>([])
 
     const [colorInfo, setColorInfo] = useState<any>({})
@@ -28,7 +22,8 @@ export default function AttendancePage() {
                 const { data } = await supabase
                     .from('Member')
                     .select()
-                    .eq('uid', id);
+                    .eq('uid', id)
+                    .single();
 
                 const memberData = data
                 if (memberData && memberData.length > 0) {

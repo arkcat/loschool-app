@@ -6,14 +6,7 @@ import { supabase } from '@/utils/supabase'
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import { getPlainText } from '@/utils/TextUtils'
-
-interface PartyData {
-  id: number
-  raid_id: number
-  day: number
-  time: number
-  member: string[]
-}
+import { PartyData } from '@/lib/database.types'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -31,9 +24,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   }
 }))
 
-interface PageProps { }
-
-export default function WeeklyPlan(props: PageProps) {
+export default function WeeklyPlan() {
   
   const searchParams = useSearchParams()
   const id = getPlainText(searchParams.get('id') || "")

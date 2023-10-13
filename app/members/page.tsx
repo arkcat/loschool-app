@@ -7,16 +7,17 @@ import Link from 'next/link'
 import { Button, Stack, Typography } from '@mui/material'
 import { getBase64Text } from '@/utils/TextUtils'
 import { supabaseAdmin } from '@/utils/supabaseAdmin'
+import { MemberData } from '@/lib/database.types'
 
 export default function MembersPage() {
     const router = useRouter()
-    const [members, setMembers] = useState<any>([])
+    const [members, setMembers] = useState<MemberData[]>([])
 
     useEffect(() => {
         const fetchMembers = async () => {
             const { data, error } = await supabase
                 .from('Member')
-                .select('id, uid, nick_name, personal_color, text_color')
+                .select()
                 .order('id')
             if (error) console.error('Error fetching members:', error)
             else setMembers(data)
@@ -28,7 +29,7 @@ export default function MembersPage() {
     const updateMemberList = async () => {
         const { data, error } = await supabase
             .from('Member')
-            .select('id, uid, nick_name, personal_color, text_color')
+            .select()
             .order('id')
         if (error) console.error('Error fetching members:', error)
         else setMembers(data)

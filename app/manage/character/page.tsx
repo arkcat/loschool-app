@@ -5,9 +5,7 @@ import { useState, useEffect } from 'react'
 import FilteredData from './filter-page'
 import { FormControl, Select, MenuItem, Typography, Box } from '@mui/material'
 
-interface PageProps { }
-
-export default function CharactersPage(props: PageProps) {
+export default function CharactersPage() {
 
   const [options, setOptions] = useState<any[]>([])
   const [selectedOption, setSelectedOption] = useState<string>('')

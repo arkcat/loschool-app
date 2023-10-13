@@ -5,12 +5,13 @@ import { supabase } from '@/utils/supabase'
 import { Button, Grid, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { parseJsonText } from 'typescript'
+import { MemberData } from '@/lib/database.types'
 const SignUp = () => {
     const router = useRouter()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [nickname, setNickname] = useState('')
-    const [members, setMemebers] = useState<any>([])
+    const [members, setMemebers] = useState<MemberData[]>([])
 
     const defaultPermission = 'freshman'
     const defaultPersonalColor = '#ffffff'
@@ -22,7 +23,7 @@ const SignUp = () => {
             console.log("Load members")
             const { data, error } = await supabase
                 .from('Member')
-                .select('id')
+                .select()
                 .order('id')
             if (error) console.error('Error fetching members:', error)
             else setMemebers(data)

@@ -6,22 +6,13 @@ import { supabase } from '@/utils/supabase'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import ScheduleBox from '@/components/ScheduleBox'
 import { getPlainText } from '@/utils/TextUtils'
-
-interface MemberData {
-  id: number
-  nick_name: string
-  schedule: {
-    [day: string]: {
-      [hour: string]: number
-    }
-  }
-}
+import { MemberData } from '@/lib/database.types'
 
 export default function MemberSchedulePage() {
   const searchParams = useSearchParams()
   const id = getPlainText(searchParams.get('id') || "")
 
-  const [memberData, setMemberData] = useState<MemberData | null>(null)
+  const [memberData, setMemberData] = useState<MemberData>()
   const [schedule, setSchedule] = useState<any>()
 
   useEffect(() => {
@@ -29,7 +20,7 @@ export default function MemberSchedulePage() {
       try {
         const { data, error } = await supabase
           .from('Member')
-          .select('id, uid, nick_name, schedule')
+          .select()
           .eq('uid', id)
           .single()
 

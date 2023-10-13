@@ -5,15 +5,14 @@ import { supabase } from '@/utils/supabase'
 import { Grid, Box, Typography, Card, CardContent, Button, Popover } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { MemberData } from '@/lib/database.types'
 
 export const dynamic = 'force-dynamic'
 
-interface PageProps { }
-
-export default function MemberPage(props: PageProps) {
+export default function MemberPage() {
 
   const router = useRouter()
-  const [members, setMembers] = useState<any>([])
+  const [members, setMembers] = useState<MemberData[]>([])
 
   useEffect(() => {
     const fetchMembers = async () => {

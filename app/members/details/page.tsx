@@ -6,13 +6,14 @@ import { supabase } from '@/utils/supabase'
 import { Box, Button, Grid, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { getPlainText } from '@/utils/TextUtils'
 import { supabaseAdmin } from '@/utils/supabaseAdmin'
+import { MemberData } from '@/lib/database.types'
 
 export default function MemberDetailPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const id = parseInt(getPlainText(searchParams.get('id') || ""))
 
-  const [member, setMember] = useState<any>(null)
+  const [member, setMember] = useState<MemberData | null>(null)
   const [selectedOption, setSelectedOption] = useState('freshman')
 
   useEffect(() => {
@@ -43,8 +44,8 @@ export default function MemberDetailPage() {
         .from('Member')
         .update({
           nick_name: member?.nick_name,
-          personal_color: member?.personal_color,
-          text_color: member?.text_color,
+          personal_color: member?.p_color,
+          text_color: member?.t_color,
           permission: member?.permission
         })
         .eq('id', id)
@@ -102,7 +103,10 @@ export default function MemberDetailPage() {
             type="text"
             value={member?.nick_name}
             onChange={(e) =>
-              setMember({ ...member, nick_name: e.target.value })
+              setMember({
+                ...(member as MemberData),
+                nick_name: e.target.value
+              })
             }
           />
         </Grid>
@@ -111,9 +115,12 @@ export default function MemberDetailPage() {
           <TextField
             size='small'
             type="text"
-            value={member?.personal_color}
+            value={member?.p_color}
             onChange={(e) =>
-              setMember({ ...member, personal_color: e.target.value })
+              setMember({
+                ...(member as MemberData),
+                p_color: e.target.value
+              })
             }
           />
         </Grid>
@@ -122,9 +129,12 @@ export default function MemberDetailPage() {
           <TextField
             size='small'
             type="text"
-            value={member?.text_color}
+            value={member?.t_color}
             onChange={(e) =>
-              setMember({ ...member, text_color: e.target.value })
+              setMember({
+                ...(member as MemberData),
+                t_color: e.target.value
+              })
             }
           />
         </Grid>
@@ -133,7 +143,10 @@ export default function MemberDetailPage() {
           <Select value={selectedOption}
             onChange={(e) => {
               setSelectedOption(e.target.value)
-              setMember({ ...member, permission: e.target.value })
+              setMember({
+                ...(member as MemberData),
+                permission: e.target.value
+              })
             }}>
             <MenuItem value="freshman">Freshman</MenuItem>
             <MenuItem value="senior">Senior</MenuItem>
@@ -148,8 +161,8 @@ export default function MemberDetailPage() {
         </Button>
 
         <Button variant='contained' onClick={() => {
-          const shouldDelete = window.confirm(`[${member.nick_name}] 정말로 삭제하시겠습니까?`)
-          if (shouldDelete) {
+          const shouldDelete = window.confirm(`[${member?.nick_name}] 정말로 삭제하시겠습니까?`)
+          if (member && shouldDelete) {
             deleteMember(member.nick_name, member.uid)
           }
         }}>멤버삭제</Button>
