@@ -107,11 +107,15 @@ export default function SwipeableTemporaryDrawer() {
 
     const showLoginBox = () => {
         return (
-            <Box display="flex"
+            <Box
+                display="flex"
                 flexDirection="column"
                 alignItems="center"
-                justifyContent="center">
-                <h1>환영합니다, {userState.nick_name} 님!</h1>
+                justifyContent="center"
+                gap={1}
+            >
+                <Typography variant='h6'>환영합니다,</Typography>
+                <Typography variant='h5'>{userState.nick_name} 님!</Typography>
                 <Button variant='contained' onClick={handleLogout} disableFocusRipple>ㅅㄱㅇ</Button>
             </Box>
         )

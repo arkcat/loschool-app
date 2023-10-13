@@ -51,7 +51,6 @@ export default function MemberSchedulePage() {
   }, [])
 
   const handleBoxClick = async (day: string, hour: string) => {
-    console.log({ day }, { hour })
     const updatedSchedule = {
       ...schedule,
       [day]: {
@@ -60,8 +59,6 @@ export default function MemberSchedulePage() {
       },
     }
     setSchedule(updatedSchedule)
-
-    console.log(updatedSchedule)
   }
 
   const handleApplyClick = async () => {
@@ -114,11 +111,11 @@ export default function MemberSchedulePage() {
             </Grid>
           </Grid>
         ))}
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
-          <Button variant="outlined" color="primary" onClick={handleApplyClick}>
+        <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
+          <Button variant="contained" color="primary" onClick={handleApplyClick}>
             반영
           </Button>
-        </div>
+        </Box>
       </Box>
     </Box>
   )

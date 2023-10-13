@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/utils/supabase'
 import { useSearchParams } from 'next/navigation'
 import { getPlainText } from '@/utils/TextUtils'
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Button, Typography } from '@mui/material'
 import ScheduleBox from '@/components/ScheduleBox'
 
 interface RaidData {
     id: number
     raid_name: string
+    raid_level: number
     raid_group: number[]
 }
 export default function AttendancePage() {
@@ -18,6 +19,7 @@ export default function AttendancePage() {
 
     const [characters, setCharacters] = useState<any[]>([])
     const [raids, setRaids] = useState<RaidData[]>([])
+
     const [colorInfo, setColorInfo] = useState<any>({})
 
     useEffect(() => {
@@ -67,6 +69,36 @@ export default function AttendancePage() {
         fetchRaid()
     }, [])
 
+    const handleCheckboxChange = (raidId: number, characterId: number) => {
+        setRaids(prevRaids => {
+            return prevRaids.map(raid => {
+                if (raid.id === raidId) {
+                    const updatedGroup = raid.raid_group.includes(characterId)
+                        ? raid.raid_group.filter(id => id !== characterId)
+                        : [...raid.raid_group, characterId];
+                    return { ...raid, raid_group: updatedGroup };
+                }
+                return raid;
+            });
+        });
+    };
+
+    const handleSave = async () => {
+        for (const raid of raids) {
+            const { data, error } = await supabase
+                .from('Raid')
+                .update({ raid_group: raid.raid_group })
+                .eq('id', raid.id);
+
+            if (error) {
+                console.error(`Error updating raid ${raid.id}:`, error);
+            } else {
+                console.log(`Raid ${raid.id} updated successfully!`);
+            }
+        }
+        alert("레이드 정보를 업데이트 했습니다.")
+    };
+
     return (
         <Box padding={2}>
             <TableContainer component={Paper}>
@@ -77,7 +109,10 @@ export default function AttendancePage() {
                             <TableCell>직업</TableCell>
                             <TableCell>레벨</TableCell>
                             {raids.map((raid: any) => (
-                                <TableCell key={raid.id}>{raid.raid_name}</TableCell>
+                                <TableCell key={raid.id} align='center'>
+                                    <Typography variant='body1'>{raid.raid_name}</Typography>
+                                    <Typography variant='caption'>{raid.raid_level}</Typography>
+                                </TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
@@ -93,12 +128,15 @@ export default function AttendancePage() {
                                 <TableCell style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
                                     {character.char_level}
                                 </TableCell>
-                                {raids.map((raid: any) => (
+                                {raids.map((raid: RaidData) => (
                                     <TableCell key={raid.id}>
-                                        <ScheduleBox
-                                            number={''}
-                                            value={raid.raid_group.includes(character.id) ? 1 : 0}
-                                            onClick={() => { }}
+                                        <Checkbox
+                                            disabled={character.char_level < raid.raid_level}
+                                            checked={raid.raid_group.includes(character.id)}
+                                            onChange={(e) => {
+                                                handleCheckboxChange(raid.id, character.id)
+                                            }}
+                                            inputProps={{ 'aria-label': 'controlled' }}
                                         />
                                     </TableCell>
                                 ))}
@@ -107,6 +145,11 @@ export default function AttendancePage() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
+                <Button variant="contained" color="primary" onClick={handleSave}>
+                    저장
+                </Button>
+            </Box>
         </Box>
     )
 }
