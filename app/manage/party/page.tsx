@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Box, Card, CardContent, Grid, IconButton, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, Grid, IconButton, MenuItem, Select, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { CharacterData, MemberData, PartyData, RaidData } from '@/lib/database.types'
+import { CharacterData, MemberData, PartyData, RaidData, days, daysOfWeek, timeSlots } from '@/lib/database.types'
+
 import { supabase } from '@/utils/supabase'
 
 export default function Index() {
@@ -79,8 +80,6 @@ export default function Index() {
 
     }, [])
 
-    const days = ['수', '목', '금', '토', '일', '월', '화']
-
     function handleDragStart(e: any, character: CharacterData) {
         e.dataTransfer?.setData('characterId', character.id);
     }
@@ -137,12 +136,14 @@ export default function Index() {
                 padding={2}
                 onDrop={(e) => handleDrop(e, partyData)}
                 onDragOver={(e) => handleDragOver(e)}>
-                <Typography marginBottom={1}>{raidInfo.raid_name} {days[partyData.day]}요일, {partyData.time}시</Typography>
+                <Typography marginBottom={1}>{raidInfo.raid_name} {days[partyData.day]}요일, {partyData.time}시
+                    <Button>삭제</Button>
+                </Typography>
                 {
                     partyData.member.map((id) => {
                         const character = characterData.filter(character => character.id == id)[0]
                         if (character === undefined) return <Box></Box>
-                        return makeCharacter(String(partyData.id) +  String(character.id), character, true, partyData.id)
+                        return makeCharacter(String(partyData.id) + String(character.id), character, true, partyData.id)
                     })
                 }
             </Box>
@@ -159,11 +160,11 @@ export default function Index() {
                 style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, height: '30px' }}
                 draggable={!showRemove}
                 onDragStart={(e) => handleDragStart(e, character)}>
-                <CardContent style={{padding:'0 10px'}}>
+                <CardContent style={{ padding: '0 10px' }}>
                     <Typography style={{ fontSize: '15px' }}>{character.char_name} {character.char_class} {character.char_level}
                         {showRemove === true &&
                             <IconButton onClick={() => { removeCharacterFromParty(partyId, character.id) }}>
-                                <DeleteIcon style={{fontSize: 20}}/>
+                                <DeleteIcon style={{ fontSize: 20 }} />
                             </IconButton>}
                     </Typography>
                 </CardContent>
@@ -171,21 +172,50 @@ export default function Index() {
         )
     }
 
-    return (
-        <Box display="flex" padding={2}>
-            <Box flex={0.4} style={{ overflowY: 'auto', maxHeight: '800px' }}>
-                {
-                    characterData.map((character) => {
-                        return makeCharacter(String(character.id), character)
-                    })
-                }
+    function showTopMenu() {
+        return (
+            <Box display="flex" justifyContent="flex-end" paddingRight={3} gap={2}>
+                <Select value={raidData[0].id}>
+                    {raidData?.map((raid) => {
+                        return <MenuItem key={raid.id} value={raid.id}>{raid.raid_name}</MenuItem>
+                    })}
+                </Select>
+                <Select value={days[0]}>
+                    {days?.map((day) => {
+                        return <MenuItem key={day} value={day}>{day}요일</MenuItem>
+                    })}
+                </Select>
+                <Select value={timeSlots[0]}>
+                    {timeSlots?.map((time) => {
+                        return <MenuItem key={time} value={time}>{time}시</MenuItem>
+                    })}
+                </Select>
+                <Button variant='contained'
+                    onClick={() => { }}>추가</Button>
+                <Button variant='contained'
+                    onClick={() => { }}>전체 삭제</Button>
             </Box>
-            <Box flex={1} style={{ overflowY: 'auto', maxHeight: '800px' }}>
-                {
-                    partyData && partyData.map((data) => {
-                        return makePartyBox(data)
-                    })
-                }
+        )
+    }
+
+    return (
+        <Box>
+            { showTopMenu() }
+            <Box display="flex" padding={2}>
+                <Box flex={0.4} style={{ overflowY: 'auto', maxHeight: '750px' }}>
+                    {
+                        characterData.map((character) => {
+                            return makeCharacter(String(character.id), character)
+                        })
+                    }
+                </Box>
+                <Box flex={1} style={{ overflowY: 'auto', maxHeight: '750px' }}>
+                    {
+                        partyData && partyData.map((data) => {
+                            return makePartyBox(data)
+                        })
+                    }
+                </Box>
             </Box>
         </Box>
     )

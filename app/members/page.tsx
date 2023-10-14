@@ -68,11 +68,11 @@ export default function MembersPage() {
                     <div key={member.id}>
                         <Stack direction="row" spacing={2}>
                             <Typography onClick={() => {
-                                router.push(`/members/details?id=${getBase64Text(String(member.id))}`)
+                                router.push(`/members/details?id=${getBase64Text(String(member.uid))}`)
                             }}>{member.nick_name}</Typography>
 
                             <Typography onClick={() => {
-                                router.push(`/members/schedule?id=${getBase64Text(String(member.id))}`)
+                                router.push(`/members/schedule?id=${getBase64Text(String(member.uid))}`)
                             }}>스케쥴</Typography>
 
                             <Button onClick={() => {

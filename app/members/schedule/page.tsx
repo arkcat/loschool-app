@@ -6,7 +6,7 @@ import { supabase } from '@/utils/supabase'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import ScheduleBox from '@/components/ScheduleBox'
 import { getPlainText } from '@/utils/TextUtils'
-import { MemberData } from '@/lib/database.types'
+import { MemberData, days, daysOfWeek, timeSlots } from '@/lib/database.types'
 
 export default function MemberSchedulePage() {
   const searchParams = useSearchParams()
@@ -69,9 +69,6 @@ export default function MemberSchedulePage() {
     }
   }
 
-  const daysOfWeek = ['wed', 'thu', 'fri', 'sat', 'sun', 'mon', 'tue']
-  const timeSlots = ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '01', '02']
-
   return (
     <Box
       display="flex"
@@ -84,10 +81,10 @@ export default function MemberSchedulePage() {
       <Typography variant='h3' paddingBottom={3}>{memberData?.nick_name} 스케쥴</Typography>
 
       <Box>
-        {memberData && daysOfWeek.map(day => (
+        {memberData && daysOfWeek.map((day, index) => (
           <Grid key={day} item container justifyContent="center" alignItems="center" border={1} margin={1}>
             <Grid>
-              <Typography variant="h6" align="center"><strong>{day.toUpperCase()}</strong></Typography>
+              <Typography variant="h6" align="center"><strong>{days[index]}요일</strong></Typography>
             </Grid>
             <Grid item container justifyContent="center" alignItems="center" height={35}>
               {timeSlots.map(time => (

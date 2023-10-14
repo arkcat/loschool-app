@@ -12,6 +12,10 @@ export interface MemberData {
     }
 }
 
+export const daysOfWeek = ['wed', 'thu', 'fri', 'sat', 'sun', 'mon', 'tue']
+export const days = ['수', '목', '금', '토', '일', '월', '화']
+export const timeSlots = ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '01', '02']
+
 export interface CharacterData {
     id: number
     member_id: number
