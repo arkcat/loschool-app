@@ -5,12 +5,11 @@ import { useRouter } from 'next/navigation'
 import { Box, Button, Card, CardContent, Grid, IconButton, MenuItem, Select, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { CharacterData, MemberData, PartyData, RaidData, days, daysOfWeek, timeSlots } from '@/lib/database.types'
-
 import { supabase } from '@/utils/supabase'
 
-export default function Index() {
-    const router = useRouter()
+export const dynamic = 'force-dynamic'
 
+export default function PartyPage() {
     const [partyData, setPartyData] = useState<PartyData[]>([])
     const [raidData, setRaidData] = useState<RaidData[]>([])
     const [characterData, setCharacterData] = useState<CharacterData[]>([])
@@ -173,34 +172,33 @@ export default function Index() {
     }
 
     function showTopMenu() {
-        return (
-            <Box display="flex" justifyContent="flex-end" paddingRight={3} gap={2}>
-                <Select value={raidData[0].id}>
-                    {raidData?.map((raid) => {
-                        return <MenuItem key={raid.id} value={raid.id}>{raid.raid_name}</MenuItem>
-                    })}
-                </Select>
-                <Select value={days[0]}>
-                    {days?.map((day) => {
-                        return <MenuItem key={day} value={day}>{day}요일</MenuItem>
-                    })}
-                </Select>
-                <Select value={timeSlots[0]}>
-                    {timeSlots?.map((time) => {
-                        return <MenuItem key={time} value={time}>{time}시</MenuItem>
-                    })}
-                </Select>
-                <Button variant='contained'
-                    onClick={() => { }}>추가</Button>
-                <Button variant='contained'
-                    onClick={() => { }}>전체 삭제</Button>
-            </Box>
-        )
+        if (raidData.length === 0) return <Box></Box>
+        return <Box display="flex" justifyContent="flex-end" paddingRight={3} gap={2}>
+            <Select value={raidData[0].id}>
+                {raidData?.map((raid) => {
+                    return <MenuItem key={raid.id} value={raid.id}>{raid.raid_name}</MenuItem>
+                })}
+            </Select>
+            <Select value={days[0]}>
+                {days?.map((day) => {
+                    return <MenuItem key={day} value={day}>{day}요일</MenuItem>
+                })}
+            </Select>
+            <Select value={timeSlots[0]}>
+                {timeSlots?.map((time) => {
+                    return <MenuItem key={time} value={time}>{time}시</MenuItem>
+                })}
+            </Select>
+            <Button variant='contained'
+                onClick={() => { }}>추가</Button>
+            <Button variant='contained'
+                onClick={() => { }}>전체 삭제</Button>
+        </Box>
     }
 
     return (
         <Box>
-            { showTopMenu() }
+            {showTopMenu()}
             <Box display="flex" padding={2}>
                 <Box flex={0.4} style={{ overflowY: 'auto', maxHeight: '750px' }}>
                     {
