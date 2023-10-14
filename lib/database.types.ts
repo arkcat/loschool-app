@@ -3,8 +3,8 @@ export interface MemberData {
     uid: string
     nick_name: string
     permission: string
-    p_color: string
-    t_color: string
+    personal_color: string
+    text_color: string
     schedule: {
         [day: string]: {
             [hour: string]: number

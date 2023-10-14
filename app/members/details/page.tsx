@@ -44,8 +44,8 @@ export default function MemberDetailPage() {
         .from('Member')
         .update({
           nick_name: member?.nick_name,
-          personal_color: member?.p_color,
-          text_color: member?.t_color,
+          personal_color: member?.personal_color,
+          text_color: member?.text_color,
           permission: member?.permission
         })
         .eq('id', id)
@@ -115,11 +115,11 @@ export default function MemberDetailPage() {
           <TextField
             size='small'
             type="text"
-            value={member?.p_color}
+            value={member?.personal_color}
             onChange={(e) =>
               setMember({
                 ...(member as MemberData),
-                p_color: e.target.value
+                personal_color: e.target.value
               })
             }
           />
@@ -129,11 +129,11 @@ export default function MemberDetailPage() {
           <TextField
             size='small'
             type="text"
-            value={member?.t_color}
+            value={member?.text_color}
             onChange={(e) =>
               setMember({
                 ...(member as MemberData),
-                t_color: e.target.value
+                text_color: e.target.value
               })
             }
           />

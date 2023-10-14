@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '@/utils/supabase'
-import { useSearchParams } from 'next/navigation'
-import { getPlainText } from '@/utils/TextUtils'
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Button, Typography } from '@mui/material'
-import { RaidData } from '@/lib/database.types'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { getBase64Text, getPlainText } from '@/utils/TextUtils'
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Button, Typography, TextField } from '@mui/material'
+import { RaidData, CharacterData } from '@/lib/database.types'
 
 export default function AttendancePage() {
+    const router = useRouter()
     const searchParams = useSearchParams()
     const id = getPlainText(searchParams.get('id') || "")
 
@@ -16,6 +17,8 @@ export default function AttendancePage() {
 
     const [colorInfo, setColorInfo] = useState<any>({})
 
+    const [addCharName, setAddCharName] = useState('')
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -23,37 +26,31 @@ export default function AttendancePage() {
                     .from('Member')
                     .select()
                     .eq('uid', id)
-                    .single();
+                    .single()
 
                 const memberData = data
-                if (memberData && memberData.length > 0) {
-                    const currentUserUid: any = memberData[0].id;
-                    const { data } = await supabase
-                        .from('Character')
-                        .select()
-                        .eq('member_id', currentUserUid);
-
-                    if (data) {
-                        setCharacters(data);
-                        setColorInfo({ pColor: memberData[0].personal_color, tColor: memberData[0].text_color })
-                    }
+                if (memberData) {
+                    fetchCharactersData(memberData.id)
+                    setColorInfo({ pColor: memberData.personal_color, tColor: memberData.text_color })
                 } else {
-                    throw new Error('사용자 정보를 찾을 수 없습니다.');
+                    throw new Error('사용자 정보를 찾을 수 없습니다.')
                 }
             } catch (error) {
-                console.error('에러 발생:', error);
+                console.error('에러 발생:', error)
             }
         }
 
         const fetchRaid = async () => {
             try {
-                const { data, error } = await supabase
+                const { data } = await supabase
                     .from('Raid')
                     .select()
                     .order('id')
 
                 if (data) {
                     setRaids(data)
+                } else {
+                    throw new Error('레이드 정보를 찾을 수 없습니다.')
                 }
             } catch (error) {
                 console.error(`에러 : {error}`)
@@ -64,35 +61,98 @@ export default function AttendancePage() {
         fetchRaid()
     }, [])
 
+    const fetchCharactersData = async (memberId: number) => {
+        try {
+            const { data } = await supabase
+                .from('Character')
+                .select()
+                .eq('member_id', memberId)
+                .order('id')
+
+            if (data) {
+                setCharacters(data)
+            }
+        } catch (error) {
+            console.error('에러 발생 : ', error)
+        }
+    }
+
     const handleCheckboxChange = (raidId: number, characterId: number) => {
         setRaids(prevRaids => {
             return prevRaids.map(raid => {
                 if (raid.id === raidId) {
                     const updatedGroup = raid.raid_group.includes(characterId)
                         ? raid.raid_group.filter(id => id !== characterId)
-                        : [...raid.raid_group, characterId];
-                    return { ...raid, raid_group: updatedGroup };
+                        : [...raid.raid_group, characterId]
+                    return { ...raid, raid_group: updatedGroup }
                 }
-                return raid;
-            });
-        });
-    };
+                return raid
+            })
+        })
+    }
 
     const handleSave = async () => {
         for (const raid of raids) {
             const { data, error } = await supabase
                 .from('Raid')
                 .update({ raid_group: raid.raid_group })
-                .eq('id', raid.id);
+                .eq('id', raid.id)
 
             if (error) {
-                console.error(`Error updating raid ${raid.id}:`, error);
+                console.error(`Error updating raid ${raid.id}:`, error)
             } else {
-                console.log(`Raid ${raid.id} updated successfully!`);
+                console.log(`Raid ${raid.id} updated successfully!`)
             }
         }
         alert("레이드 정보를 업데이트 했습니다.")
-    };
+    }
+
+    const handleAddCharacter = async () => {
+        const lastCharacterId = characters[characters.length - 1].id
+        const memberId = characters[0].member_id
+        try {
+            const { data, error } = await supabase
+                .from('Character')
+                .insert([
+                    {
+                        id: lastCharacterId + 1,
+                        member_id: memberId,
+                        char_name: addCharName,
+                        char_class: '',
+                        char_type: '',
+                        char_level: 0,
+                    }
+                ])
+
+            if (error) {
+                throw error
+            }
+
+            alert("캐릭터 추가 성공")
+            fetchCharactersData(memberId)
+        } catch (error) {
+            console.error('캐릭터 추가 에러:', error)
+        }
+    }
+
+    const handleDeleteCharacter = async (charId: number) => {
+        const memberId = characters[0].member_id
+        try {
+            const { data, error } = await supabase
+                .from('Character')
+                .delete()
+                .eq('id', charId)
+
+            if (error) {
+                throw error
+            }
+
+            alert("캐릭터 삭제 성공")
+            fetchCharactersData(memberId)
+        } catch (error) {
+            console.error('캐릭터 삭제 에러:', error)
+        }
+    }
 
     return (
         <Box padding={2}>
@@ -116,6 +176,17 @@ export default function AttendancePage() {
                             <TableRow key={character.id}>
                                 <TableCell style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
                                     {character.char_name}
+                                    <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '3px' }}>
+                                        <Button style={{ fontSize: '10px' }} onClick={() => {
+                                            router.push(`/members/character?id=${getBase64Text(String(character.id))}`)
+                                        }}>관리</Button>
+                                        {/* <Button style={{ fontSize: '10px' }} onClick={() => {
+                                            const shouldDelete = window.confirm(`[${character.char_name}] 를 정말로 삭제하시겠습니까?`)
+                                            if (shouldDelete) {
+                                                handleDeleteCharacter(character.id)
+                                            }
+                                        }}>삭제</Button> */}
+                                    </Box>
                                 </TableCell>
                                 <TableCell style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
                                     {character.char_class}
@@ -143,6 +214,21 @@ export default function AttendancePage() {
             <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
                 <Button variant="contained" color="primary" onClick={handleSave}>
                     저장
+                </Button>
+            </Box>
+            <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
+                <TextField value={addCharName} onChange={(e) => setAddCharName(e.target.value)} />
+                <Button variant="contained" color="primary" onClick={() => {
+                    if (addCharName.length < 2) {
+                        alert('캐릭터 이름을 정확히 입력해주세요.')
+                    } else {
+                        const shouldDelete = window.confirm(`[${addCharName}] 를 추가하시겠습니까?`)
+                        if (shouldDelete) {
+                            handleAddCharacter()
+                        }
+                    }
+                }} style={{ marginLeft: '15px' }}>
+                    캐릭터 추가
                 </Button>
             </Box>
         </Box>

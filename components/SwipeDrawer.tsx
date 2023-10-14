@@ -42,15 +42,13 @@ export default function SwipeableTemporaryDrawer() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                if (!userState) {
-                    const authSession = supabase.auth.getSession()
-                    console.log(authSession)
-                    const currentSession = (await authSession).data.session
-                    if (currentSession !== null) {
-                        getLoginMember(currentSession.user.id)
-                    } else {
-                        setUserState(null)
-                    }
+                const authSession = supabase.auth.getSession()
+                console.log(authSession)
+                const currentSession = (await authSession).data.session
+                if (currentSession !== null) {
+                    getLoginMember(currentSession.user.id)
+                } else {
+                    setUserState(null)
                 }
             } catch (error: any) {
                 console.error('사용자 정보 가져오기 오류:', error.message)
@@ -116,7 +114,7 @@ export default function SwipeableTemporaryDrawer() {
             >
                 <Typography variant='h6'>환영합니다,</Typography>
                 <Typography variant='h5'>{userState.nick_name} 님!</Typography>
-                <Button variant='contained' onClick={handleLogout} disableFocusRipple>ㅅㄱㅇ</Button>
+                <Button variant='contained' onClick={handleLogout} disableFocusRipple>탈출의 노래</Button>
             </Box>
         )
     }
