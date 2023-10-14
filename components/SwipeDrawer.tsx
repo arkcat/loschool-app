@@ -70,7 +70,7 @@ export default function SwipeableTemporaryDrawer() {
                 throw error
             }
 
-            if (data.length == 1) {
+            if (data.length === 1) {
                 setUserState(data[0])
             }
         } catch (error: any) {
@@ -206,8 +206,8 @@ export default function SwipeableTemporaryDrawer() {
                     </ListItemButton>
                 </ListItem>
             </List>
-            {(userState?.permission == 'senior' || userState?.permission == 'professor') && showMenuList()}
-            {userState?.permission == 'professor' && showManageMenuList()}
+            {(userState?.permission === 'senior' || userState?.permission === 'professor') && showMenuList()}
+            {userState?.permission === 'professor' && showManageMenuList()}
         </Box>
     )
 

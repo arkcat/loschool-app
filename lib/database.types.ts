@@ -33,5 +33,5 @@ export interface PartyData {
     raid_id: number
     day: number
     time: number
-    member: string[]
+    member: number[]
 }

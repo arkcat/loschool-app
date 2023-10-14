@@ -38,9 +38,7 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
     }, [selectedOption])
 
     function makeCharacterCard(character: any) {
-        const member = members?.find((member) => {
-            return member.id == character.member_id
-        })
+        const member = members?.find(member => member.id === character.member_id)
         const bgColor: string = member?.personal_color
         const textColor: string = member?.text_color
         return (
@@ -66,7 +64,7 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
                 {
                     filteredData?.filter((item) => {
                         const selectedId = parseInt(selectedOption)
-                        return selectedId == item.member_id
+                        return selectedId === item.member_id
                     })?.map((character) => {
                         return makeCharacterCard(character)
                     })
