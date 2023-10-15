@@ -5,13 +5,14 @@ import { supabase } from '@/utils/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { getBase64Text, getPlainText } from '@/utils/TextUtils'
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Button, Typography, TextField } from '@mui/material'
-import { RaidData, CharacterData } from '@/lib/database.types'
+import { RaidData, CharacterData, MemberData } from '@/lib/database.types'
 
 export default function AttendancePage() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const id = getPlainText(searchParams.get('id') || "")
 
+    const [member, setMember] = useState<MemberData | null>()
     const [characters, setCharacters] = useState<CharacterData[]>([])
     const [raids, setRaids] = useState<RaidData[]>([])
 
@@ -30,6 +31,7 @@ export default function AttendancePage() {
 
                 const memberData = data
                 if (memberData) {
+                    setMember(memberData)
                     fetchCharactersData(memberData.id)
                     setColorInfo({ pColor: memberData.personal_color, tColor: memberData.text_color })
                 } else {
@@ -108,30 +110,37 @@ export default function AttendancePage() {
     }
 
     const handleAddCharacter = async () => {
-        const lastCharacterId = characters[characters.length - 1].id
-        const memberId = characters[0].member_id
-        try {
-            const { data, error } = await supabase
-                .from('Character')
-                .insert([
-                    {
-                        id: lastCharacterId + 1,
-                        member_id: memberId,
-                        char_name: addCharName,
-                        char_class: '',
-                        char_type: '',
-                        char_level: 0,
-                    }
-                ])
-
-            if (error) {
-                throw error
+        if (member) {
+            let id
+            if (characters.length === 0) {
+                id = ((member.id - 8000) * 100)
+            } else {
+                id = characters[characters.length - 1].id
             }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('Character')
+                    .insert([
+                        {
+                            id: id + 1,
+                            member_id: member.id,
+                            char_name: addCharName,
+                            char_class: '',
+                            char_type: '',
+                            char_level: 0,
+                        }
+                    ])
 
-            alert("캐릭터 추가 성공")
-            fetchCharactersData(memberId)
-        } catch (error) {
-            console.error('캐릭터 추가 에러:', error)
+                if (error) {
+                    throw error
+                }
+
+                alert("캐릭터 추가 성공")
+                fetchCharactersData(member.id)
+            } catch (error) {
+                console.error('캐릭터 추가 에러:', error)
+            }
         }
     }
 

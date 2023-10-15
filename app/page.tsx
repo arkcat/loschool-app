@@ -68,7 +68,7 @@ export default function Index() {
         display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" gap={5} marginTop={-25}
       >
         <Typography
-          variant="h1" style={{ fontFamily: 'Times New Roman, serif', fontWeight: 'bold' }}
+          variant="h1" style={{ fontFamily: 'Times New Roman, serif', fontWeight: 'bold', textAlign: 'center' }}
         >
           Lo, School
         </Typography>
