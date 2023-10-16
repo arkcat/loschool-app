@@ -32,7 +32,7 @@ export default function WeeklyPlan() {
   const [raidData, setRaidData] = useState<RaidData[]>([])
   const [characterData, setCharacterData] = useState<CharacterData[]>([])
   const [memberData, setMemberData] = useState<MemberData[]>([])
-
+  const [currentMember, setCurrentMember] = useState<MemberData>()
   useEffect(() => {
     const fetchPartyData = async () => {
       const { data, error } = await supabase.from('Party').select('*')
@@ -80,6 +80,8 @@ export default function WeeklyPlan() {
       if (data) {
         console.log('complete fetch member data')
         setMemberData(data)
+        const member = data.find(d => d.uid === id)
+        setCurrentMember(member)
       } else {
         console.error('Error fetching member data:', error)
       }
@@ -120,35 +122,36 @@ export default function WeeklyPlan() {
   }
 
   function makePartyBox(partyData: PartyData, index: number) {
-    console.log(partyData)
     const raidInfo = raidData[partyData.raid_id]
     if (raidInfo === undefined) {
       return <Box></Box>
     }
 
-    return (
-      <Box
-        marginBottom={1}
-        border={4}
-        padding={1}
-        borderColor={raidInfo.raid_color}>
-        <Typography marginBottom={1} fontSize={15} onClick={() => handleToggle(partyData.id)}>{raidInfo.raid_name}</Typography>
-        <Box sx={{
-          display: partyStates[partyData.id] ? 'block' : 'none',
-          border: '1px solid #ccc',
-          padding: '16px',
-          marginTop: '16px',
-        }}>
-          {
-            partyData.member.map((id) => {
-              const character = characterData.filter(character => character.id == id)[0]
-              if (character === undefined) return <Box></Box>
-              return makeCharacter(String(partyData.id) + String(character.id), character, true, partyData.id)
-            })
-          }
+    if (partyData.member.map((id) => {
+      const hasCharacter = characterData.filter(character => character.id === id && character.member_id === currentMember?.id).length > 0
+      if (hasCharacter) {
+        partyStates[partyData.id] = true
+      }
+    }))
+
+      return (
+        <Box
+          marginBottom={1}
+          border={6}
+          padding={1}
+          borderColor={raidInfo.raid_color}>
+          <Typography marginBottom={1} fontSize={15} onClick={() => handleToggle(partyData.id)}>{raidInfo.raid_name}</Typography>
+          <Box sx={{ display: partyStates[partyData.id] ? 'block' : 'none', padding: '1px' }}>
+            {
+              partyData.member.map((id) => {
+                const character = characterData.filter(character => character.id == id)[0]
+                if (character === undefined) return <Box></Box>
+                return makeCharacter(String(partyData.id) + String(character.id), character, true, partyData.id)
+              })
+            }
+          </Box>
         </Box>
-      </Box>
-    )
+      )
   }
 
   function generateWeeklyPlan() {
@@ -166,12 +169,12 @@ export default function WeeklyPlan() {
     }
 
     return (
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 800, borderTop: 1, borderRight: 1 }}>
+      <Paper sx={{ overflow: 'hidden', padding: 1 }}>
+        <TableContainer sx={{ maxHeight: 800, border: 1, margin: 1 }}>
           <Table stickyHeader aria-label="sticky table" style={{ overflowX: 'auto' }}>
             <TableHead>
               <TableRow>
-                <TableCell align={'center'} sx={{ borderLeft: 1 }}>요일</TableCell>
+                <TableCell align={'center'}>요일</TableCell>
                 {days.map((day, index) => (
                   <TableCell key={index} align={'center'} sx={{ borderLeft: 1 }}>{day}</TableCell>
                 ))}
@@ -182,8 +185,7 @@ export default function WeeklyPlan() {
                 <StyledTableRow key={index}>
                   <TableCell
                     key={days[index]}
-                    align={'center'}
-                    sx={{ borderLeft: 1 }}>{timeSlots[index]}</TableCell>
+                    align={'center'}>{timeSlots[index]}</TableCell>
                   {daySchedule.schedule.map(hourData => (
                     <StyledTableCell key={hourData.day}
                       align={'center'}
@@ -212,7 +214,7 @@ export default function WeeklyPlan() {
       justifyContent="center"
       margin={1}
     >
-      <Typography variant='h3' paddingBottom={3} align='center'>이번주 시간표</Typography>
+      <Typography variant='h3' align='center'>이번주 시간표</Typography>
       {generateWeeklyPlan()}
     </Box>
   )
