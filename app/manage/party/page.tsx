@@ -202,13 +202,11 @@ export default function PartyPage() {
 
         return (
             <Box key={partyData.id}
-                marginLeft={2}
                 marginBottom={1}
                 onDrop={(e) => handleDrop(e, partyData)}
                 onDragOver={(e) => handleDragOver(e)}>
-                <Typography marginBottom={1} fontSize={10}>{raidInfo.raid_name} <Button onClick={() => { handleDeleteParty(partyData.id) }}>삭제</Button></Typography>
-                <Typography marginBottom={1} fontSize={10}>{days[partyData.day]}요일, {partyData.time}시</Typography>
-
+                <Typography marginBottom={1} fontSize={15}>{raidInfo.short_name} <Button onClick={() => { handleDeleteParty(partyData.id) }}>삭제</Button></Typography>
+                <Typography marginBottom={1} fontSize={12}>{days[partyData.day]}요일, {partyData.time}시</Typography>
                 {
                     partyData.member.map((id) => {
                         const character = characterData.filter(character => character.id == id)[0]
@@ -231,13 +229,7 @@ export default function PartyPage() {
                 draggable={!showRemove}
                 onDragStart={(e) => handleDragStart(e, character)}>
                 <CardContent style={{ padding: '0 10px' }}>
-                    <Typography style={{ fontSize: '12px' }}>{character.char_name} {character.char_class}                        {showRemove === true &&
-                        <IconButton
-                            style={{ alignContent: 'end' }}
-                            onClick={() => { removeCharacterFromParty(partyId, character.id) }}>
-                            <DeleteIcon style={{ fontSize: 15 }} />
-                        </IconButton>}
-                    </Typography>
+                    <Typography style={{ fontSize: '12px' }}>{character.char_name} {character.char_class}</Typography>
                 </CardContent>
             </Card>
         )
@@ -299,6 +291,7 @@ export default function PartyPage() {
         const partyArray = sortedPartyData[index] || [];
         return {
             day,
+            index,
             parties: partyArray
         };
     });
@@ -313,13 +306,11 @@ export default function PartyPage() {
 
     const DayComponent: React.FC<{ dayData: any }> = ({ dayData }) => {
         return (
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Paper style={{ padding: '10px', marginBottom: '20px' }}>
-                    <Typography variant="h6">{dayData.day}</Typography>
-                    {dayData.parties.map((party: any) => (
-                        <PartyComponent key={party.id} party={party} />
-                    ))}
-                </Paper>
+            <Grid item xs>
+                <Typography variant="h6" style={{ textAlign: 'center' }} onClick={() => { setSelectedDay(String(dayData.index)) }}>{dayData.day}</Typography>
+                {dayData.parties.map((party: any) => (
+                    <PartyComponent key={party.id} party={party} />
+                ))}
             </Grid>
         );
     };
@@ -346,7 +337,7 @@ export default function PartyPage() {
                         })
                     }
                 </Box>
-                <Box flex={5} border={1} style={{ overflowY: 'auto' }} marginLeft={5} marginRight={5}>
+                <Box flex={6} border={1} style={{ overflowY: 'auto' }} marginLeft={5}>
                     <Typography variant='h6' style={{ fontWeight: 'bold', textAlign: 'center' }}>파티 목록</Typography>
                     <TableComponent />
                 </Box>

@@ -28,6 +28,8 @@ export interface CharacterData {
 export interface RaidData {
     id: number
     raid_name: string
+    short_name: string
+    raid_color: string
     raid_level: number
     raid_group: number[]
 }

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabase'
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from '@mui/material'
+import { Box, Button, Card, CardContent, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import { getPlainText } from '@/utils/TextUtils'
-import { PartyData, days, daysOfWeek, timeSlots } from '@/lib/database.types'
+import { PartyData, RaidData, CharacterData, days, daysOfWeek, timeSlots, MemberData } from '@/lib/database.types'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -29,6 +29,9 @@ export default function WeeklyPlan() {
   const id = getPlainText(searchParams.get('id') || "")
 
   const [partyData, setPartyData] = useState<PartyData[]>([])
+  const [raidData, setRaidData] = useState<RaidData[]>([])
+  const [characterData, setCharacterData] = useState<CharacterData[]>([])
+  const [memberData, setMemberData] = useState<MemberData[]>([])
 
   useEffect(() => {
     const fetchPartyData = async () => {
@@ -40,8 +43,113 @@ export default function WeeklyPlan() {
       }
     }
 
+    const fetchRaidData = async () => {
+      const { data, error } = await supabase
+        .from('Raid')
+        .select()
+        .order('id')
+
+      if (data) {
+        console.log('complete fetch raid data')
+        setRaidData(data)
+      } else {
+        console.error('Error fetching raid data:', error)
+      }
+    }
+
+    const fetchCharacterData = async () => {
+      const { data, error } = await supabase
+        .from('Character')
+        .select()
+        .order('id')
+
+      if (data) {
+        console.log('complete fetch character data')
+        setCharacterData(data)
+      } else {
+        console.error('Error fetching character data:', error)
+      }
+    }
+
+    const fetchMemberData = async () => {
+      const { data, error } = await supabase
+        .from('Member')
+        .select()
+        .order('id')
+
+      if (data) {
+        console.log('complete fetch member data')
+        setMemberData(data)
+      } else {
+        console.error('Error fetching member data:', error)
+      }
+    }
+
     fetchPartyData()
+    fetchRaidData()
+    fetchCharacterData()
+    fetchMemberData()
   }, [])
+
+  const [partyStates, setPartyStates] = useState(
+    partyData.reduce((acc: any, party) => {
+      acc[party.id] = false
+      return acc
+    }, {})
+  )
+
+  const handleToggle = (id: number) => {
+    setPartyStates((prevState: any) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }))
+  }
+
+  function makeCharacter(key: string, character: CharacterData, showRemove: boolean = false, partyId: number = 0) {
+    const member = memberData.filter(member => member.id === character.member_id)[0]
+    const bgColor = member?.personal_color
+    const textColor = member?.text_color
+
+    return (
+      <Card key={key} style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, height: '30px', marginTop: '3px' }}>
+        <CardContent style={{ padding: '0 10px' }}>
+          <Typography style={{ fontSize: '12px' }}>{character.char_name} {character.char_class}</Typography>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  function makePartyBox(partyData: PartyData, index: number) {
+    console.log(partyData)
+    const raidInfo = raidData[partyData.raid_id]
+    if (raidInfo === undefined) {
+      return <Box></Box>
+    }
+
+    return (
+      <Box
+        marginBottom={1}
+        border={4}
+        padding={1}
+        borderColor={raidInfo.raid_color}>
+        <Typography marginBottom={1} fontSize={15} onClick={() => handleToggle(partyData.id)}>{raidInfo.raid_name}</Typography>
+        <Box sx={{
+          display: partyStates[partyData.id] ? 'block' : 'none',
+          border: '1px solid #ccc',
+          padding: '16px',
+          marginTop: '16px',
+        }}>
+          {
+            partyData.member.map((id) => {
+              const character = characterData.filter(character => character.id == id)[0]
+              if (character === undefined) return <Box></Box>
+              return makeCharacter(String(partyData.id) + String(character.id), character, true, partyData.id)
+            })
+          }
+        </Box>
+      </Box>
+    )
+  }
 
   function generateWeeklyPlan() {
 
@@ -80,15 +188,10 @@ export default function WeeklyPlan() {
                     <StyledTableCell key={hourData.day}
                       align={'center'}
                       sx={{ borderLeft: 1 }}>
-                      {hourData.parties.map(party => (
-                        <div key={party.id} className='outlined'>
-                          <div>
-                            raid_id: {party.raid_id}, id: {party.id}
-                          </div>
-                          {party.member.map((member, index) => (
-                            <div key={index}>{member}</div>
-                          ))}
-                        </div>
+                      {hourData.parties.map((party, partyIndex) => (
+                        <Box key={party.id}>
+                          {makePartyBox(party, partyIndex)}
+                        </Box>
                       ))}
                     </StyledTableCell >
                   ))}

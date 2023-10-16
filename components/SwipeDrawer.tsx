@@ -14,6 +14,7 @@ import MainIcon from '@mui/icons-material/HomeOutlined'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonthOutlined'
 import ManageMemberIcon from '@mui/icons-material/ManageAccountsOutlined'
 import ManageCharacterIcon from '@mui/icons-material/ManageAccountsSharp'
+import PartyIcon from '@mui/icons-material/AppRegistrationOutlined';
 import ManageRaidIcon from '@mui/icons-material/ManageSearchOutlined'
 import MenuIcon from '@mui/icons-material/Menu'
 import userAtom from '@/recoil/userAtom'
@@ -179,6 +180,16 @@ export default function SwipeableTemporaryDrawer() {
                             <ManageRaidIcon />
                         </ListItemIcon>
                         <ListItemText primary={'레이드 관리'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={'manage partyt'} disablePadding>
+                    <ListItemButton onClick={() => {
+                        router.push(`/manage/party`)
+                    }}>
+                        <ListItemIcon>
+                            <PartyIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'파티 편성'} />
                     </ListItemButton>
                 </ListItem>
             </List>
