@@ -137,10 +137,12 @@ export default function WeeklyPlan() {
       return (
         <Box
           marginBottom={1}
-          border={6}
+          border={2}
+          borderRadius={1}
           padding={1}
+          bgcolor={raidInfo.raid_color}
           borderColor={raidInfo.raid_color}>
-          <Typography marginBottom={1} fontSize={15} onClick={() => handleToggle(partyData.id)}>{raidInfo.raid_name}</Typography>
+          <Typography marginBottom={1} fontSize={15} style={{ color: 'white' }} onClick={() => handleToggle(partyData.id)}>{raidInfo.raid_name}</Typography>
           <Box sx={{ display: partyStates[partyData.id] ? 'block' : 'none', padding: '1px' }}>
             {
               partyData.member.map((id) => {

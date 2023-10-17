@@ -201,12 +201,17 @@ export default function PartyPage() {
         }
 
         return (
-            <Box key={partyData.id}
+            <Box
                 marginBottom={1}
+                border={2}
+                borderRadius={1}
+                padding={1}
+                bgcolor={raidInfo.raid_color}
+                borderColor={raidInfo.raid_color}
                 onDrop={(e) => handleDrop(e, partyData)}
                 onDragOver={(e) => handleDragOver(e)}>
-                <Typography marginBottom={1} fontSize={15}>{raidInfo.short_name} <Button onClick={() => { handleDeleteParty(partyData.id) }}>삭제</Button></Typography>
-                <Typography marginBottom={1} fontSize={12}>{days[partyData.day]}요일, {partyData.time}시</Typography>
+                <Typography fontSize={15} style={{ color: 'white' }}>{raidInfo.short_name} <Button style={{ color: 'white', fontSize: '10px' }} onClick={() => { handleDeleteParty(partyData.id) }}>삭제</Button></Typography>
+                <Typography marginBottom={1} fontSize={14} style={{ color: 'white' }}>{days[partyData.day]}요일, {partyData.time}시</Typography>
                 {
                     partyData.member.map((id) => {
                         const character = characterData.filter(character => character.id == id)[0]
@@ -229,7 +234,7 @@ export default function PartyPage() {
                 draggable={!showRemove}
                 onDragStart={(e) => handleDragStart(e, character)}>
                 <CardContent style={{ padding: '0 10px' }}>
-                    <Typography style={{ fontSize: '12px' }}>{character.char_name} {character.char_class}</Typography>
+                    <Typography style={{ fontSize: '12px' }}>{character.char_name} {character.char_class} {!showRemove && character.char_level}</Typography>
                 </CardContent>
             </Card>
         )
@@ -241,15 +246,13 @@ export default function PartyPage() {
 
     function getFilteredCharacters(): CharacterData[] {
         const currentRaidInfo = raidData[parseInt(selectedRaid)]
+        const day = daysOfWeek[parseInt(selectedDay)]
+        const time = timeSlots[parseInt(selectedTime)]
+
         if (currentRaidInfo) {
             const includeRaidCharacters = characterData.filter(character => currentRaidInfo.raid_group.includes(character.id))
-            const day = daysOfWeek[parseInt(selectedDay)]
-            const time = timeSlots[parseInt(selectedTime)]
             const canMembers = memberData.filter(member => member.schedule[day][time] === 1)
-            console.log(canMembers)
-
             const canCharacters = includeRaidCharacters.filter(character => canMembers.filter(member => member.id === character.member_id).length > 0)
-            console.log(canCharacters)
             return canCharacters
         } else {
             return []
@@ -258,33 +261,41 @@ export default function PartyPage() {
 
     function showTopMenu() {
         if (raidData.length === 0) return <Box></Box>
-        return <Box display="flex" justifyContent="flex-end" paddingRight={3} gap={2}>
-            <Select value={selectedRaid} onChange={(e) => {
-                setSelectedRaid(e.target.value)
-            }}>
-                {raidData?.map((raid, index) => {
-                    return <MenuItem key={raid.id} value={index}>{raid.raid_name}</MenuItem>
-                })}
-            </Select>
-            <Select value={selectedDay} onChange={(e) => {
-                setSelectedDay(e.target.value)
-            }}>
-                {days?.map((day, index) => {
-                    return <MenuItem key={day} value={index}>{day}요일</MenuItem>
-                })}
-            </Select>
-            <Select value={selectedTime} onChange={(e) => {
-                setSelectedTime(e.target.value)
-            }}>
-                {timeSlots?.map((time, index) => {
-                    return <MenuItem key={time} value={index}>{time}시</MenuItem>
-                })}
-            </Select>
-            <Button variant='contained'
-                onClick={handleAddParty}>추가</Button>
-            <Button variant='contained'
-                onClick={() => { }}>전체 삭제</Button>
-        </Box>
+
+        return (
+            <Box display="flex">
+                <Box display="flex" flex={1} justifyContent="flex-start" paddingLeft={3} gap={2}>
+                    <Button variant='contained'
+                        onClick={handleAddParty}>파티 편성 확정</Button>
+                </Box>
+                <Box display="flex" flex={1} justifyContent="flex-end" paddingRight={3} gap={2}>
+                    <Select value={selectedRaid} onChange={(e) => {
+                        setSelectedRaid(e.target.value)
+                    }}>
+                        {raidData?.map((raid, index) => {
+                            return <MenuItem key={raid.id} value={index}>{raid.raid_name}</MenuItem>
+                        })}
+                    </Select>
+                    <Select value={selectedDay} onChange={(e) => {
+                        setSelectedDay(e.target.value)
+                    }}>
+                        {days?.map((day, index) => {
+                            return <MenuItem key={day} value={index}>{day}요일</MenuItem>
+                        })}
+                    </Select>
+                    <Select value={selectedTime} onChange={(e) => {
+                        setSelectedTime(e.target.value)
+                    }}>
+                        {timeSlots?.map((time, index) => {
+                            return <MenuItem key={time} value={index}>{time}시</MenuItem>
+                        })}
+                    </Select>
+                    <Button variant='contained'
+                        onClick={handleAddParty}>추가</Button>
+                    <Button variant='contained'
+                        onClick={() => { }}>전체 삭제</Button>
+                </Box>
+            </Box>)
     }
 
     const tableData = days.map((day, index) => {
@@ -298,7 +309,7 @@ export default function PartyPage() {
 
     const PartyComponent: React.FC<{ party: any }> = ({ party }) => {
         return (
-            <Paper style={{ padding: '10px', margin: '10px' }}>
+            <Paper style={{ margin: '10px 10px' }}>
                 {makePartyBox(party)}
             </Paper>
         );
@@ -306,8 +317,8 @@ export default function PartyPage() {
 
     const DayComponent: React.FC<{ dayData: any }> = ({ dayData }) => {
         return (
-            <Grid item xs>
-                <Typography variant="h6" style={{ textAlign: 'center' }} onClick={() => { setSelectedDay(String(dayData.index)) }}>{dayData.day}</Typography>
+            <Grid item xs borderLeft={1} borderTop={1}>
+                <Typography variant="h6" borderBottom={1} style={{ textAlign: 'center' }} onClick={() => { setSelectedDay(String(dayData.index)) }}>{dayData.day}</Typography>
                 {dayData.parties.map((party: any) => (
                     <PartyComponent key={party.id} party={party} />
                 ))}
@@ -317,7 +328,7 @@ export default function PartyPage() {
 
     const TableComponent = () => {
         return (
-            <Grid container spacing={2}>
+            <Grid container>
                 {tableData.map(dayData => (
                     <DayComponent key={dayData.day} dayData={dayData} />
                 ))}
@@ -330,15 +341,15 @@ export default function PartyPage() {
             {showTopMenu()}
             <Box display="flex" padding={2} style={{ maxHeight: '800px' }}>
                 <Box flex={1} border={1} style={{ overflowY: 'auto' }} padding={1}>
-                    <Typography variant='h6' style={{ fontWeight: 'bold', textAlign: 'center' }}>캐릭터 목록</Typography>
+                    <Typography variant='h6' borderBottom={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>캐릭터 목록</Typography>
                     {
                         getFilteredCharacters().map((character) => {
                             return makeCharacter(String(character.id), character)
                         })
                     }
                 </Box>
-                <Box flex={6} border={1} style={{ overflowY: 'auto' }} marginLeft={5}>
-                    <Typography variant='h6' style={{ fontWeight: 'bold', textAlign: 'center' }}>파티 목록</Typography>
+                <Box flex={6} borderRight={1} borderTop={1} borderBottom={1} style={{ overflowY: 'auto' }} marginLeft={2}>
+                    <Typography variant='h6' borderLeft={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>파티 목록</Typography>
                     <TableComponent />
                 </Box>
             </Box>
