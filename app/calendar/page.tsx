@@ -6,6 +6,7 @@ import { Box, Button, Card, CardContent, Paper, Table, TableBody, TableCell, Tab
 import { useSearchParams } from 'next/navigation'
 import { getPlainText } from '@/utils/TextUtils'
 import { PartyData, RaidData, CharacterData, days, daysOfWeek, timeSlots, MemberData } from '@/lib/database.types'
+import { getDayBgColor } from '@/utils/ColorUtils'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -113,7 +114,8 @@ export default function WeeklyPlan() {
     const textColor = member?.text_color
 
     return (
-      <Card key={key} style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, height: '30px', marginTop: '3px' }}>
+      <Card key={key}
+        style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, height: '30px', marginTop: '3px' }}>
         <CardContent style={{ padding: '0 10px' }}>
           <Typography style={{ fontSize: '12px' }}>{character.char_name} {character.char_class}</Typography>
         </CardContent>
@@ -178,7 +180,10 @@ export default function WeeklyPlan() {
               <TableRow>
                 <TableCell align={'center'}>요일</TableCell>
                 {days.map((day, index) => (
-                  <TableCell key={index} align={'center'} sx={{ borderLeft: 1 }}>{day}</TableCell>
+                  <TableCell key={index} align={'center'} sx={{
+                    borderLeft: 1,
+                    backgroundColor: getDayBgColor(day)
+                  }}>{day}</TableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -191,7 +196,7 @@ export default function WeeklyPlan() {
                   {daySchedule.schedule.map(hourData => (
                     <StyledTableCell key={hourData.day}
                       align={'center'}
-                      sx={{ borderLeft: 1 }}>
+                      sx={{ borderLeft: 1, backgroundColor: getDayBgColor(hourData.day) }}>
                       {hourData.parties.map((party, partyIndex) => (
                         <Box key={party.id}>
                           {makePartyBox(party, partyIndex)}

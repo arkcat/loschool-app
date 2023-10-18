@@ -28,12 +28,11 @@ body {
   max-width: 300px;
   margin: 0 auto;
   padding: 20px;
-  border: 3px solid #ddd;
-  border-radius: 5px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
 }
 
 .loginForm {
-  transition: opacity 0.3s ease;
   opacity: 1;
 }
 

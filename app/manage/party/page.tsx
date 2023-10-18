@@ -7,6 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { CharacterData, MemberData, PartyData, RaidData, days, daysOfWeek, timeSlots } from '@/lib/database.types'
 import { supabase } from '@/utils/supabase'
 import { assert } from 'console'
+import { getDayBgColor } from '@/utils/ColorUtils'
 
 export const dynamic = 'force-dynamic'
 
@@ -317,7 +318,7 @@ export default function PartyPage() {
 
     const DayComponent: React.FC<{ dayData: any }> = ({ dayData }) => {
         return (
-            <Grid item xs borderLeft={1} borderTop={1}>
+            <Grid item xs borderLeft={1} borderTop={1} bgcolor={getDayBgColor(dayData.day)}>
                 <Typography variant="h6" borderBottom={1} style={{ textAlign: 'center' }} onClick={() => { setSelectedDay(String(dayData.index)) }}>{dayData.day}</Typography>
                 {dayData.parties.map((party: any) => (
                     <PartyComponent key={party.id} party={party} />
