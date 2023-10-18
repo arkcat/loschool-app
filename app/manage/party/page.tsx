@@ -154,19 +154,41 @@ export default function PartyPage() {
 
     function handleDragStart(e: any, character: CharacterData) {
         e.dataTransfer?.setData('characterId', character.id);
+        e.dataTransfer?.setData('characterType', character.char_type);
     }
 
     function handleDrop(e: any, partyData: PartyData) {
         e.preventDefault();
-        const characterId = parseInt(e.dataTransfer?.getData('characterId'))
+        const characterId = e.dataTransfer?.getData('characterId')
+        const characterType = e.dataTransfer?.getData('characterType')
         const partyId = partyData.id
 
         setPartyData(prevPartyData => {
             return prevPartyData.map(party => {
                 if (party.id === partyId) {
-                    const updatedGroup = party.member.includes(characterId)
-                        ? party.member
-                        : [...party.member, characterId]
+                    let updatedGroup = [...party.member]
+
+                    if (characterType === "D") {
+                        if (updatedGroup[0] === 0) {
+                            updatedGroup[0] = characterId;
+                        } else if (updatedGroup[1] === 0) {
+                            updatedGroup[1] = characterId;
+                        } else if (updatedGroup[2] === 0) {
+                            updatedGroup[2] = characterId;
+                        } else if (updatedGroup[4] === 0) {
+                            updatedGroup[4] = characterId;
+                        } else if (updatedGroup[5] === 0) {
+                            updatedGroup[5] = characterId;
+                        } else if (updatedGroup[6] === 0) {
+                            updatedGroup[6] = characterId;
+                        }
+                    } else if (characterType === "S") {
+                        if (updatedGroup[3] === 0) {
+                            updatedGroup[3] = characterId;
+                        } else if (updatedGroup[7] === 0) {
+                            updatedGroup[7] = characterId;
+                        }
+                    }
 
                     return { ...party, member: updatedGroup }
                 }
@@ -195,7 +217,6 @@ export default function PartyPage() {
     }
 
     function makePartyBox(partyData: PartyData) {
-        console.log(partyData)
         const raidInfo = raidData[partyData.raid_id]
         if (raidInfo === undefined) {
             return <Box></Box>
@@ -203,6 +224,7 @@ export default function PartyPage() {
 
         return (
             <Box
+                key={partyData.id}
                 marginBottom={1}
                 border={2}
                 borderRadius={1}
@@ -214,13 +236,25 @@ export default function PartyPage() {
                 <Typography fontSize={15} style={{ color: 'white' }}>{raidInfo.short_name} <Button style={{ color: 'white', fontSize: '10px' }} onClick={() => { handleDeleteParty(partyData.id) }}>삭제</Button></Typography>
                 <Typography marginBottom={1} fontSize={14} style={{ color: 'white' }}>{days[partyData.day]}요일, {partyData.time}시</Typography>
                 {
-                    partyData.member.map((id) => {
+                    partyData.member.map((id, memberIdx) => {
+                        if (id === 0) return makeEmptyCharacter(String(partyData.id) + String(memberIdx + 900000), memberIdx, true, partyData.id)
                         const character = characterData.filter(character => character.id == id)[0]
                         if (character === undefined) return <Box></Box>
                         return makeCharacter(String(partyData.id) + String(character.id), character, true, partyData.id)
                     })
                 }
             </Box>
+        )
+    }
+
+    function makeEmptyCharacter(key: string, index: number, showRemove: boolean = false, partyId: number = 0) {
+        return (
+            <Card key={key}
+                style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', height: '30px', marginTop: '3px' }}>
+                <CardContent style={{ padding: '0 10px' }}>
+                    <Typography style={{ fontSize: '12px' }}>{index === 3 || index === 7 ? "서폿" : "딜러"}</Typography>
+                </CardContent>
+            </Card>
         )
     }
 
