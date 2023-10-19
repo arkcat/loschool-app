@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { MouseEvent, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Box, Button, Card, CardContent, Grid, IconButton, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -119,7 +119,7 @@ export default function PartyPage() {
                     {
                         id: id + 1,
                         raid_id: selectedRaidId,
-                        member: [],
+                        member: [0, 0, 0, 0, 0, 0, 0, 0],
                         day: selectedDayInt,
                         time: selectedTimeInt
                     }
@@ -157,9 +157,16 @@ export default function PartyPage() {
         e.dataTransfer?.setData('characterType', character.char_type);
     }
 
+    function handleRightClick(e: any, showRemove: boolean, character: CharacterData, partyId: number) {
+        e.preventDefault();
+        console.log(character.char_name, showRemove)
+        if (!showRemove) return
+        removeCharacterFromParty(partyId, character.id)
+    }
+
     function handleDrop(e: any, partyData: PartyData) {
         e.preventDefault();
-        const characterId = e.dataTransfer?.getData('characterId')
+        const characterId = parseInt(e.dataTransfer?.getData('characterId'))
         const characterType = e.dataTransfer?.getData('characterType')
         const partyId = partyData.id
 
@@ -202,13 +209,17 @@ export default function PartyPage() {
     }
 
     function removeCharacterFromParty(partyId: number, characterId: number) {
+        console.log("Remove : ", partyId, characterId)
         setPartyData(prevPartyData => {
             return prevPartyData.map(party => {
                 if (party.id === partyId) {
-                    const updatedGroup = party.member.includes(characterId)
-                        ? party.member.filter(id => id !== characterId)
-                        : party.member
-
+                    const updatedGroup = party.member.map(id => {
+                        if (id === characterId) {
+                            return 0;
+                        }
+                        return id;
+                    });
+                    console.log(updatedGroup)
                     return { ...party, member: updatedGroup }
                 }
                 return party
@@ -267,7 +278,8 @@ export default function PartyPage() {
             <Card key={key}
                 style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, height: '30px', marginTop: '3px' }}
                 draggable={!showRemove}
-                onDragStart={(e) => handleDragStart(e, character)}>
+                onDragStart={(e) => handleDragStart(e, character)}
+                onContextMenu={(e) => handleRightClick(e, showRemove, character, partyId)}>
                 <CardContent style={{ padding: '0 10px' }}>
                     <Typography style={{ fontSize: '12px' }}>{character.char_name} {character.char_class} {!showRemove && character.char_level}</Typography>
                 </CardContent>
