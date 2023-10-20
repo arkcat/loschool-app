@@ -102,7 +102,7 @@ export default function PartyPage() {
         if (partyData.length === 0) {
             id = 0
         } else {
-            id = partyData[partyData.length - 1].id + 1
+            id = partyData[partyData.length - 1].id
         }
 
         const selectedRaidId = parseInt(selectedRaid)
@@ -130,17 +130,30 @@ export default function PartyPage() {
 
     const saveParties = async () => {
         try {
-            const { error } = await supabase
-                .from('Party')
-                .upsert(partyData);
+            console.log(partyData)
 
-            if (error) {
-                throw error
+            const { error: deleteError } = await supabase
+                .from('Party')
+                .delete()
+                .neq('day', -1)
+
+            if (deleteError) {
+                console.error(deleteError)
+                throw new Error("파티 정보 삭제 에러")
+            }
+
+            const { error: insertError } = await supabase
+                .from('Party')
+                .insert(partyData)
+
+            if (insertError) {
+                console.error(insertError)
+                throw new Error("파티 정보 추가 에러")
             }
 
             alert('파티 정보를 저장했습니다.')
-        } catch(error) {
-            console.error("파티 정보 추가 에러 : ", error)
+        } catch (error) {
+            console.error("파티 정보 변경 에러 : ", error)
         }
     }
 
