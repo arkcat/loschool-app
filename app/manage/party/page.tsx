@@ -18,67 +18,64 @@ export default function PartyPage() {
     const [memberData, setMemberData] = useState<MemberData[]>([])
 
     useEffect(() => {
+
+        const fetchPartyData = async () => {
+            const { data, error } = await supabase
+                .from('Party')
+                .select()
+                .order('id')
+
+            if (data) {
+                setPartyData(data)
+            } else {
+                console.error('Error fetching party data:', error)
+            }
+        }
+
+        const fetchRaidData = async () => {
+            const { data, error } = await supabase
+                .from('Raid')
+                .select()
+                .order('id')
+
+            if (data) {
+                setRaidData(data)
+            } else {
+                console.error('Error fetching raid data:', error)
+            }
+        }
+
+        const fetchCharacterData = async () => {
+            const { data, error } = await supabase
+                .from('Character')
+                .select()
+                .order('id')
+
+            if (data) {
+                setCharacterData(data)
+            } else {
+                console.error('Error fetching character data:', error)
+            }
+        }
+
+        const fetchMemberData = async () => {
+            const { data, error } = await supabase
+                .from('Member')
+                .select()
+                .order('id')
+
+            if (data) {
+                setMemberData(data)
+            } else {
+                console.error('Error fetching member data:', error)
+            }
+        }
+
         fetchMemberData()
         fetchCharacterData()
         fetchRaidData()
         fetchPartyData()
     }, [])
-
-    const fetchPartyData = async () => {
-        const { data, error } = await supabase
-            .from('Party')
-            .select()
-            .order('id')
-
-        if (data) {
-            console.log('complete fetch party data')
-            setPartyData(data)
-        } else {
-            console.error('Error fetching party data:', error)
-        }
-    }
-
-    const fetchRaidData = async () => {
-        const { data, error } = await supabase
-            .from('Raid')
-            .select()
-            .order('id')
-
-        if (data) {
-            console.log('complete fetch raid data')
-            setRaidData(data)
-        } else {
-            console.error('Error fetching raid data:', error)
-        }
-    }
-
-    const fetchCharacterData = async () => {
-        const { data, error } = await supabase
-            .from('Character')
-            .select()
-            .order('id')
-
-        if (data) {
-            console.log('complete fetch character data')
-            setCharacterData(data)
-        } else {
-            console.error('Error fetching character data:', error)
-        }
-    }
-
-    const fetchMemberData = async () => {
-        const { data, error } = await supabase
-            .from('Member')
-            .select()
-            .order('id')
-
-        if (data) {
-            console.log('complete fetch member data')
-            setMemberData(data)
-        } else {
-            console.error('Error fetching member data:', error)
-        }
-    }
 
     const sortedPartyData = useMemo(() => {
         // day 값에 따라 분류
@@ -99,7 +96,7 @@ export default function PartyPage() {
         return groupedByDay as PartyData[][];
     }, [partyData]);
 
-    const handleAddParty = async () => {
+    const handleAddParty = () => {
         let id;
 
         if (partyData.length === 0) {
@@ -112,43 +109,38 @@ export default function PartyPage() {
         const selectedDayInt = parseInt(selectedDay)
         const selectedTimeInt = parseInt(timeSlots[parseInt(selectedTime)])
 
-        try {
-            const { data, error } = await supabase
-                .from('Party')
-                .insert([
-                    {
-                        id: id + 1,
-                        raid_id: selectedRaidId,
-                        member: [0, 0, 0, 0, 0, 0, 0, 0],
-                        day: selectedDayInt,
-                        time: selectedTimeInt
-                    }
-                ])
-
-            if (error) {
-                throw error
-            }
-
-            fetchPartyData()
-        } catch (error) {
-            console.error('파티 추가 에러:', error)
+        const newParty = {
+            id: id + 1,
+            raid_id: selectedRaidId,
+            member: [0, 0, 0, 0, 0, 0, 0, 0],
+            day: selectedDayInt,
+            time: selectedTimeInt
         }
+
+        setPartyData(prevPartyData => [...prevPartyData, newParty])
     }
 
-    const handleDeleteParty = async (id: number) => {
+    const handleDeleteAllParty = () => {
+        setPartyData([])
+    }
+
+    const handleDeleteParty = (id: number) => {
+        setPartyData(prevPartyData => prevPartyData.filter(party => party.id !== id));
+    }
+
+    const saveParties = async () => {
         try {
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('Party')
-                .delete()
-                .eq('id', id)
+                .upsert(partyData);
 
             if (error) {
                 throw error
             }
 
-            fetchPartyData()
-        } catch (error) {
-            console.error('파티 추가 에러:', error)
+            alert('파티 정보를 저장했습니다.')
+        } catch(error) {
+            console.error("파티 정보 추가 에러 : ", error)
         }
     }
 
@@ -159,7 +151,6 @@ export default function PartyPage() {
 
     function handleRightClick(e: any, showRemove: boolean, character: CharacterData, partyId: number) {
         e.preventDefault();
-        console.log(character.char_name, showRemove)
         if (!showRemove) return
         removeCharacterFromParty(partyId, character.id)
     }
@@ -219,7 +210,6 @@ export default function PartyPage() {
                         }
                         return id;
                     });
-                    console.log(updatedGroup)
                     return { ...party, member: updatedGroup }
                 }
                 return party
@@ -242,6 +232,7 @@ export default function PartyPage() {
                 padding={1}
                 bgcolor={raidInfo.raid_color}
                 borderColor={raidInfo.raid_color}
+                boxShadow={2}
                 onDrop={(e) => handleDrop(e, partyData)}
                 onDragOver={(e) => handleDragOver(e)}>
                 <Typography fontSize={15} style={{ color: 'white' }}>{raidInfo.short_name} <Button style={{ color: 'white', fontSize: '10px' }} onClick={() => { handleDeleteParty(partyData.id) }}>삭제</Button></Typography>
@@ -313,7 +304,7 @@ export default function PartyPage() {
             <Box display="flex">
                 <Box display="flex" flex={1} justifyContent="flex-start" paddingLeft={3} gap={2}>
                     <Button variant='contained'
-                        onClick={handleAddParty}>파티 편성 확정</Button>
+                        onClick={saveParties}>파티 편성 확정</Button>
                 </Box>
                 <Box display="flex" flex={1} justifyContent="flex-end" paddingRight={3} gap={2}>
                     <Select value={selectedRaid} onChange={(e) => {
@@ -340,7 +331,7 @@ export default function PartyPage() {
                     <Button variant='contained'
                         onClick={handleAddParty}>추가</Button>
                     <Button variant='contained'
-                        onClick={() => { }}>전체 삭제</Button>
+                        onClick={handleDeleteAllParty}>전체 삭제</Button>
                 </Box>
             </Box>)
     }

@@ -44,7 +44,6 @@ export default function SwipeableTemporaryDrawer() {
         const fetchUser = async () => {
             try {
                 const authSession = supabase.auth.getSession()
-                console.log(authSession)
                 const currentSession = (await authSession).data.session
                 if (currentSession !== null) {
                     getLoginMember(currentSession.user.id)
@@ -61,17 +60,17 @@ export default function SwipeableTemporaryDrawer() {
 
     const getLoginMember = async (uid: string) => {
         try {
-            console.log(`fetch members ${uid}`)
+            console.log('get login memeber info : ' + uid)
             const { data, error } = await supabase
                 .from('Member')
-                .select('id, uid, nick_name')
+                .select()
                 .eq('uid', uid)
 
             if (error) {
                 throw error
             }
 
-            if (data.length === 1) {
+            if (data) {
                 setUserState(data[0])
             }
         } catch (error: any) {
@@ -111,8 +110,7 @@ export default function SwipeableTemporaryDrawer() {
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center"
-                gap={1}
-            >
+                gap={1}>
                 <Typography variant='h6'>환영합니다,</Typography>
                 <Typography variant='h5'>{userState.nick_name} 님!</Typography>
                 <Button variant='contained' onClick={handleLogout} disableFocusRipple>탈출의 노래</Button>

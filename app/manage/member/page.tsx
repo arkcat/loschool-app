@@ -19,6 +19,7 @@ export default function MemberPage() {
       const { data, error } = await supabase
         .from('Member')
         .select()
+        .neq('id', 99999)
         .order('id')
       if (error) console.error('Error fetching members:', error)
       else setMembers(data)

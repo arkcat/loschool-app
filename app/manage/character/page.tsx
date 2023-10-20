@@ -12,7 +12,12 @@ export default function CharactersPage() {
 
   useEffect(() => {
     async function fetchOptions() {
-      const { data, error } = await supabase.from('Member').select().order('id')
+      const { data, error } = await supabase
+        .from('Member')
+        .select()
+        .neq('id', 99999)
+        .order('id')
+
       if (data) {
         setOptions(data)
       }
@@ -21,7 +26,6 @@ export default function CharactersPage() {
   }, [])
 
   const handleChange = (e: any) => {
-    console.log(e.target.value)
     setSelectedOption(e.target.value)
   }
 

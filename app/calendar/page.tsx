@@ -51,7 +51,6 @@ export default function WeeklyPlan() {
         .order('id')
 
       if (data) {
-        console.log('complete fetch raid data')
         setRaidData(data)
       } else {
         console.error('Error fetching raid data:', error)
@@ -65,7 +64,6 @@ export default function WeeklyPlan() {
         .order('id')
 
       if (data) {
-        console.log('complete fetch character data')
         setCharacterData(data)
       } else {
         console.error('Error fetching character data:', error)
@@ -79,7 +77,6 @@ export default function WeeklyPlan() {
         .order('id')
 
       if (data) {
-        console.log('complete fetch member data')
         setMemberData(data)
         const member = data.find(d => d.uid === id)
         setCurrentMember(member)
@@ -108,6 +105,17 @@ export default function WeeklyPlan() {
     }))
   }
 
+  function makeEmptyCharacter(key: string, index: number, showRemove: boolean = false, partyId: number = 0) {
+    return (
+      <Card key={key}
+        style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', height: '30px', marginTop: '3px' }}>
+        <CardContent style={{ padding: '0 10px' }}>
+          <Typography style={{ fontSize: '12px' }}>{index === 3 || index === 7 ? "서폿" : "딜러"}</Typography>
+        </CardContent>
+      </Card>
+    )
+  }
+
   function makeCharacter(key: string, character: CharacterData, showRemove: boolean = false, partyId: number = 0) {
     const member = memberData.filter(member => member.id === character.member_id)[0]
     const bgColor = member?.personal_color
@@ -123,11 +131,28 @@ export default function WeeklyPlan() {
     )
   }
 
+  function isDealer(id: number): boolean {
+    const character = characterData.filter(character => character.id == id)[0]
+    if (character === undefined) return false
+    return character.char_type === 'D'
+  }
+
+  function isSupporter(id: number): boolean {
+    const character = characterData.filter(character => character.id == id)[0]
+    if (character === undefined) return false
+    return character.char_type === 'S'
+  }
+
   function makePartyBox(partyData: PartyData, index: number) {
     const raidInfo = raidData[partyData.raid_id]
     if (raidInfo === undefined) {
       return <Box></Box>
     }
+
+    const dealerCount = partyData.member.filter(id => isDealer(id)).length
+    const supperterCount = partyData.member.filter(id => isSupporter(id)).length
+    const remainingDealers = dealerCount < 6 ? 6 - dealerCount : 0
+    const remainingSupporters = supperterCount < 2 ? 2 - supperterCount : 0
 
     if (partyData.member.map((id) => {
       const hasCharacter = characterData.filter(character => character.id === id && character.member_id === currentMember?.id).length > 0
@@ -139,15 +164,21 @@ export default function WeeklyPlan() {
       return (
         <Box
           marginBottom={1}
-          border={2}
+          border={1}
           borderRadius={1}
           padding={1}
           bgcolor={raidInfo.raid_color}
-          borderColor={raidInfo.raid_color}>
-          <Typography marginBottom={1} fontSize={15} style={{ color: 'white' }} onClick={() => handleToggle(partyData.id)}>{raidInfo.raid_name}</Typography>
-          <Box sx={{ display: partyStates[partyData.id] ? 'block' : 'none', padding: '1px' }}>
+          borderColor={raidInfo.raid_color}
+          boxShadow={2}>
+          <Typography fontSize={15} style={{ color: 'white' }} onClick={() => handleToggle(partyData.id)}>
+            {raidInfo.raid_name + ` ${dealerCount + supperterCount}/8`} <br />
+            {remainingDealers > 0 && `랏딜: ${remainingDealers}`} {remainingSupporters > 0 && ` 랏폿: ${remainingSupporters}`}
+          </Typography>
+
+          <Box marginTop={1} sx={{ display: partyStates[partyData.id] ? 'block' : 'none', padding: '1px' }}>
             {
-              partyData.member.map((id) => {
+              partyData.member.map((id, memberIdx) => {
+                if (id === 0) return makeEmptyCharacter(String(partyData.id) + String(memberIdx + 900000), memberIdx, true, partyData.id)
                 const character = characterData.filter(character => character.id == id)[0]
                 if (character === undefined) return <Box></Box>
                 return makeCharacter(String(partyData.id) + String(character.id), character, true, partyData.id)
@@ -182,7 +213,8 @@ export default function WeeklyPlan() {
                 {days.map((day, index) => (
                   <TableCell key={index} align={'center'} sx={{
                     borderLeft: 1,
-                    backgroundColor: getDayBgColor(day)
+                    backgroundColor: getDayBgColor(day),
+                    minWidth: 125
                   }}>{day}</TableCell>
                 ))}
               </TableRow>
