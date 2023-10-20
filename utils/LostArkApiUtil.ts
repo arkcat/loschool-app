@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiUrl = 'https://developer-lostark.game.onstove.com/characters/'
-const bearerToken = process.env.LOSTARK_API_PRIVATE_KEY
+const bearerToken: string = process.env.NEXT_PUBLIC_LOSTARK_API_PRIVATE_KEY!
 
 export interface LostArkCharacterData {
     "ServerName": string,
@@ -17,7 +17,8 @@ export const fetchCharactersFromServer = async (characterName: string) => {
         const url = apiUrl + characterName + '/siblings'
         const response = await axios.get(url, {
             headers: {
-                Authorization: `Bearer ${bearerToken}`
+                Accept: 'application/json',
+                Authorization: `bearer ${bearerToken}`
             }
         });
         return response.data;
