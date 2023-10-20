@@ -18,11 +18,9 @@ export default function Index() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        console.log(`fetch user session ${userState}`)
         if (!userState) {
           const authSession = supabase.auth.getSession()
           const currentSession = (await authSession).data.session
-          console.log(`session = ${currentSession}`)
           if (currentSession !== null) {
             handleUpdateMember(currentSession.user.id)
           } else {
@@ -40,7 +38,6 @@ export default function Index() {
   const handleUpdateMember = async (uid: string) => {
     try {
       if (!userState) {
-        console.log(`handle member update: ${uid}`)
         const { data, error } = await supabase
           .from('Member')
           .select()

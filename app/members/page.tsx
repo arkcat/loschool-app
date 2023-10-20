@@ -56,8 +56,6 @@ export default function MembersPage() {
         })
 
         await Promise.all(deletePromises)
-
-        console.log(`${name} 유저 삭제`)
     }
 
     return (

@@ -84,10 +84,10 @@ export default function CharacterDetailPage() {
                         position: 'relative',
                         top: '10px',
                         left: '30px'
-                      }}
+                    }}
                     onClick={() => { router.back() }}
                 >
-                    <ArrowBackIcon style={{fontSize: 40}}/>
+                    <ArrowBackIcon style={{ fontSize: 40 }} />
                 </IconButton>
             </Box>
             <Grid container

@@ -79,7 +79,6 @@ export default function MemberDetailPage() {
     }
     deletePromises(uid)
 
-    console.log(`${name} 유저 삭제`)
     router.back()
   }
 

@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { getBase64Text, getPlainText } from '@/utils/TextUtils'
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Button, Typography, TextField } from '@mui/material'
 import { RaidData, CharacterData, MemberData } from '@/lib/database.types'
+import { LostArkCharacterData, fetchCharactersFromServer } from '@/utils/LostArkApiUtil'
 
 export default function AttendancePage() {
     const router = useRouter()
@@ -79,6 +80,59 @@ export default function AttendancePage() {
         }
     }
 
+    const updateCharacterInfo = async (id: number, className: string, classType: string, itemLevel: string) => {
+        try {
+            const { data, error } = await supabase
+                .from('Character')
+                .update({
+                    char_class: className,
+                    char_type: classType,
+                    char_level: parseInt(itemLevel)
+                })
+                .eq('id', id)
+
+            if (error) {
+                throw error
+            }
+
+            setCharacters(prevCharacters =>
+                prevCharacters.map(character =>
+                    character.id === id
+                        ? {
+                            ...character,
+                            char_class: className,
+                            char_type: classType,
+                            char_level: parseInt(itemLevel)
+                        }
+                        : character
+                )
+            )
+        } catch (error) {
+            console.error('캐릭터 정보 업데이트 에러 발생 : ', error)
+        }
+    }
+
+    const handleUpdate = async () => {
+        try {
+            const characterList = await fetchCharactersFromServer(characters[0].char_name) as LostArkCharacterData[];
+            const ourServers = characterList.filter(character => character.ServerName === "실리안")
+            characters.map(char => {
+                const charInfo = ourServers.filter(c => c.CharacterName === char.char_name)[0]
+                if (charInfo === undefined) {
+                    updateCharacterInfo(char.id, 'error', '?', '0')
+                } else {
+                    const className = charInfo.CharacterClassName
+                    let classType = 'D'
+                    if (className === '바드' || className === '홀리나이트' || className === '도화가') classType = 'S'
+                    const itemLevel = charInfo.ItemMaxLevel.replace(/[,]/g, '')
+                    updateCharacterInfo(char.id, className, classType, itemLevel)
+                }
+            })
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    }
+
     const handleCheckboxChange = (raidId: number, characterId: number) => {
         setRaids(prevRaids => {
             return prevRaids.map(raid => {
@@ -117,7 +171,7 @@ export default function AttendancePage() {
             } else {
                 id = characters[characters.length - 1].id
             }
-            
+
             try {
                 const { data, error } = await supabase
                     .from('Character')
@@ -221,9 +275,8 @@ export default function AttendancePage() {
                 </Table>
             </TableContainer>
             <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
-                <Button variant="contained" color="primary" onClick={handleSave}>
-                    저장
-                </Button>
+                <Button variant="contained" color="primary" style={{ marginLeft: 15, marginRight: 10 }} onClick={handleSave}>저장</Button>
+                <Button variant="contained" color="primary" style={{ marginLeft: 10, marginRight: 15 }} onClick={handleUpdate}>업데이트</Button>
             </Box>
             <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
                 <TextField value={addCharName} onChange={(e) => setAddCharName(e.target.value)} />

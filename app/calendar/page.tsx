@@ -207,7 +207,7 @@ export default function WeeklyPlan() {
       <Paper sx={{ overflow: 'hidden', padding: 1 }}>
         <TableContainer sx={{ maxHeight: 800, border: 1, margin: 1 }}>
           <Table stickyHeader aria-label="sticky table" style={{ overflowX: 'auto' }}>
-            <TableHead>
+            <TableHead>``
               <TableRow>
                 <TableCell align={'center'}>요일</TableCell>
                 {days.map((day, index) => (

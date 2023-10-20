@@ -20,7 +20,6 @@ const SignUp = () => {
 
     useEffect(() => {
         const fetchMembers = async () => {
-            console.log("Load members")
             const { data, error } = await supabase
                 .from('Member')
                 .select()
@@ -46,8 +45,6 @@ const SignUp = () => {
         }
 
         const lastMemeberId = members[members.length - 1].id
-
-        console.log(lastMemeberId)
 
         const { data, error: memberError } = await supabase.from('Member').upsert([
             {
