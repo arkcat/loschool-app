@@ -1,13 +1,11 @@
 'use client'
 
-import { MouseEvent, useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Box, Button, Card, CardContent, Grid, IconButton, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
+import { useEffect, useMemo, useState } from 'react'
+import { Box, Button, Card, CardContent, Grid, IconButton, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
 import { CharacterData, MemberData, PartyData, RaidData, days, daysOfWeek, timeSlots } from '@/lib/database.types'
 import { supabase } from '@/utils/supabase'
-import { assert } from 'console'
-import { getDayBgColor } from '@/utils/ColorUtils'
+import { getDayBgColor, hexToRgba } from '@/utils/ColorUtils'
+import SearchIcon from '@mui/icons-material/SearchOutlined'
 
 export const dynamic = 'force-dynamic'
 
@@ -77,6 +75,33 @@ export default function PartyPage() {
         fetchPartyData()
     }, [])
 
+    const [selectedRaid, setSelectedRaid] = useState<string>('0')
+    const [selectedDay, setSelectedDay] = useState<string>('0')
+    const [selectedTime, setSelectedTime] = useState<string>('0')
+    const [searchCharacterName, setSearchCharacterName] = useState<string>('')
+
+    function getFilteredCharacters(): CharacterData[] {
+        const currentRaidInfo = raidData[parseInt(selectedRaid)]
+        const day = daysOfWeek[parseInt(selectedDay)]
+        const time = timeSlots[parseInt(selectedTime)]
+
+        if (searchCharacterName.length > 0) {
+            return characterData.filter(character => {
+                const regex = new RegExp(searchCharacterName, 'i')
+                return regex.test(character.char_name)
+            })
+        }
+
+        if (currentRaidInfo) {
+            const includeRaidCharacters = characterData.filter(character => currentRaidInfo.raid_group.includes(character.id))
+            const canMembers = memberData.filter(member => member.schedule[day][time] === 1)
+            const canCharacters = includeRaidCharacters.filter(character => canMembers.filter(member => member.id === character.member_id).length > 0)
+            return canCharacters
+        } else {
+            return []
+        }
+    }
+
     const sortedPartyData = useMemo(() => {
         // day 값에 따라 분류
         const groupedByDay = partyData.reduce((acc: any, data) => {
@@ -121,37 +146,45 @@ export default function PartyPage() {
     }
 
     const handleDeleteAllParty = () => {
-        setPartyData([])
+        const shouldDelete = window.confirm('모든 파티를 삭제하시겠습니까?')
+        if (shouldDelete) {
+            setPartyData([])
+        }
     }
 
     const handleDeleteParty = (id: number) => {
-        setPartyData(prevPartyData => prevPartyData.filter(party => party.id !== id));
+        const shouldDelete = window.confirm(`이 파티를 삭제하시겠습니까?`)
+        if (shouldDelete) {
+            setPartyData(prevPartyData => prevPartyData.filter(party => party.id !== id));
+        }
     }
 
     const saveParties = async () => {
         try {
             console.log(partyData)
+            const shouldDelete = window.confirm(`파티 정보를 저장하시겠습니까?`)
+            if (shouldDelete) {
+                const { error: deleteError } = await supabase
+                    .from('Party')
+                    .delete()
+                    .neq('day', -1)
 
-            const { error: deleteError } = await supabase
-                .from('Party')
-                .delete()
-                .neq('day', -1)
+                if (deleteError) {
+                    console.error(deleteError)
+                    throw new Error("파티 정보 삭제 에러")
+                }
 
-            if (deleteError) {
-                console.error(deleteError)
-                throw new Error("파티 정보 삭제 에러")
+                const { error: insertError } = await supabase
+                    .from('Party')
+                    .insert(partyData)
+
+                if (insertError) {
+                    console.error(insertError)
+                    throw new Error("파티 정보 추가 에러")
+                }
+
+                alert('파티 정보를 저장했습니다.')
             }
-
-            const { error: insertError } = await supabase
-                .from('Party')
-                .insert(partyData)
-
-            if (insertError) {
-                console.error(insertError)
-                throw new Error("파티 정보 추가 에러")
-            }
-
-            alert('파티 정보를 저장했습니다.')
         } catch (error) {
             console.error("파티 정보 변경 에러 : ", error)
         }
@@ -246,13 +279,18 @@ export default function PartyPage() {
                 bgcolor={raidInfo.raid_color}
                 borderColor={raidInfo.raid_color}
                 boxShadow={2}
+                onClick={() => {
+                    setSelectedRaid(String(partyData.raid_id))
+                    setSelectedDay(String(partyData.day))
+                    setSelectedTime(String(timeSlots.indexOf(String(partyData.time))))
+                }}
                 onDrop={(e) => handleDrop(e, partyData)}
                 onDragOver={(e) => handleDragOver(e)}>
                 <Typography fontSize={15} style={{ color: 'white' }}>{raidInfo.short_name} <Button style={{ color: 'white', fontSize: '10px' }} onClick={() => { handleDeleteParty(partyData.id) }}>삭제</Button></Typography>
                 <Typography marginBottom={1} fontSize={14} style={{ color: 'white' }}>{days[partyData.day]}요일, {partyData.time}시</Typography>
                 {
-                    partyData.member.map((id, memberIdx) => {
-                        if (id === 0) return makeEmptyCharacter(String(partyData.id) + String(memberIdx + 900000), memberIdx, true, partyData.id)
+                    partyData.member.map((id, characterIdx) => {
+                        if (id === 0) return makeEmptyCharacter(String(partyData.id) + String(characterIdx + 900000), characterIdx, true, partyData.id)
                         const character = characterData.filter(character => character.id == id)[0]
                         if (character === undefined) return <Box></Box>
                         return makeCharacter(String(partyData.id) + String(character.id), character, true, partyData.id)
@@ -291,23 +329,66 @@ export default function PartyPage() {
         )
     }
 
-    const [selectedRaid, setSelectedRaid] = useState<string>('0')
-    const [selectedDay, setSelectedDay] = useState<string>('0')
-    const [selectedTime, setSelectedTime] = useState<string>('0')
+    function checkEntryCharacter(characterId: number): boolean {
+        const includedParty = partyData
+            .filter(p => p.raid_id === parseInt(selectedRaid))
+            .filter(p => p.member.includes(characterId)).length
+        return includedParty > 0
+    }
 
-    function getFilteredCharacters(): CharacterData[] {
-        const currentRaidInfo = raidData[parseInt(selectedRaid)]
-        const day = daysOfWeek[parseInt(selectedDay)]
-        const time = timeSlots[parseInt(selectedTime)]
+    const getCharacterIDsInParty = useMemo((): number[] => {
+        const day = parseInt(selectedDay)
+        const time = parseInt(timeSlots[parseInt(selectedTime)])
+        const ids = partyData
+            .filter(party => party.day === day && party.time === time)
+            .map(party => party.member)
+            .reduce((acc, curr) => {
+                curr.forEach(item => {
+                    if (!acc.includes(item)) {
+                        acc.push(item)
+                    }
+                })
+                return acc;
+            }, [])
+            .map(id => {
+                return characterData.filter(c => c.id === id)
+                    .map(c => c.member_id)
+            })
+            .reduce((acc, curr) => {
+                curr.forEach(item => {
+                    if (!acc.includes(item)) {
+                        acc.push(item)
+                    }
+                })
+                return acc;
+            }, [])
 
-        if (currentRaidInfo) {
-            const includeRaidCharacters = characterData.filter(character => currentRaidInfo.raid_group.includes(character.id))
-            const canMembers = memberData.filter(member => member.schedule[day][time] === 1)
-            const canCharacters = includeRaidCharacters.filter(character => canMembers.filter(member => member.id === character.member_id).length > 0)
-            return canCharacters
-        } else {
-            return []
-        }
+        return ids
+    }, [selectedDay, selectedTime, partyData])
+
+    function makeCandiCharacter(key: string, character: CharacterData) {
+        const member = memberData.filter(member => member.id === character.member_id)[0]
+        const bgColor = member?.personal_color
+        const textColor = member?.text_color
+
+        const entyCharacter = checkEntryCharacter(character.id)
+        const otherCharacterInParty = getCharacterIDsInParty.includes(character.member_id)
+        let color = hexToRgba(bgColor, 1)
+        return (
+            <Card key={key}
+                style={{
+                    display: 'flex', alignItems: 'center', border: '1px solid #ccc',
+                    backgroundColor: entyCharacter || otherCharacterInParty ? `rgb(${color[0] * 0.7}, ${color[1] * 0.7}, ${color[2] * 0.7})` : `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+                    color: textColor, height: '30px', marginTop: '3px'
+                }}
+
+                draggable={!(entyCharacter || otherCharacterInParty)}
+                onDragStart={(e) => handleDragStart(e, character)}>
+                <CardContent style={{ padding: '0 10px' }}>
+                    <Typography style={{ fontSize: '12px' }}>{character.char_name} {character.char_class} {character.char_level}</Typography>
+                </CardContent>
+            </Card>
+        )
     }
 
     function showTopMenu() {
@@ -379,7 +460,7 @@ export default function PartyPage() {
 
     const TableComponent = () => {
         return (
-            <Grid container>
+            <Grid container sx={{ height: '100%' }}>
                 {tableData.map(dayData => (
                     <DayComponent key={dayData.day} dayData={dayData} />
                 ))}
@@ -387,15 +468,35 @@ export default function PartyPage() {
         );
     };
 
+    const [showSearch, setShowSearch] = useState<boolean>(false)
+
     return (
         <Box>
             {showTopMenu()}
             <Box display="flex" padding={2} style={{ maxHeight: '800px' }}>
                 <Box flex={1} border={1} style={{ overflowY: 'auto' }} padding={1}>
-                    <Typography variant='h6' borderBottom={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>캐릭터 목록</Typography>
+                    <Typography variant='h6' borderBottom={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>캐릭터 목록
+                        <IconButton onClick={() => { setShowSearch(true) }}>
+                            <SearchIcon />
+                        </IconButton>
+                    </Typography>
+                    <Box>
+                        {showSearch === true ?
+                            <TextField
+                                size='small'
+                                type="text"
+                                sx={{ marginTop: 1, marginBottom: 1 }}
+                                fullWidth
+                                value={searchCharacterName}
+                                onChange={(e) =>
+                                    setSearchCharacterName(e.target.value)
+                                }
+                            /> : <Box></Box>
+                        }
+                    </Box>
                     {
                         getFilteredCharacters().map((character) => {
-                            return makeCharacter(String(character.id), character)
+                            return makeCandiCharacter(String(character.id), character)
                         })
                     }
                 </Box>
