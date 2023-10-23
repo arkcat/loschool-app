@@ -79,10 +79,12 @@ export default function MemberSchedulePage() {
     >
 
       <Typography variant='h3' paddingBottom={3}>{memberData?.nick_name} 스케쥴</Typography>
-
+      <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #ccc solid' }} padding='5px' marginBottom={2}>
+        <Typography>레이드 참여 가능한 시간을 클릭하면 파란색으로 변경됩니다.<br/> 모두 선택 후 하단에 반영 버튼을 눌러주세요.</Typography>
+      </Box>
       <Box>
         {memberData && daysOfWeek.map((day, index) => (
-          <Grid key={day} item container justifyContent="center" alignItems="center" border={1} margin={1}>
+          <Grid key={day} item container justifyContent="center" alignItems="center" border={1}>
             <Grid>
               <Typography variant="h6" align="center"><strong>{days[index]}요일</strong></Typography>
             </Grid>

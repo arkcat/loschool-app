@@ -114,20 +114,25 @@ export default function AttendancePage() {
 
     const handleUpdate = async () => {
         try {
-            const characterList = await fetchCharactersFromServer(characters[0].char_name) as LostArkCharacterData[];
-            const ourServers = characterList.filter(character => character.ServerName === "실리안")
-            characters.map(char => {
-                const charInfo = ourServers.filter(c => c.CharacterName === char.char_name)[0]
-                if (charInfo === undefined) {
-                    updateCharacterInfo(char.id, 'error', '?', '0')
-                } else {
-                    const className = charInfo.CharacterClassName
-                    let classType = 'D'
-                    if (className === '바드' || className === '홀리나이트' || className === '도화가') classType = 'S'
-                    const itemLevel = charInfo.ItemMaxLevel.replace(/[,]/g, '')
-                    updateCharacterInfo(char.id, className, classType, itemLevel)
-                }
-            })
+            let otherAccountCharacters: string[] = characters.map(c => c.char_name)
+
+            while (otherAccountCharacters.length > 0) {
+                const characterList = await fetchCharactersFromServer(otherAccountCharacters[0]) as LostArkCharacterData[];
+                const ourServers = characterList.filter(character => character.ServerName === "실리안")
+                characters.map(char => {
+                    const charInfo = ourServers.filter(c => c.CharacterName === char.char_name)[0]
+                    if (charInfo) {
+                        otherAccountCharacters = otherAccountCharacters.filter(item => item !== char.char_name)
+                        const className = charInfo.CharacterClassName
+                        let classType = 'D'
+                        if (className === '바드' || className === '홀리나이트' || className === '도화가') classType = 'S'
+                        const itemLevel = charInfo.ItemMaxLevel.replace(/[,]/g, '')
+                        updateCharacterInfo(char.id, className, classType, itemLevel)
+                    }
+                })
+            }
+
+            alert("캐릭터 정보 업데이트 완료")
         } catch (error) {
             console.error('Error fetching posts:', error);
         }
@@ -219,6 +224,12 @@ export default function AttendancePage() {
 
     return (
         <Box padding={2}>
+            <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #ccc solid' }} padding='5px' marginBottom={2}>
+                <Typography>캐릭터를 추가하려면 하단 텍스트박스에 캐릭터 이름을 적고 추가 버튼을 눌러주세요.<br />
+                    업데이트 버튼을 누르면 캐릭터 정보가 로아 서버로부터 업데이트 됩니다.<br />
+                    캐릭터 정보를 모두 업데이트 한 뒤 저장 버튼을 눌러주세요.
+                </Typography>
+            </Box>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>

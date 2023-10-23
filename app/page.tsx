@@ -85,6 +85,11 @@ export default function Index() {
             )
           }
         </Box>
+        <Box>
+          {userState &&
+            (<Box></Box>)
+          }
+        </Box>
       </Box>
 
       <Box position={'absolute'} bottom={0} marginBottom={5}>
