@@ -11,9 +11,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" type="image/png" sizes="96x96" href="res/12_RM.png" />
-      </head>
       <body>
         <RecoilRoot>
           <SwipeDrawer />
