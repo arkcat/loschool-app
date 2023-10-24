@@ -237,7 +237,7 @@ export default function SwipeableTemporaryDrawer() {
                         disableRipple
                     >
                         <MenuIcon sx={{ width: 40, height: 40, margin: 1 }} />
-                        <Typography variant='h4'>{userState?.nick_name}</Typography>
+                        <Typography variant='h4' style={{ fontFamily: 'PuradakGentleGothicR' }}>{userState?.nick_name}</Typography>
                     </Button>
 
                     <SwipeableDrawer

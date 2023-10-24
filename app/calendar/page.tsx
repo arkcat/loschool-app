@@ -34,6 +34,7 @@ export default function WeeklyPlan() {
   const [characterData, setCharacterData] = useState<CharacterData[]>([])
   const [memberData, setMemberData] = useState<MemberData[]>([])
   const [currentMember, setCurrentMember] = useState<MemberData>()
+
   useEffect(() => {
     const fetchPartyData = async () => {
       const { data, error } = await supabase.from('Party').select('*')
@@ -125,7 +126,7 @@ export default function WeeklyPlan() {
       <Card key={key}
         style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, height: '30px', marginTop: '3px' }}>
         <CardContent style={{ padding: '0 10px' }}>
-          <Typography style={{ fontSize: '12px' }}>{character.char_name} {character.char_class}</Typography>
+          <Typography style={{ fontSize: '12px' }}>{character.char_name} [{character.char_class}]</Typography>
         </CardContent>
       </Card>
     )
@@ -204,17 +205,23 @@ export default function WeeklyPlan() {
     }
 
     return (
-      <Paper sx={{ overflow: 'hidden', padding: 1 }}>
-        <TableContainer sx={{ maxHeight: 800, border: 1, margin: 1 }}>
-          <Table stickyHeader aria-label="sticky table" style={{ overflowX: 'auto' }}>
-            <TableHead>``
+      <Paper sx={{ overflow: 'auto', margin: 1, backgroundColor: '#b7bd98' }}>
+        <TableContainer>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
               <TableRow>
-                <TableCell align={'center'}>요일</TableCell>
+                <TableCell align={'center'} sx={{
+                  backgroundColor: '#b7bd98',
+                  fontFamily: "NanumBarunGothic",
+                  fontSize: "23px"
+                }}>요일</TableCell>
                 {days.map((day, index) => (
                   <TableCell key={index} align={'center'} sx={{
                     borderLeft: 1,
                     backgroundColor: getDayBgColor(day),
-                    minWidth: 125
+                    minWidth: 200,
+                    fontFamily: "NanumBarunGothic",
+                    fontSize: "25px"
                   }}>{day}</TableCell>
                 ))}
               </TableRow>
@@ -223,6 +230,10 @@ export default function WeeklyPlan() {
               {weeklyPlan.map((daySchedule, index) => (
                 <StyledTableRow key={index}>
                   <TableCell
+                    sx={{
+                      fontFamily: "NanumBarunGothic",
+                      fontSize: "15px"
+                    }}
                     key={days[index]}
                     align={'center'}>{timeSlots[index]}</TableCell>
                   {daySchedule.schedule.map(hourData => (
@@ -246,14 +257,8 @@ export default function WeeklyPlan() {
   }
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      margin={1}
-    >
-      <Typography variant='h3' align='center'>이번주 시간표</Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" margin={1} position="relative" height="90vh">
+      <Typography variant='h3' paddingBottom={3} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>이번주 시간표</Typography>
       {generateWeeklyPlan()}
     </Box>
   )

@@ -9,8 +9,8 @@ function ScheduleBox({ number, value, onClick }: { number: string, value: number
         onClick(value)
     }
 
-    const color = clicked ? '#00ffff' : '#cecece'
-
+    const color = clicked ? '#f3e07c' : '#d1d7b1'
+    const borderColor = clicked ? '#e6bd76' : '#d1d7b1'
     return (
         <div
             onClick={toggleColor}
@@ -18,8 +18,8 @@ function ScheduleBox({ number, value, onClick }: { number: string, value: number
                 width: '25px',
                 height: '25px',
                 background: color,
-                margin: '1px',
                 display: 'inline-block',
+                border: `2px solid ${borderColor}`
             }}
         > <Typography align='center'>{number}</Typography> </div>
     )
