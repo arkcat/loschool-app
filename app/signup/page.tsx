@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabase'
-import { Button, Grid, TextField, Typography } from '@mui/material'
+import { Box, Button, Grid, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { parseJsonText } from 'typescript'
 import { MemberData } from '@/lib/database.types'
@@ -75,9 +75,24 @@ const SignUp = () => {
     return (
         <div>
             <Typography variant='h3' paddingBottom={3} paddingTop={3} align='center'>회원 가입 페이지</Typography>
+            <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #ccc solid' }} padding='5px' marginBottom={2}>
+                <Typography>길드 관리자가 알고있는 대표 닉네임을 작성해주세요.<br />
+                    이메일은 실제하지 않는 이메일 사용을 권장합니다. (예시 : myname@lo.school.com)<br />
+                    비밀번호는 최소 6자리 이상을 입력해주세요. 비밀번호를 분실할 경우 새로 가입해야 합니다.
+                </Typography>
+            </Box>
             <form onSubmit={handleSignUp}>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
                     <Grid item xs={12} justifyContent={'center'} alignItems={'center'}>
+                        <Grid paddingBottom={2}>
+                            <TextField
+                                type="text"
+                                placeholder="대표닉네임"
+                                value={nickname}
+                                onChange={(e) => setNickname(e.target.value)}
+                                required
+                            />
+                        </Grid>
                         <Grid paddingBottom={2}>
                             <TextField
                                 type="email"
@@ -96,15 +111,7 @@ const SignUp = () => {
                                 required
                             />
                         </Grid>
-                        <Grid paddingBottom={2}>
-                            <TextField
-                                type="text"
-                                placeholder="닉네임"
-                                value={nickname}
-                                onChange={(e) => setNickname(e.target.value)}
-                                required
-                            />
-                        </Grid>
+
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
                             <Button variant='outlined' type="submit">가입하기</Button>
                         </div>
