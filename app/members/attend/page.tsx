@@ -226,20 +226,19 @@ export default function AttendancePage() {
         <Box display="flex" flexDirection="column" alignItems="center" margin={1} position="relative" height="90vh">
             <Typography variant='h3' paddingBottom={3} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>출석부</Typography>
             <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #e6bd76 solid', backgroundColor: '#f3e07c', textAlign: 'center' }} padding='5px' marginBottom={2}>
-                <Typography style={{ fontFamily: 'S-CoreDream-3Light'}}>캐릭터를 추가하려면 하단 텍스트박스에 캐릭터 이름을 적고 추가 버튼을 눌러주세요.<br />
+                <Typography style={{ fontFamily: 'S-CoreDream-3Light' }}>캐릭터를 추가하려면 하단 텍스트박스에 캐릭터 이름을 적고 추가 버튼을 눌러주세요.<br />
                     업데이트 버튼을 누르면 캐릭터 정보가 로아 서버로부터 업데이트 됩니다.<br />
                     캐릭터 정보를 모두 업데이트 한 뒤 저장 버튼을 눌러주세요.
                 </Typography>
             </Box>
-            <TableContainer component={Paper}>
-                <Table>
+            <TableContainer component={Paper} sx={{ maxHeight: '550px' }}>
+                <Table stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ minWidth: '100px', textAlign: 'center' }}>캐릭터</TableCell>
-                            <TableCell sx={{ minWidth: '60px', textAlign: 'center' }}>직업</TableCell>
-                            <TableCell sx={{ minWidth: '30px', textAlign: 'center' }}>레벨</TableCell>
+                            <TableCell style={{ position: 'sticky', left: 0, zIndex: 99 }} sx={{ minWidth: '100px', textAlign: 'center', borderRight: '2px #f3e07c solid', borderBottom: '2px #f3e07c solid' }}>캐릭터</TableCell>
+                            <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }}>레벨</TableCell>
                             {raids.map((raid: any) => (
-                                <TableCell sx={{ minWidth: '100px' }} key={raid.id} align='center'>
+                                <TableCell sx={{ minWidth: '100px', borderBottom: '2px #f3e07c solid' }} key={raid.id} align='center'>
                                     <Typography variant='body1'>{raid.raid_name}</Typography>
                                     <Typography variant='caption'>{raid.raid_level}</Typography>
                                 </TableCell>
@@ -249,17 +248,15 @@ export default function AttendancePage() {
                     <TableBody>
                         {characters.map((character: any) => (
                             <TableRow key={character.id}>
-                                <TableCell sx={{ textAlign: 'center' }}
-                                    style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
-                                    {character.char_name}
+                                <TableCell sx={{ textAlign: 'center', borderRight: '2px #f3e07c solid' }}
+                                    style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor, position: 'sticky', left: 0, zIndex: 98 }}>
+                                    {character.char_name}<br />
+                                    [{character.char_class}]
                                     <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '3px' }}>
                                         <Button variant='contained' style={{ fontSize: '10px' }} onClick={() => {
                                             router.push(`/members/character?id=${getBase64Text(String(character.id))}`)
                                         }}>관리</Button>
                                     </Box>
-                                </TableCell>
-                                <TableCell sx={{ textAlign: 'center' }} style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
-                                    {character.char_class}
                                 </TableCell>
                                 <TableCell sx={{ textAlign: 'center' }} style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
                                     {character.char_level}
