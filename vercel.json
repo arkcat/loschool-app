@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/AllCharactersUpdate",
+      "path": "/api/UpdateCharacters",
       "schedule": "* 5 * * *"
     }
   ]
