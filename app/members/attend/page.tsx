@@ -114,28 +114,59 @@ export default function AttendancePage() {
 
     const handleUpdate = async () => {
         try {
-            let otherAccountCharacters: string[] = characters.map(c => c.char_name)
+            let characterNames: string[] = characters.map((c) => c.char_name);
+            let serverCallCount = 0;
+            while (characterNames.length > 0) {
+              const response = await fetchCharactersFromServer(characterNames[0]);
+              console.log(`fetch call ${serverCallCount++} with ${characterNames[0]}`);
+              if (!response) {
+                console.log(`Can't find ${characterNames[0]}`);
+                characterNames = characterNames.filter(
+                  (item) => item !== characterNames[0]
+                );
+                continue;
+              }
 
-            while (otherAccountCharacters.length > 0) {
-                const characterList = await fetchCharactersFromServer(otherAccountCharacters[0]) as LostArkCharacterData[];
-                const ourServers = characterList.filter(character => character.ServerName === "실리안")
-                characters.map(char => {
-                    const charInfo = ourServers.filter(c => c.CharacterName === char.char_name)[0]
-                    if (charInfo) {
-                        otherAccountCharacters = otherAccountCharacters.filter(item => item !== char.char_name)
-                        const className = charInfo.CharacterClassName
-                        let classType = 'D'
-                        if (className === '바드' || className === '홀리나이트' || className === '도화가') classType = 'S'
-                        const itemLevel = charInfo.ItemMaxLevel.replace(/[,]/g, '')
-                        updateCharacterInfo(char.id, className, classType, itemLevel)
-                    }
-                })
+              const characterList = response as LostArkCharacterData[];
+              const ourServers = characterList.filter(
+                (character) => character.ServerName === "실리안"
+              );
+
+              if (ourServers.length === 0) {
+                console.log(`Can't find in '실리안' ${characterNames[0]}`);
+                characterNames = characterNames.filter(
+                  (item) => item !== characterNames[0]
+                );
+                continue;
+              }
+
+              characters.map((char) => {
+                const charInfo = ourServers.filter(
+                  (c) => c.CharacterName === char.char_name
+                )[0];
+                if (charInfo) {
+                  characterNames = characterNames.filter(
+                    (item) => item !== char.char_name
+                  );
+                  const className = charInfo.CharacterClassName;
+                  let classType = "D";
+                  if (
+                    className === "바드" ||
+                    className === "홀리나이트" ||
+                    className === "도화가"
+                  ) {
+                    classType = "S";
+                  }
+                  const itemLevel = charInfo.ItemMaxLevel.replace(/[,]/g, "");
+                  updateCharacterInfo(char.id, className, classType, itemLevel);
+                }
+              });
             }
 
-            alert("캐릭터 정보 업데이트 완료")
-        } catch (error) {
-            console.error('Error fetching posts:', error);
-        }
+            alert("캐릭터 정보 업데이트 완료");
+          } catch (error) {
+            console.error("에러 발생 : ", error);
+          }
     }
 
     const handleCheckboxChange = (raidId: number, characterId: number) => {
