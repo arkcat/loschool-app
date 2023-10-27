@@ -205,8 +205,8 @@ export default function WeeklyPlan() {
     }
 
     return (
-      <Paper sx={{ overflow: 'auto', margin: 1, backgroundColor: '#b7bd98' }}>
-        <TableContainer>
+      <Paper sx={{ margin: 1, backgroundColor: '#b7bd98' }}>
+        <TableContainer sx={{ height: '670px' }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -256,10 +256,81 @@ export default function WeeklyPlan() {
     )
   }
 
+  function generatePlan() {
+
+    const weeklyPlan = []
+
+    for (let j = 13; j <= 26; j++) {
+      const hourData = partyData.filter(party => party.time === j)
+      const daySchedule = []
+      for (let i = 0; i < 7; i++) {
+        const dayData = hourData.filter(party => party.day === i)
+        daySchedule.push({ day: days[i], parties: dayData })
+      }
+      weeklyPlan.push({ hour: j, schedule: daySchedule })
+    }
+
+    return (
+      <TableContainer component={Paper} sx={{ maxHeight: '750px' }}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell
+                align={'center'}
+                style={{ position: 'sticky', left: 0, zIndex: 99 }}
+                sx={{
+                  minWidth: '100px', textAlign: 'center', backgroundColor: '#b7bd98',
+                  fontFamily: "NanumBarunGothic"
+                }}>
+                시간
+              </TableCell>
+              {days.map((day, index) => (
+                <TableCell key={index} align={'center'} sx={{
+                  borderLeft: 1,
+                  backgroundColor: getDayBgColor(day),
+                  minWidth: 200,
+                  fontFamily: "NanumBarunGothic",
+                  fontSize: "25px"
+                }}>{day}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {weeklyPlan.map((daySchedule, index) => (
+              <TableRow key={index}>
+                <TableCell
+                  sx={{
+                    fontFamily: "NanumBarunGothic",
+                    fontSize: "15px",
+                    textAlign: 'center',
+                    backgroundColor: '#b7bd98'
+                  }}
+                  style={{ position: 'sticky', left: 0, zIndex: 98 }}
+                  key={days[index]}
+                  align={'center'}>{timeSlots[index]}</TableCell>
+                {daySchedule.schedule.map(hourData => (
+                  <TableCell key={hourData.day}
+                    align={'center'}
+                    sx={{ borderLeft: 1, backgroundColor: getDayBgColor(hourData.day) }}>
+                    {hourData.parties.map((party, partyIndex) => (
+                      <Box key={party.id}>
+                        {makePartyBox(party, partyIndex)}
+                      </Box>
+                    ))}
+                  </TableCell >
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )
+  }
+
   return (
     <Box display="flex" flexDirection="column" alignItems="center" margin={1} position="relative" height="90vh">
       <Typography variant='h3' paddingBottom={3} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>이번주 시간표</Typography>
-      {generateWeeklyPlan()}
+      {generatePlan()}
     </Box>
   )
 

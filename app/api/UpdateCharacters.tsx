@@ -21,9 +21,9 @@ const updateCharacterInfo = async (
       })
       .eq("id", id);
 
-      if (error) {
-        throw error;
-      }
+    if (error) {
+      throw error;
+    }
   } catch (error) {
     console.error("캐릭터 정보 업데이트 에러 발생 : ", error);
   }
@@ -49,7 +49,7 @@ export default async function AllCharactersUpdate() {
       const response = await fetchCharactersFromServer(characterNames[0]);
       console.log(`fetch call ${serverCallCount++} with ${characterNames[0]}`);
       if (!response) {
-        console.log(`Can't find ${characterNames[0]}`);
+        console.error(`Can't find ${characterNames[0]}`);
         characterNames = characterNames.filter(
           (item) => item !== characterNames[0]
         );
@@ -62,7 +62,7 @@ export default async function AllCharactersUpdate() {
       );
 
       if (ourServers.length === 0) {
-        console.log(`Can't find in '실리안' ${characterNames[0]}`);
+        console.error(`Can't find in '실리안' ${characterNames[0]}`);
         characterNames = characterNames.filter(
           (item) => item !== characterNames[0]
         );
