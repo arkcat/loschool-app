@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/AllCharactersUpdate",
+      "schedule": "* 5 * * *"
+    }
+  ]
+}
