@@ -1,27 +1,5 @@
-.animate-in {
-  animation: animateIn 0.3s ease 0.15s both;
-}
-
-@keyframes animateIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background-color: #272727;
-  background-image: url('res/page_bg.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
 }
 
 .outlined {
@@ -39,6 +17,38 @@ body {
 .loginForm.hidden {
   opacity: 0;
   pointer-events: none;
+}
+
+/* 600px 이하인 경우 */
+@media screen and (max-width: 600px) {
+  .title-image {
+    width: 300px;
+    height: 60px;
+  }
+  .mokoko-image {
+    width: 330px;
+    height: 257px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding-bottom: 30px;
+  }
+}
+
+/* 600px 초과인 경우 */
+@media screen and (min-width: 601px) {
+  .title-image {
+    width: 600px;
+    height: 120px;
+  }
+  .mokoko-image {
+    width: 500px;
+    height: 390px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding-bottom: 30px;
+  }
 }
 
 @font-face {

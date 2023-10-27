@@ -117,56 +117,56 @@ export default function AttendancePage() {
             let characterNames: string[] = characters.map((c) => c.char_name);
             let serverCallCount = 0;
             while (characterNames.length > 0) {
-              const response = await fetchCharactersFromServer(characterNames[0]);
-              console.log(`fetch call ${serverCallCount++} with ${characterNames[0]}`);
-              if (!response) {
-                console.log(`Can't find ${characterNames[0]}`);
-                characterNames = characterNames.filter(
-                  (item) => item !== characterNames[0]
-                );
-                continue;
-              }
-
-              const characterList = response as LostArkCharacterData[];
-              const ourServers = characterList.filter(
-                (character) => character.ServerName === "실리안"
-              );
-
-              if (ourServers.length === 0) {
-                console.log(`Can't find in '실리안' ${characterNames[0]}`);
-                characterNames = characterNames.filter(
-                  (item) => item !== characterNames[0]
-                );
-                continue;
-              }
-
-              characters.map((char) => {
-                const charInfo = ourServers.filter(
-                  (c) => c.CharacterName === char.char_name
-                )[0];
-                if (charInfo) {
-                  characterNames = characterNames.filter(
-                    (item) => item !== char.char_name
-                  );
-                  const className = charInfo.CharacterClassName;
-                  let classType = "D";
-                  if (
-                    className === "바드" ||
-                    className === "홀리나이트" ||
-                    className === "도화가"
-                  ) {
-                    classType = "S";
-                  }
-                  const itemLevel = charInfo.ItemMaxLevel.replace(/[,]/g, "");
-                  updateCharacterInfo(char.id, className, classType, itemLevel);
+                const response = await fetchCharactersFromServer(characterNames[0]);
+                console.log(`fetch call ${serverCallCount++} with ${characterNames[0]}`);
+                if (!response) {
+                    console.log(`Can't find ${characterNames[0]}`);
+                    characterNames = characterNames.filter(
+                        (item) => item !== characterNames[0]
+                    );
+                    continue;
                 }
-              });
+
+                const characterList = response as LostArkCharacterData[];
+                const ourServers = characterList.filter(
+                    (character) => character.ServerName === "실리안"
+                );
+
+                if (ourServers.length === 0) {
+                    console.log(`Can't find in '실리안' ${characterNames[0]}`);
+                    characterNames = characterNames.filter(
+                        (item) => item !== characterNames[0]
+                    );
+                    continue;
+                }
+
+                characters.map((char) => {
+                    const charInfo = ourServers.filter(
+                        (c) => c.CharacterName === char.char_name
+                    )[0];
+                    if (charInfo) {
+                        characterNames = characterNames.filter(
+                            (item) => item !== char.char_name
+                        );
+                        const className = charInfo.CharacterClassName;
+                        let classType = "D";
+                        if (
+                            className === "바드" ||
+                            className === "홀리나이트" ||
+                            className === "도화가"
+                        ) {
+                            classType = "S";
+                        }
+                        const itemLevel = charInfo.ItemMaxLevel.replace(/[,]/g, "");
+                        updateCharacterInfo(char.id, className, classType, itemLevel);
+                    }
+                });
             }
 
             alert("캐릭터 정보 업데이트 완료");
-          } catch (error) {
+        } catch (error) {
             console.error("에러 발생 : ", error);
-          }
+        }
     }
 
     const handleCheckboxChange = (raidId: number, characterId: number) => {
@@ -254,15 +254,15 @@ export default function AttendancePage() {
     }
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" margin={1} position="relative" height="90vh">
-            <Typography variant='h3' paddingBottom={3} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>출석부</Typography>
+        <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
+            <Typography variant='h3' pb={3} pt={10} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>출석부</Typography>
             <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #e6bd76 solid', backgroundColor: '#f3e07c', textAlign: 'center' }} padding='5px' marginBottom={2}>
                 <Typography style={{ fontFamily: 'S-CoreDream-3Light' }}>캐릭터를 추가하려면 하단 텍스트박스에 캐릭터 이름을 적고 추가 버튼을 눌러주세요.<br />
                     업데이트 버튼을 누르면 캐릭터 정보가 로아 서버로부터 업데이트 됩니다.<br />
                     캐릭터 정보를 모두 업데이트 한 뒤 저장 버튼을 눌러주세요.
                 </Typography>
             </Box>
-            <TableContainer component={Paper} sx={{ maxHeight: '550px' }}>
+            <TableContainer component={Paper} sx={{ maxHeight: '550px', maxWidth: '1800px' }}>
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>

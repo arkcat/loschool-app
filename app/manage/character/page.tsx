@@ -37,10 +37,8 @@ export default function CharactersPage() {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center">
-      <Typography variant="h1" align={"center"} margin={2}>
-        Characters
-      </Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
+    <Typography variant='h3' pb={3} pt={10} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>캐릭터 목록</Typography>
       <FormControl>
         <Select value={selectedOption} onChange={handleChange}>
           <MenuItem value="0">전체</MenuItem>
@@ -53,7 +51,7 @@ export default function CharactersPage() {
         variant="contained"
         sx={{ margin: "5px" }}
         onClick={AllCharactersUpdate}
-      >        캐릭터 정보 업데이트      </Button>
+      >캐릭터 정보 업데이트</Button>
       <FilteredData members={options} selectedOption={selectedOption} />
     </Box>
   );

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabase'
-import { Box, Button, Card, CardContent, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from '@mui/material'
+import { Box, Button, Card, CardContent, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography, styled, tableCellClasses } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import { getPlainText } from '@/utils/TextUtils'
 import { PartyData, RaidData, CharacterData, days, daysOfWeek, timeSlots, MemberData } from '@/lib/database.types'
@@ -111,7 +111,7 @@ export default function WeeklyPlan() {
       <Card key={key}
         style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', height: '30px', marginTop: '3px' }}>
         <CardContent style={{ padding: '0 10px' }}>
-          <Typography style={{ fontSize: '12px' }}>{index === 3 || index === 7 ? "서폿" : "딜러"}</Typography>
+          <Typography style={{ fontSize: '12px', fontFamily: 'SUIT-Regular' }}>{index === 3 || index === 7 ? "서폿" : "딜러"}</Typography>
         </CardContent>
       </Card>
     )
@@ -123,12 +123,14 @@ export default function WeeklyPlan() {
     const textColor = member?.text_color
 
     return (
-      <Card key={key}
-        style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, height: '30px', marginTop: '3px' }}>
-        <CardContent style={{ padding: '0 10px' }}>
-          <Typography style={{ fontSize: '12px' }}>{character.char_name} [{character.char_class}]</Typography>
-        </CardContent>
-      </Card>
+      <Tooltip title={member?.nick_name}>
+        <Card key={key}
+          style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, height: '30px', marginTop: '3px' }}>
+          <CardContent style={{ padding: '0 10px' }}>
+            <Typography style={{ fontSize: '14px', fontFamily: 'SUIT-Regular' }}>{character.char_name} [{character.char_class}]</Typography>
+          </CardContent>
+        </Card>
+      </Tooltip>
     )
   }
 
@@ -171,7 +173,7 @@ export default function WeeklyPlan() {
           bgcolor={raidInfo.raid_color}
           borderColor={raidInfo.raid_color}
           boxShadow={2}>
-          <Typography fontSize={15} style={{ color: 'white' }} onClick={() => handleToggle(partyData.id)}>
+          <Typography style={{ fontFamily: 'NanumBarunGothic', fontSize: 14, color: 'white' }} onClick={() => handleToggle(partyData.id)}>
             {raidInfo.raid_name + ` ${dealerCount + supperterCount}/8`} <br />
             {remainingDealers > 0 && `랏딜: ${remainingDealers}`} {remainingSupporters > 0 && ` 랏폿: ${remainingSupporters}`}
           </Typography>
@@ -190,72 +192,6 @@ export default function WeeklyPlan() {
       )
   }
 
-  function generateWeeklyPlan() {
-
-    const weeklyPlan = []
-
-    for (let j = 13; j <= 26; j++) {
-      const hourData = partyData.filter(party => party.time === j)
-      const daySchedule = []
-      for (let i = 0; i < 7; i++) {
-        const dayData = hourData.filter(party => party.day === i)
-        daySchedule.push({ day: days[i], parties: dayData })
-      }
-      weeklyPlan.push({ hour: j, schedule: daySchedule })
-    }
-
-    return (
-      <Paper sx={{ margin: 1, backgroundColor: '#b7bd98' }}>
-        <TableContainer sx={{ height: '670px' }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                <TableCell align={'center'} sx={{
-                  backgroundColor: '#b7bd98',
-                  fontFamily: "NanumBarunGothic",
-                  fontSize: "23px"
-                }}>요일</TableCell>
-                {days.map((day, index) => (
-                  <TableCell key={index} align={'center'} sx={{
-                    borderLeft: 1,
-                    backgroundColor: getDayBgColor(day),
-                    minWidth: 200,
-                    fontFamily: "NanumBarunGothic",
-                    fontSize: "25px"
-                  }}>{day}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {weeklyPlan.map((daySchedule, index) => (
-                <StyledTableRow key={index}>
-                  <TableCell
-                    sx={{
-                      fontFamily: "NanumBarunGothic",
-                      fontSize: "15px"
-                    }}
-                    key={days[index]}
-                    align={'center'}>{timeSlots[index]}</TableCell>
-                  {daySchedule.schedule.map(hourData => (
-                    <StyledTableCell key={hourData.day}
-                      align={'center'}
-                      sx={{ borderLeft: 1, backgroundColor: getDayBgColor(hourData.day) }}>
-                      {hourData.parties.map((party, partyIndex) => (
-                        <Box key={party.id}>
-                          {makePartyBox(party, partyIndex)}
-                        </Box>
-                      ))}
-                    </StyledTableCell >
-                  ))}
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    )
-  }
-
   function generatePlan() {
 
     const weeklyPlan = []
@@ -271,7 +207,7 @@ export default function WeeklyPlan() {
     }
 
     return (
-      <TableContainer component={Paper} sx={{ maxHeight: '750px' }}>
+      <TableContainer component={Paper} style={{ maxHeight: '750px', maxWidth: '1800px' }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
@@ -279,8 +215,7 @@ export default function WeeklyPlan() {
                 align={'center'}
                 style={{ position: 'sticky', left: 0, zIndex: 99 }}
                 sx={{
-                  minWidth: '100px', textAlign: 'center', backgroundColor: '#b7bd98',
-                  fontFamily: "NanumBarunGothic"
+                  minWidth: '30px', textAlign: 'center', backgroundColor: '#b7bd98', fontFamily: "NanumBarunGothic"
                 }}>
                 시간
               </TableCell>
@@ -288,7 +223,7 @@ export default function WeeklyPlan() {
                 <TableCell key={index} align={'center'} sx={{
                   borderLeft: 1,
                   backgroundColor: getDayBgColor(day),
-                  minWidth: 200,
+                  minWidth: 150,
                   fontFamily: "NanumBarunGothic",
                   fontSize: "25px"
                 }}>{day}</TableCell>
@@ -328,8 +263,8 @@ export default function WeeklyPlan() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" margin={1} position="relative" height="90vh">
-      <Typography variant='h3' paddingBottom={3} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>이번주 시간표</Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
+      <Typography variant='h3' pb={3} pt={10} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>이번주 시간표</Typography>
       {generatePlan()}
     </Box>
   )

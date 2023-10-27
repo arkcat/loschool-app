@@ -120,10 +120,10 @@ export default function Index() {
 
   return (
     <Box
-      display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" height="90vh"
+      display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" height="100vh"
     >
       <Box
-        display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" gap={3} marginTop={-25}
+        display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" gap={3}
       >
         {/* <Typography
           variant="h1" style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '85px', fontWeight: '600', textAlign: 'center', textShadow: "1" }}
@@ -131,7 +131,7 @@ export default function Index() {
           Lo, School
         </Typography> */}
         <Box>
-          <Image src={titleImage} width="600" height="120" alt="Title" />
+          <img src={titleImage.src} className='title-image' alt="Title" />
         </Box>
         <Box>
           {
@@ -174,13 +174,13 @@ export default function Index() {
           }
         </Box> */}
       </Box>
-      
-      <Box position={'absolute'} bottom={0} marginBottom={-4}>
+
+      {/* <Box position={'absolute'} bottom={0} marginBottom={-4}>
         <Image
           src={logo}
           width="150" height="50"
           alt="Logo" />
-      </Box>
+      </Box> */}
     </Box>
   )
 }

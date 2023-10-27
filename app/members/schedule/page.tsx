@@ -70,8 +70,8 @@ export default function MemberSchedulePage() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" margin={1} position="relative" height="90vh">
-      <Typography variant='h3' paddingBottom={3} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>{memberData?.nick_name} 스케쥴</Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
+    <Typography variant='h3' pb={3} pt={10} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>{memberData?.nick_name} 스케쥴</Typography>
       <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #e6bd76 solid', backgroundColor: '#f3e07c', textAlign: 'center' }} padding='5px' marginBottom={2}>
         <Typography style={{ fontFamily: 'S-CoreDream-3Light' }}>레이드 참여 가능한 시간을 클릭하면 색상이 채워집니다.<br /> 모두 선택 후 하단에 반영 버튼을 눌러주세요.</Typography>
       </Box>

@@ -234,6 +234,7 @@ export default function SwipeableTemporaryDrawer() {
                                 backgroundColor: 'transparent',
                             },
                         }}
+                        style={{ position: 'absolute', zIndex:1 }}
                         disableRipple
                     >
                         <MenuIcon sx={{ width: 40, height: 40, margin: 1 }} />

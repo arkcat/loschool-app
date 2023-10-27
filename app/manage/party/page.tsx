@@ -471,38 +471,40 @@ export default function PartyPage() {
     const [showSearch, setShowSearch] = useState<boolean>(false)
 
     return (
-        <Box>
-            {showTopMenu()}
-            <Box display="flex" padding={2} style={{ maxHeight: '800px' }}>
-                <Box flex={1} border={1} style={{ overflowY: 'auto' }} padding={1}>
-                    <Typography variant='h6' borderBottom={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>캐릭터 목록
-                        <IconButton onClick={() => { setShowSearch(true) }}>
-                            <SearchIcon />
-                        </IconButton>
-                    </Typography>
-                    <Box>
-                        {showSearch === true ?
-                            <TextField
-                                size='small'
-                                type="text"
-                                sx={{ marginTop: 1, marginBottom: 1 }}
-                                fullWidth
-                                value={searchCharacterName}
-                                onChange={(e) =>
-                                    setSearchCharacterName(e.target.value)
-                                }
-                            /> : <Box></Box>
+        <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
+            <Box pb={3} pt={10}>
+                {showTopMenu()}
+                <Box display="flex" padding={2} style={{ maxHeight: '800px' }}>
+                    <Box flex={1} border={1} style={{ overflowY: 'auto' }} padding={1}>
+                        <Typography variant='h6' borderBottom={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>캐릭터 목록
+                            <IconButton onClick={() => { setShowSearch(true) }}>
+                                <SearchIcon />
+                            </IconButton>
+                        </Typography>
+                        <Box>
+                            {showSearch === true ?
+                                <TextField
+                                    size='small'
+                                    type="text"
+                                    sx={{ marginTop: 1, marginBottom: 1 }}
+                                    fullWidth
+                                    value={searchCharacterName}
+                                    onChange={(e) =>
+                                        setSearchCharacterName(e.target.value)
+                                    }
+                                /> : <Box></Box>
+                            }
+                        </Box>
+                        {
+                            getFilteredCharacters().map((character) => {
+                                return makeCandiCharacter(String(character.id), character)
+                            })
                         }
                     </Box>
-                    {
-                        getFilteredCharacters().map((character) => {
-                            return makeCandiCharacter(String(character.id), character)
-                        })
-                    }
-                </Box>
-                <Box flex={6} borderRight={1} borderTop={1} borderBottom={1} style={{ overflowY: 'auto' }} marginLeft={2}>
-                    <Typography variant='h6' borderLeft={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>파티 목록</Typography>
-                    <TableComponent />
+                    <Box flex={6} borderRight={1} borderTop={1} borderBottom={1} style={{ overflowY: 'auto' }} marginLeft={2}>
+                        <Typography variant='h6' borderLeft={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>파티 목록</Typography>
+                        <TableComponent />
+                    </Box>
                 </Box>
             </Box>
         </Box>

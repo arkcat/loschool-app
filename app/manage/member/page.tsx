@@ -28,15 +28,15 @@ export default function MemberPage() {
     fetchMembers()
   }, [])
 
-  function makeMemberCard(member: any) {
+  function makeMemberCard(member: MemberData) {
 
     function handleClickMemberCard(): void {
       router.push(`/members/details?id=${getBase64Text(String(member.id))}`)
     }
-    
+
     const bgColor = member.personal_color
     const textColor = member.text_color
-
+    console.log(member)
     return (
       <Grid item xs={6} lg={2} key={member.id}>
         <Card onClick={handleClickMemberCard} style={{ backgroundColor: bgColor, color: textColor }}>
@@ -48,6 +48,7 @@ export default function MemberPage() {
               <Typography variant="body2">{bgColor}</Typography>
               <Typography variant="body2">{textColor}</Typography>
               <Typography variant="body2">{member.permission}</Typography>
+              <Typography variant="body2">{String(member.schedule_check)}</Typography>
             </Box>
           </CardContent>
         </Card>
@@ -56,10 +57,10 @@ export default function MemberPage() {
   }
 
   return (
-    <Box padding={2}>
-      <Typography variant="h2" align={'center'} margin={2}>Members</Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
+      <Typography variant='h3' pb={3} pt={10} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>멤버 관리</Typography>
       <Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} style={{ overflow: 'auto', maxHeight: '800px', maxWidth: '1800px' }}>
           {
             members?.map((member: any) => {
               return (makeMemberCard(member))
