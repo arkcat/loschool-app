@@ -57,7 +57,7 @@ const updateCharacterInfo = async (
   }
 };
 
-export const AllCharactersUpdate = async () => {
+export default async function AllCharactersUpdate() {
   try {
     fetchCharactersData();
 
@@ -96,4 +96,4 @@ export const AllCharactersUpdate = async () => {
   } catch (error) {
     console.error("Error fetching posts:", error);
   }
-};
+}
