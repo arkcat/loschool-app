@@ -69,7 +69,7 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
   }
 
   return (
-    <Box padding={2}>
+    <Box margin={2} sx={{maxHeight: '800px', overflow: 'auto'}}>
       <Grid container spacing={2}>
         {filteredData
           ?.filter((item) => {

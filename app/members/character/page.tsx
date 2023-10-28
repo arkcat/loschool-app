@@ -49,6 +49,7 @@ export default function CharacterDetailPage() {
       const { error } = await supabase
         .from("Character")
         .update({
+          char_name: character?.char_name,
           char_class: character?.char_class,
           char_level: character?.char_level,
         })
@@ -84,108 +85,129 @@ export default function CharacterDetailPage() {
   };
 
   return (
-    <Box>
-      <Box display="flex">
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="back"
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
+      <Box pb={3} pt={10}>
+        <Box display="flex" position='absolute' left={0}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="back"
+            style={{
+              position: "relative",
+              top: "10px",
+              left: "30px",
+            }}
+            onClick={() => {
+              router.back();
+            }}
+          >
+            <ArrowBackIcon style={{ fontSize: 40 }} />
+          </IconButton>
+        </Box>
+        <Grid
+          container
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          gap={2}
+        >
+          <Grid item xs={12}>
+            {character && (
+              <Typography variant='h3' className='page-title'>{character?.char_name} 수정</Typography>
+            )}
+          </Grid>
+          <Grid item xs={12}>
+            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>이름</Typography>
+            <TextField
+              size="small"
+              type="text"
+              value={character?.char_name}
+              InputProps={{
+                style: {
+                  border: 'none',
+                  borderRadius: 18,
+                  background: '#fff'
+                }
+              }}
+              onChange={(e) =>
+                setCharacter({
+                  ...(character as CharacterData),
+                  char_name: e.target.value,
+                })
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>직업</Typography>
+            <TextField
+              size="small"
+              type="text"
+              value={character?.char_class}
+              InputProps={{
+                style: {
+                  border: 'none',
+                  borderRadius: 18,
+                  background: '#fff'
+                }
+              }}
+              onChange={(e) =>
+                setCharacter({
+                  ...(character as CharacterData),
+                  char_class: e.target.value,
+                })
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>레벨</Typography>
+            <TextField
+              size="small"
+              type="text"
+              value={character?.char_level}
+              InputProps={{
+                style: {
+                  border: 'none',
+                  borderRadius: 18,
+                  background: '#fff'
+                }
+              }}
+              onChange={(e) =>
+                setCharacter({
+                  ...(character as CharacterData),
+                  char_level: parseInt(e.target.value),
+                })
+              }
+            />
+          </Grid>
+        </Grid>
+        <Box
           style={{
-            position: "relative",
-            top: "10px",
-            left: "30px",
-          }}
-          onClick={() => {
-            router.back();
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "15px",
+            gap: "15px",
           }}
         >
-          <ArrowBackIcon style={{ fontSize: 40 }} />
-        </IconButton>
-      </Box>
-      <Grid
-        container
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        gap={2}
-      >
-        <Grid item xs={12}>
-          {character && (
-            <Typography variant="h3" paddingBottom={3} align="center">
-              {character?.char_name} 수정
-            </Typography>
-          )}
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>이름</Typography>
-          <TextField
-            size="small"
-            type="text"
-            value={character?.char_name}
-            onChange={(e) =>
-              setCharacter({
-                ...(character as CharacterData),
-                char_name: e.target.value,
-              })
-            }
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>직업</Typography>
-          <TextField
-            size="small"
-            type="text"
-            value={character?.char_class}
-            onChange={(e) =>
-              setCharacter({
-                ...(character as CharacterData),
-                char_class: e.target.value,
-              })
-            }
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>레벨</Typography>
-          <TextField
-            size="small"
-            type="text"
-            value={character?.char_level}
-            onChange={(e) =>
-              setCharacter({
-                ...(character as CharacterData),
-                char_level: parseInt(e.target.value),
-              })
-            }
-          />
-        </Grid>
-      </Grid>
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "15px",
-          gap: "15px",
-        }}
-      >
-        <Button variant="contained" onClick={handleUpdateMember}>
-          저장
-        </Button>
+          <Button variant="contained" onClick={handleUpdateMember}>
+            저장
+          </Button>
 
-        <Button
-          variant="contained"
-          onClick={() => {
-            const shouldDelete = window.confirm(
-              `[${character?.char_name}] 정말로 삭제하시겠습니까?`
-            );
-            if (character && shouldDelete) {
-              handleDeleteCharacter(character.id);
-            }
-          }}
-        >
-          캐릭터 삭제
-        </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              const shouldDelete = window.confirm(
+                `[${character?.char_name}] 정말로 삭제하시겠습니까?`
+              );
+              if (character && shouldDelete) {
+                handleDeleteCharacter(character.id);
+              }
+            }}
+          >
+            캐릭터 삭제
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

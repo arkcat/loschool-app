@@ -101,7 +101,6 @@ export default function MemberDetailPage() {
           <Grid item xs={12}>
             <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>닉네임</Typography>
             <TextField
-              variant='outlined'
               size='small'
               type="text"
               value={member?.nick_name}
