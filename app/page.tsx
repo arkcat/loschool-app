@@ -19,6 +19,7 @@ export default function Index() {
   const [userState, setUserState] = useRecoilState<any | null>(userAtom)
   const [partyData, setPartyData] = useState<PartyData[]>([])
   const [raidData, setRaidData] = useState<RaidData[]>([])
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -38,15 +39,13 @@ export default function Index() {
 
     const fetchPartyData = async () => {
       try {
-        if (!userState) {
-          const today = getDayOfWeek()
+        const today = getDayOfWeek()
           const { data, error } = await supabase.from('Party').select().eq('day', today)
           if (error) {
             console.error('Error fetching party data:', error)
           } else {
             setPartyData(data as PartyData[])
           }
-        }
       } catch (error: any) {
         console.error('사용자 정보 가져오기 오류:', error.message)
       }
@@ -112,7 +111,7 @@ export default function Index() {
     return (
       <ListItem style={{ textAlign: 'center' }}>
         <ListItemText
-          primary={<span style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '20px', fontWeight: '300' }}>{`${raidInfo.raid_name} ${data.time}시`}</span>}
+          primary={<span style={{ fontFamily: 'NanumBarunGothic', fontSize: '20px' }}>{`${raidInfo.raid_name} ${data.time} 시`}</span>}
         />
       </ListItem>
     )
@@ -139,7 +138,7 @@ export default function Index() {
             (
               <div className='outlined'>
                 {showLoginForm === false ?
-                  <div onClick={() => setShowLoginForm(true)} style={{cursor:'pointer', fontFamily:'NanumBarunGothic', fontSize:'30px'}}>로그인</div> :
+                  <div onClick={() => setShowLoginForm(true)} style={{ cursor: 'pointer', fontFamily: 'NanumBarunGothic', fontSize: '30px' }}>로그인</div> :
                   <div className="loginForm">
                     <LoginForm onLoginSuccess={handleUpdateMember} />
                   </div>
@@ -148,13 +147,13 @@ export default function Index() {
             )
           }
         </Box>
-        {/* <Box>
+        <Box>
           {userState &&
             (<Box>
               <Grid container spacing={2}>
-                <Grid item xs={12} md={6} style={{ padding: '10px' }}>
+                <Grid item xs={12} md={6} >
                   <Typography sx={{ mt: 2, mb: 2 }} variant="h4" textAlign={'center'} style={{ fontFamily: 'SUIT-Regular', fontSize: '32px', fontWeight: '600' }}>오늘의 공대</Typography>
-                  <div style={{border: '1px solid #ccc'}}>
+                  <div className='main-post'>
                     <List dense>
                       {partyData.map((data) => (
                         <PartyItem key={data.id} data={data} />
@@ -162,25 +161,17 @@ export default function Index() {
                     </List>
                   </div>
                 </Grid>
-                <Grid item xs={12} md={6} style={{ padding: '10px' }}>
+                <Grid item xs={12} md={6}>
                   <Typography sx={{ mt: 2, mb: 2 }} variant="h4" textAlign={'center'} style={{ fontFamily: 'SUIT-Regular', fontSize: '32px', fontWeight: '600' }}>운영진 공지</Typography>
-                  <div style={{border: '1px solid #ccc'}}>
-                    <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '22px', fontWeight: '400' }}>지각 금지</Typography>
-                    
+                  <div className='main-post'>
+                    <Typography style={{ fontFamily: 'NanumBarunGothic', fontSize: '20px', textAlign: 'center' }}>지각 금지</Typography>
                   </div>
                 </Grid>
               </Grid>
             </Box>)
           }
-        </Box> */}
+        </Box>
       </Box>
-
-      {/* <Box position={'absolute'} bottom={0} marginBottom={-4}>
-        <Image
-          src={logo}
-          width="150" height="50"
-          alt="Logo" />
-      </Box> */}
     </Box>
   )
 }

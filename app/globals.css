@@ -52,6 +52,10 @@ body {
     font-family: "S-CoreDream-3Light";
     font-size: 10px;
   }
+  .main-post {
+    background: #f3e07cc8;
+    margin: 10px;
+  }
   .MuiTableCell-root {
     font-family: "SUIT-Regular";
     font-size: 10px;
@@ -96,6 +100,12 @@ body {
   .page-description {
     font-family: "S-CoreDream-3Light";
     font-size: 18px;
+  }
+  .main-post {
+    background: #f3e07cc8;
+    margin: 10px;
+    min-width: 400px;
+    min-height: 200px;
   }
   .MuiTableCell-root {
     font-family: "SUIT-Regular";
