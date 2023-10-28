@@ -6,20 +6,9 @@ import {
   Card,
   CardContent,
   Grid,
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableCell,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/navigation";
 import { getBase64Text } from "@/utils/TextUtils";
-import { CharacterData } from "@/lib/database.types";
-import { TableVirtuoso, TableComponents } from "react-virtuoso";
 import React from "react";
 
 interface FilteredDataProps {
