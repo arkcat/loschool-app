@@ -177,7 +177,7 @@ export default function SwipeableTemporaryDrawer() {
                         <ListItemText primary={'캐릭터 관리'} />
                     </ListItemButton>
                 </ListItem>
-                <ListItem key={'manage raid'} disablePadding>
+                {/* <ListItem key={'manage raid'} disablePadding>
                     <ListItemButton onClick={() => {
                         router.push(`/manage/raid`)
                     }}>
@@ -186,7 +186,7 @@ export default function SwipeableTemporaryDrawer() {
                         </ListItemIcon>
                         <ListItemText primary={'레이드 관리'} />
                     </ListItemButton>
-                </ListItem>
+                </ListItem> */}
                 <ListItem key={'manage partyt'} disablePadding>
                     <ListItemButton onClick={() => {
                         router.push(`/manage/party`)

@@ -471,7 +471,7 @@ export default function PartyPage() {
     const [showSearch, setShowSearch] = useState<boolean>(false)
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
+        <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
             <Box pb={3} pt={10}>
                 {showTopMenu()}
                 <Box display="flex" padding={2} style={{ maxHeight: '800px' }}>

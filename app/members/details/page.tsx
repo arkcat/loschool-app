@@ -85,7 +85,7 @@ export default function MemberDetailPage() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
       <Box pb={3} pt={10}>
         <Grid container
           display="flex"
@@ -95,15 +95,23 @@ export default function MemberDetailPage() {
           gap={2}>
           <Grid item xs={12}>
             {member && (
-              <Typography variant='h3' paddingBottom={3} align='center' style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>{member.nick_name} 수정</Typography>
+              <Typography variant='h3' className='page-title'>{member.nick_name} 수정</Typography>
             )}
           </Grid>
           <Grid item xs={12}>
-            <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '20px' }}>닉네임</Typography>
+            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>닉네임</Typography>
             <TextField
+              variant='outlined'
               size='small'
               type="text"
               value={member?.nick_name}
+              InputProps={{
+                style: {
+                  border: 'none',
+                  borderRadius: 18,
+                  background: '#fff'
+                }
+              }}
               onChange={(e) =>
                 setMember({
                   ...(member as MemberData),
@@ -113,11 +121,18 @@ export default function MemberDetailPage() {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '20px' }}>퍼스널 컬러</Typography>
+            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>퍼스널 컬러</Typography>
             <TextField
               size='small'
               type="text"
               value={member?.personal_color}
+              InputProps={{
+                style: {
+                  border: 'none',
+                  borderRadius: 18,
+                  background: '#fff'
+                }
+              }}
               onChange={(e) =>
                 setMember({
                   ...(member as MemberData),
@@ -127,11 +142,18 @@ export default function MemberDetailPage() {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '20px' }}>텍스트 컬러</Typography>
+            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>텍스트 컬러</Typography>
             <TextField
               size='small'
               type="text"
               value={member?.text_color}
+              InputProps={{
+                style: {
+                  border: 'none',
+                  borderRadius: 18,
+                  background: '#fff'
+                }
+              }}
               onChange={(e) =>
                 setMember({
                   ...(member as MemberData),
@@ -142,8 +164,10 @@ export default function MemberDetailPage() {
           </Grid>
           {caller !== '' && (
             <Grid item xs={12}>
-              <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '20px' }}>권한</Typography>
+              <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>권한</Typography>
               <Select value={selectedOption}
+                variant='outlined'
+                sx={{background:'#fff', minWidth:250, height:40, borderRadius:18}}
                 onChange={(e) => {
                   setSelectedOption(e.target.value)
                   setMember({

@@ -37,10 +37,13 @@ export default function CharactersPage() {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
-    <Typography variant='h3' pb={3} pt={10} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>캐릭터 목록</Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
+      <Typography variant='h3' className='page-title'>캐릭터 목록</Typography>
       <FormControl>
-        <Select value={selectedOption} onChange={handleChange}>
+        <Select value={selectedOption}
+          variant='outlined'
+          sx={{ background: '#fff', minWidth: 250, height: 40, borderRadius: 18 }}
+          onChange={handleChange}>
           <MenuItem value="0">전체</MenuItem>
           {options?.map((option) => {
             return <MenuItem value={option.id}>{option.nick_name}</MenuItem>;

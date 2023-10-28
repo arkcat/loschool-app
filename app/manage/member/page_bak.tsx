@@ -57,8 +57,8 @@ export default function MemberPage() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
-      <Typography variant='h3' pb={3} pt={10} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>멤버 관리</Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
+      <Typography variant='h3' className='page-title'>멤버 관리</Typography>
       {/* <Box>
         <Grid container spacing={2} style={{ overflow: 'auto', maxHeight: '800px', maxWidth: '1800px' }}>
           {

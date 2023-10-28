@@ -40,12 +40,12 @@ export default function Index() {
     const fetchPartyData = async () => {
       try {
         const today = getDayOfWeek()
-          const { data, error } = await supabase.from('Party').select().eq('day', today)
-          if (error) {
-            console.error('Error fetching party data:', error)
-          } else {
-            setPartyData(data as PartyData[])
-          }
+        const { data, error } = await supabase.from('Party').select().eq('day', today)
+        if (error) {
+          console.error('Error fetching party data:', error)
+        } else {
+          setPartyData(data as PartyData[])
+        }
       } catch (error: any) {
         console.error('사용자 정보 가져오기 오류:', error.message)
       }
@@ -118,17 +118,8 @@ export default function Index() {
   }
 
   return (
-    <Box
-      display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" height="100vh"
-    >
-      <Box
-        display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" gap={3}
-      >
-        {/* <Typography
-          variant="h1" style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '85px', fontWeight: '600', textAlign: 'center', textShadow: "1" }}
-        >
-          Lo, School
-        </Typography> */}
+    <Box display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" height="100dvh">
+      <Box display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" gap={3}>
         <Box>
           <img src={titleImage.src} className='title-image' alt="Title" />
         </Box>

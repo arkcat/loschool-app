@@ -221,45 +221,40 @@ export default function EnhancedTable() {
     }
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
-            <Typography variant='h3' pb={3} pt={10} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>멤버 관리</Typography>
-            <Paper sx={{ width: '90%', mb: 2, maxHeight: '800px', maxWidth: '550px', overflow: 'auto' }}>
-                <TableContainer>
-                    <Table
-                        aria-labelledby="tableTitle"
-                        size={'small'}
-                    >
-                        <TableHead>
-                            <TableRow>
-                                <TableCell scope="row" style={{ padding: 15, fontFamily: 'S-CoreDream-3Light', width: '30%' }}>닉네임</TableCell>
-                                <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', width: '20%' }}>권한</TableCell>
-                                <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', width: '20%' }}>컬러</TableCell>
-                                <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', width: '30%' }}>스케쥴</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {members.map((row, index) => {
-                                const labelId = `enhanced-table-checkbox-${index}`;
+        <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
+            <Typography variant='h3' className='page-title'>멤버 관리</Typography>
+            <TableContainer component={Paper} sx={{ width: '90%', mb: 5, maxHeight: '800px', maxWidth: '550px', overflow: 'auto' }}>
+                <Table aria-labelledby="tableTitle" size={'small'} stickyHeader>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell scope="row" style={{ padding: 15, fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '30%' }}>닉네임</TableCell>
+                            <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '20%' }}>권한</TableCell>
+                            <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '20%' }}>컬러</TableCell>
+                            <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '30%' }}>스케쥴</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {members.map((row, index) => {
+                            const labelId = `enhanced-table-checkbox-${index}`;
 
-                                return (
-                                    <TableRow hover tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }} onClick={() => { routeMemberDetails(row.uid) }}>
-                                        <TableCell component="th" id={labelId} scope="row" style={{ padding: 15, fontFamily: 'SUIT-Regular' }}>{row.nick_name}</TableCell>
-                                        <TableCell align="right" style={{ fontFamily: 'SUIT-Regular' }}>{row.permission}</TableCell>
-                                        <TableCell align="right" style={{ backgroundColor: row.personal_color, color: row.text_color, fontFamily: 'SUIT-Regular' }}>{row.personal_color}</TableCell>
-                                        <TableCell align="right">
-                                            {row.schedule_check === true ? (
-                                                <CheckIcon color="success" />
-                                            ) : (
-                                                <CancelIcon color="error" />
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
+                            return (
+                                <TableRow hover tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }} onClick={() => { routeMemberDetails(row.uid) }}>
+                                    <TableCell component="th" id={labelId} scope="row" style={{ padding: 15, fontFamily: 'SUIT-Regular' }}>{row.nick_name}</TableCell>
+                                    <TableCell align="right" style={{ fontFamily: 'SUIT-Regular' }}>{row.permission}</TableCell>
+                                    <TableCell align="right" style={{ backgroundColor: row.personal_color, color: row.text_color, fontFamily: 'SUIT-Regular' }}>{row.personal_color}</TableCell>
+                                    <TableCell align="right">
+                                        {row.schedule_check === true ? (
+                                            <CheckIcon color="success" />
+                                        ) : (
+                                            <CancelIcon color="error" />
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </Box>
     );
 }

@@ -207,7 +207,7 @@ export default function WeeklyPlan() {
     }
 
     return (
-      <TableContainer component={Paper} style={{ maxHeight: '750px', maxWidth: '1800px' }}>
+      <TableContainer component={Paper} sx={{ mb: 5 }} style={{ maxHeight: '800px', maxWidth: '1800px' }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
@@ -266,7 +266,7 @@ export default function WeeklyPlan() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
       <Typography variant='h3' className='page-title'>이번주 시간표</Typography>
       {generatePlan()}
     </Box>

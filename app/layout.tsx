@@ -17,7 +17,7 @@ export default function RootLayout({
       <body>
         <RecoilRoot>
           <Box>
-            <main className="min-h-screen bg-background flex flex-col items-center"
+            <main className="100dvh bg-background flex flex-col items-center"
               style={{ position: 'relative', backgroundColor: '#d1d7b1' }}>
               <SwipeDrawer />
               <img
