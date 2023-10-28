@@ -33,6 +33,35 @@ body {
     bottom: 0;
     padding-bottom: 30px;
   }
+  .header-text {
+    font-family: "PuradakGentleGothicR";
+    font-size: 20px;
+  }
+  .header-icon {
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+  }
+  .page-title {
+    padding-top: 50px;
+    padding-bottom: 10px;
+    font-family: "PuradakGentleGothicR";
+    font-size: 30px;
+  }
+  .page-description {
+    font-family: "S-CoreDream-3Light";
+    font-size: 10px;
+  }
+  .MuiTableCell-root {
+    font-family: "SUIT-Regular";
+    font-size: 10px;
+  }
+  .MuiButton-contained {
+    background-color: #e6bd76;
+    color: #000000;
+    font-family: "NanumBarunGothic";
+    font-size: 11px;
+  }
 }
 
 /* 600px 초과인 경우 */
@@ -49,33 +78,74 @@ body {
     bottom: 0;
     padding-bottom: 30px;
   }
+  .header-text {
+    font-family: "PuradakGentleGothicR";
+    font-size: 50px;
+  }
+  .header-icon {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+  }
+  .page-title {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    font-family: "PuradakGentleGothicR";
+    font-size: 50px;
+  }
+  .page-description {
+    font-family: "S-CoreDream-3Light";
+    font-size: 18px;
+  }
+  .MuiTableCell-root {
+    font-family: "SUIT-Regular";
+    font-size: 14px;
+  }
+  .MuiButton-contained {
+    background-color: #e6bd76;
+    color: #000000;
+    font-family: "NanumBarunGothic";
+    font-size: 16px;
+  }
+}
+
+.MuiButton-contained:hover {
+  background-color: #f3e07c;
 }
 
 @font-face {
-  font-family: 'PuradakGentleGothicR';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.1/PuradakGentleGothicR.woff2') format('woff2');
+  font-family: "PuradakGentleGothicR";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.1/PuradakGentleGothicR.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'NanumBarunGothic';
+  font-family: "NanumBarunGothic";
   font-style: normal;
   font-weight: 700;
-  src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot');
-  src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.ttf') format('truetype')
- }
+  src: url("//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot");
+  src: url("//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot?#iefix")
+      format("embedded-opentype"),
+    url("//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.woff")
+      format("woff"),
+    url("//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.ttf")
+      format("truetype");
+}
 
 @font-face {
-  font-family: 'S-CoreDream-3Light';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-family: "S-CoreDream-3Light";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SUIT-Regular';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+  font-family: "SUIT-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }

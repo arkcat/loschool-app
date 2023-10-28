@@ -78,6 +78,10 @@ export default function SwipeableTemporaryDrawer() {
         }
     }
 
+    function routeMemberDetails(): void {
+        router.push(`/members/details?id=${getBase64Text(userState.uid)}`)
+    }
+
     async function handleLogout() {
         const { error } = await supabase.auth.signOut()
         if (error) {
@@ -113,7 +117,10 @@ export default function SwipeableTemporaryDrawer() {
                 gap={1}>
                 <Typography variant='h6'>환영합니다,</Typography>
                 <Typography variant='h5'>{userState.nick_name} 님!</Typography>
-                <Button variant='contained' onClick={handleLogout} disableFocusRipple>탈출의 노래</Button>
+                <Box>
+                    <Button variant='contained' disableFocusRipple onClick={routeMemberDetails} style={{ marginRight: '4px' }}>내 정보</Button>
+                    <Button variant='contained' onClick={handleLogout} disableFocusRipple>탈출의 노래</Button>
+                </Box>
             </Box>
         )
     }
@@ -229,16 +236,15 @@ export default function SwipeableTemporaryDrawer() {
                         color="inherit"
                         onClick={toggleDrawer(anchor, true)}
                         sx={{
-                            marginLeft: 2,
                             '&:hover': {
                                 backgroundColor: 'transparent',
                             },
                         }}
-                        style={{ position: 'absolute', zIndex:1 }}
+                        style={{ position: 'absolute', zIndex: 1 }}
                         disableRipple
                     >
-                        <MenuIcon sx={{ width: 40, height: 40, margin: 1 }} />
-                        <Typography variant='h4' style={{ fontFamily: 'PuradakGentleGothicR' }}>{userState?.nick_name}</Typography>
+                        <MenuIcon className='header-icon' />
+                        <Typography variant='h4' className='header-text'>{userState?.nick_name}</Typography>
                     </Button>
 
                     <SwipeableDrawer

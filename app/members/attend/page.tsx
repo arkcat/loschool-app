@@ -255,9 +255,9 @@ export default function AttendancePage() {
 
     return (
         <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
-            <Typography variant='h3' pb={3} pt={10} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>출석부</Typography>
+            <Typography variant='h3' className='page-title'>출석부</Typography>
             <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #e6bd76 solid', backgroundColor: '#f3e07c', textAlign: 'center' }} padding='5px' marginBottom={2}>
-                <Typography style={{ fontFamily: 'S-CoreDream-3Light' }}>캐릭터를 추가하려면 하단 텍스트박스에 캐릭터 이름을 적고 추가 버튼을 눌러주세요.<br />
+                <Typography className='page-description'>캐릭터를 추가하려면 하단 텍스트박스에 캐릭터 이름을 적고 추가 버튼을 눌러주세요.<br />
                     업데이트 버튼을 누르면 캐릭터 정보가 로아 서버로부터 업데이트 됩니다.<br />
                     캐릭터 정보를 모두 업데이트 한 뒤 저장 버튼을 눌러주세요.
                 </Typography>
@@ -266,12 +266,12 @@ export default function AttendancePage() {
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{ position: 'sticky', left: 0, zIndex: 99 }} sx={{ minWidth: '100px', textAlign: 'center', borderRight: '2px #f3e07c solid', borderBottom: '2px #f3e07c solid' }}>캐릭터</TableCell>
-                            <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }}>레벨</TableCell>
+                            <TableCell style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: 'S-CoreDream-3Light', fontSize: '13px' }} sx={{ minWidth: '100px', textAlign: 'center', borderRight: '2px #f3e07c solid', borderBottom: '2px #f3e07c solid' }}>캐릭터</TableCell>
+                            <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }} style={{fontFamily: 'S-CoreDream-3Light', fontSize: '13px'}}>레벨</TableCell>
                             {raids.map((raid: any) => (
                                 <TableCell sx={{ minWidth: '100px', borderBottom: '2px #f3e07c solid' }} key={raid.id} align='center'>
-                                    <Typography variant='body1'>{raid.raid_name}</Typography>
-                                    <Typography variant='caption'>{raid.raid_level}</Typography>
+                                    <Typography variant='body1' style={{fontFamily: 'S-CoreDream-3Light', fontSize: '13px'}}>{raid.raid_name}</Typography>
+                                    <Typography variant='caption' style={{fontFamily: 'S-CoreDream-3Light', fontSize: '13px'}}>{raid.raid_level}</Typography>
                                 </TableCell>
                             ))}
                         </TableRow>
@@ -284,7 +284,7 @@ export default function AttendancePage() {
                                     {character.char_name}<br />
                                     [{character.char_class}]
                                     <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '3px' }}>
-                                        <Button variant='contained' style={{ fontSize: '10px' }} onClick={() => {
+                                        <Button variant='contained' onClick={() => {
                                             router.push(`/members/character?id=${getBase64Text(String(character.id))}`)
                                         }}>관리</Button>
                                     </Box>
@@ -313,8 +313,8 @@ export default function AttendancePage() {
                 <Button variant="contained" color="primary" style={{ marginLeft: 15, marginRight: 10 }} onClick={handleSave}>저장</Button>
                 <Button variant="contained" color="primary" style={{ marginLeft: 10, marginRight: 15 }} onClick={handleUpdate}>업데이트</Button>
             </Box>
-            <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
-                <TextField value={addCharName} onChange={(e) => setAddCharName(e.target.value)} />
+            <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px', paddingBottom: '5px' }}>
+                <TextField variant='filled' sx={{background:'#fff'}} value={addCharName} onChange={(e) => setAddCharName(e.target.value)} />
                 <Button variant="contained" color="primary" onClick={() => {
                     if (addCharName.length < 2) {
                         alert('캐릭터 이름을 정확히 입력해주세요.')

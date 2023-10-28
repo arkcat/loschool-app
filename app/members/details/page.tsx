@@ -11,8 +11,10 @@ import { MemberData } from '@/lib/database.types'
 export default function MemberDetailPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const id = parseInt(getPlainText(searchParams.get('id') || ""))
-
+  const id = getPlainText(searchParams.get('id') || "")
+  const caller = searchParams.get('caller') || ''
+  console.log(id)
+  console.log(caller)
   const [member, setMember] = useState<MemberData | null>(null)
   const [selectedOption, setSelectedOption] = useState('freshman')
 
@@ -21,7 +23,7 @@ export default function MemberDetailPage() {
       const { data, error } = await supabase
         .from('Member')
         .select()
-        .eq('id', id)
+        .eq('uid', id)
         .single()
 
       if (error) { console.error('Error fetching member:', error) }
@@ -48,7 +50,7 @@ export default function MemberDetailPage() {
           text_color: member?.text_color,
           permission: member?.permission
         })
-        .eq('id', id)
+        .eq('uid', id)
 
       if (error) {
         throw error
@@ -83,88 +85,92 @@ export default function MemberDetailPage() {
   }
 
   return (
-    <Box>
-      <Grid container
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        gap={2}>
-        <Grid item xs={12}>
-          {member && (
-            <Typography variant='h3' paddingBottom={3} align='center'>{member.nick_name} 수정</Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
+      <Box pb={3} pt={10}>
+        <Grid container
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          gap={2}>
+          <Grid item xs={12}>
+            {member && (
+              <Typography variant='h3' paddingBottom={3} align='center' style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>{member.nick_name} 수정</Typography>
+            )}
+          </Grid>
+          <Grid item xs={12}>
+            <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '20px' }}>닉네임</Typography>
+            <TextField
+              size='small'
+              type="text"
+              value={member?.nick_name}
+              onChange={(e) =>
+                setMember({
+                  ...(member as MemberData),
+                  nick_name: e.target.value
+                })
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '20px' }}>퍼스널 컬러</Typography>
+            <TextField
+              size='small'
+              type="text"
+              value={member?.personal_color}
+              onChange={(e) =>
+                setMember({
+                  ...(member as MemberData),
+                  personal_color: e.target.value
+                })
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '20px' }}>텍스트 컬러</Typography>
+            <TextField
+              size='small'
+              type="text"
+              value={member?.text_color}
+              onChange={(e) =>
+                setMember({
+                  ...(member as MemberData),
+                  text_color: e.target.value
+                })
+              }
+            />
+          </Grid>
+          {caller !== '' && (
+            <Grid item xs={12}>
+              <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '20px' }}>권한</Typography>
+              <Select value={selectedOption}
+                onChange={(e) => {
+                  setSelectedOption(e.target.value)
+                  setMember({
+                    ...(member as MemberData),
+                    permission: e.target.value
+                  })
+                }}>
+                <MenuItem value="freshman">Freshman</MenuItem>
+                <MenuItem value="senior">Senior</MenuItem>
+                <MenuItem value="professor">Professor</MenuItem>
+              </Select>
+            </Grid>
           )}
         </Grid>
-        <Grid item xs={12}>
-          <Typography>Nick Name</Typography>
-          <TextField
-            size='small'
-            type="text"
-            value={member?.nick_name}
-            onChange={(e) =>
-              setMember({
-                ...(member as MemberData),
-                nick_name: e.target.value
-              })
-            }
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>Personal Color</Typography>
-          <TextField
-            size='small'
-            type="text"
-            value={member?.personal_color}
-            onChange={(e) =>
-              setMember({
-                ...(member as MemberData),
-                personal_color: e.target.value
-              })
-            }
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>Text Color</Typography>
-          <TextField
-            size='small'
-            type="text"
-            value={member?.text_color}
-            onChange={(e) =>
-              setMember({
-                ...(member as MemberData),
-                text_color: e.target.value
-              })
-            }
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>Permission</Typography>
-          <Select value={selectedOption}
-            onChange={(e) => {
-              setSelectedOption(e.target.value)
-              setMember({
-                ...(member as MemberData),
-                permission: e.target.value
-              })
-            }}>
-            <MenuItem value="freshman">Freshman</MenuItem>
-            <MenuItem value="senior">Senior</MenuItem>
-            <MenuItem value="professor">Professor</MenuItem>
-          </Select>
-        </Grid>
-      </Grid>
-      <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '15px', gap: '15px' }}>
-
-        <Button variant='contained' onClick={handleUpdateMember}>
-          저장
-        </Button>
-
-        <Button variant='contained' onClick={() => {
-          const shouldDelete = window.confirm(`[${member?.nick_name}] 정말로 삭제하시겠습니까?`)
-          if (member && shouldDelete) {
-            deleteMember(member.nick_name, member.uid)
-          }
-        }}>멤버삭제</Button>
+        <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '15px', gap: '15px' }}>
+          <Button variant='contained' onClick={handleUpdateMember}>
+            저장
+          </Button>
+          {caller !== '' && (
+            <Button variant='contained' onClick={() => {
+              const shouldDelete = window.confirm(`[${member?.nick_name}] 정말로 삭제하시겠습니까?`)
+              if (member && shouldDelete) {
+                deleteMember(member.nick_name, member.uid)
+              }
+            }}>멤버삭제</Button>
+          )}
+        </Box>
       </Box>
     </Box>
   )

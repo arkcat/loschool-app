@@ -139,7 +139,7 @@ export default function Index() {
             (
               <div className='outlined'>
                 {showLoginForm === false ?
-                  <div onClick={() => setShowLoginForm(true)}>로그인</div> :
+                  <div onClick={() => setShowLoginForm(true)} style={{cursor:'pointer', fontFamily:'NanumBarunGothic', fontSize:'30px'}}>로그인</div> :
                   <div className="loginForm">
                     <LoginForm onLoginSuccess={handleUpdateMember} />
                   </div>

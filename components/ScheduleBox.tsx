@@ -15,8 +15,8 @@ function ScheduleBox({ number, value, onClick }: { number: string, value: number
         <div
             onClick={toggleColor}
             style={{
-                width: '25px',
-                height: '25px',
+                width: '23px',
+                height: '23px',
                 background: color,
                 display: 'inline-block',
                 border: `2px solid ${borderColor}`

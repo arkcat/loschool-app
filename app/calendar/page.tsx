@@ -125,7 +125,7 @@ export default function WeeklyPlan() {
     return (
       <Tooltip title={member?.nick_name}>
         <Card key={key}
-          style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, height: '30px', marginTop: '3px' }}>
+          style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, minHeight: '30px', marginTop: '3px' }}>
           <CardContent style={{ padding: '0 10px' }}>
             <Typography style={{ fontSize: '14px', fontFamily: 'SUIT-Regular' }}>{character.char_name} [{character.char_class}]</Typography>
           </CardContent>
@@ -213,20 +213,21 @@ export default function WeeklyPlan() {
             <TableRow>
               <TableCell
                 align={'center'}
-                style={{ position: 'sticky', left: 0, zIndex: 99 }}
-                sx={{
-                  minWidth: '30px', textAlign: 'center', backgroundColor: '#b7bd98', fontFamily: "NanumBarunGothic"
-                }}>
+                style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: "NanumBarunGothic", fontSize: '14px' }}
+                sx={{ minWidth: '30px', textAlign: 'center', backgroundColor: '#b7bd98' }}>
                 시간
               </TableCell>
               {days.map((day, index) => (
-                <TableCell key={index} align={'center'} sx={{
-                  borderLeft: 1,
-                  backgroundColor: getDayBgColor(day),
-                  minWidth: 150,
-                  fontFamily: "NanumBarunGothic",
-                  fontSize: "25px"
-                }}>{day}</TableCell>
+                <TableCell key={index} align={'center'}
+                  sx={{
+                    borderLeft: 1,
+                    backgroundColor: getDayBgColor(day),
+                    minWidth: 150,
+                  }}
+                  style={{
+                    fontFamily: "NanumBarunGothic",
+                    fontSize: '14px'
+                  }}>{day}</TableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -235,12 +236,14 @@ export default function WeeklyPlan() {
               <TableRow key={index}>
                 <TableCell
                   sx={{
-                    fontFamily: "NanumBarunGothic",
-                    fontSize: "15px",
                     textAlign: 'center',
                     backgroundColor: '#b7bd98'
                   }}
-                  style={{ position: 'sticky', left: 0, zIndex: 98 }}
+                  style={{
+                    position: 'sticky', left: 0, zIndex: 98,
+                    fontFamily: "NanumBarunGothic",
+                    fontSize: '14px'
+                  }}
                   key={days[index]}
                   align={'center'}>{timeSlots[index]}</TableCell>
                 {daySchedule.schedule.map(hourData => (
@@ -264,7 +267,7 @@ export default function WeeklyPlan() {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100vh">
-      <Typography variant='h3' pb={3} pt={10} style={{ fontFamily: 'PuradakGentleGothicR', fontSize: '50px' }}>이번주 시간표</Typography>
+      <Typography variant='h3' className='page-title'>이번주 시간표</Typography>
       {generatePlan()}
     </Box>
   )
