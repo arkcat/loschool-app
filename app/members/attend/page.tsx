@@ -270,8 +270,8 @@ export default function AttendancePage() {
                             <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }} style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '13px' }}>레벨</TableCell>
                             {raids.map(raid => (
                                 <TableCell sx={{ minWidth: '100px', borderBottom: '2px #f3e07c solid', background: raid.raid_color, color: '#fff' }} key={raid.id} align='center'>
-                                    <Typography variant='body1' style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '13px' }}>{raid.raid_name}</Typography>
-                                    <Typography variant='caption' style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '13px' }}>{raid.raid_level}</Typography>
+                                    <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '13px' }}>{raid.raid_name}</Typography>
+                                    <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '13px' }}>{raid.raid_level}</Typography>
                                 </TableCell>
                             ))}
                         </TableRow>
