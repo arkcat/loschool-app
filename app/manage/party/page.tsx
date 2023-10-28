@@ -373,17 +373,29 @@ export default function PartyPage() {
 
         const entyCharacter = checkEntryCharacter(character.id)
         const otherCharacterInParty = getCharacterIDsInParty.includes(character.member_id)
-        let color = hexToRgba(bgColor, 1)
+
+        const dragable = !(entyCharacter || otherCharacterInParty)
         return (
             <Card key={key}
                 style={{
+                    position: 'relative',
                     display: 'flex', alignItems: 'center', border: '1px solid #ccc',
-                    backgroundColor: entyCharacter || otherCharacterInParty ? `rgb(${color[0] * 0.7}, ${color[1] * 0.7}, ${color[2] * 0.7})` : `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+                    backgroundColor: bgColor,
                     color: textColor, height: '30px', marginTop: '3px'
                 }}
-
-                draggable={!(entyCharacter || otherCharacterInParty)}
+                draggable={dragable}
                 onDragStart={(e) => handleDragStart(e, character)}>
+
+                {!dragable && (
+                    <Box style={{
+                        position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                    }}
+                        alignItems="center" justifyContent="center"
+                    >
+                        <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 600, fontSize: '18px', color: '#fff', textAlign: 'center' }}>편성중</Typography>
+                    </Box>
+                )}
+
                 <CardContent style={{ padding: '0 10px' }}>
                     <Typography style={{ fontSize: '12px' }}>{character.char_name} {character.char_class} {character.char_level}</Typography>
                 </CardContent>
