@@ -2,27 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabase'
-import { Box, Button, Card, CardContent, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography, styled, tableCellClasses } from '@mui/material'
+
 import { useSearchParams } from 'next/navigation'
 import { getPlainText } from '@/utils/TextUtils'
 import { PartyData, RaidData, CharacterData, days, daysOfWeek, timeSlots, MemberData } from '@/lib/database.types'
-import { getDayBgColor } from '@/utils/ColorUtils'
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}))
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  }
-}))
+import { getDayBgColor, getDayHeadBgColor } from '@/utils/ColorUtils'
+import { Card, CardContent, Typography, Tooltip, Box, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid, Tabs, useMediaQuery, Tab } from '@mui/material'
 
 export default function WeeklyPlan() {
 
@@ -168,8 +153,8 @@ export default function WeeklyPlan() {
         <Box
           marginBottom={1}
           border={1}
-          borderRadius={1}
-          padding={1}
+          borderRadius={6}
+          padding={2}
           bgcolor={raidInfo.raid_color}
           borderColor={raidInfo.raid_color}
           boxShadow={2}>
@@ -192,9 +177,17 @@ export default function WeeklyPlan() {
       )
   }
 
-  function generatePlan() {
+  interface WeekData {
+    hour: number,
+    schedule: {
+      day: string,
+      parties: PartyData[]
+    }[]
+  }
 
-    const weeklyPlan = []
+  function wideScreenLayout() {
+
+    const weeklyPlan: WeekData[] = []
 
     for (let j = 13; j <= 26; j++) {
       const hourData = partyData.filter(party => party.time === j)
@@ -207,7 +200,7 @@ export default function WeeklyPlan() {
     }
 
     return (
-      <TableContainer component={Paper} sx={{ mb: 5 }} style={{ maxHeight: '800px', maxWidth: '1800px' }}>
+      <TableContainer sx={{ mb: 5 }} style={{ maxHeight: '800px', maxWidth: '1800px' }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
@@ -221,7 +214,7 @@ export default function WeeklyPlan() {
                 <TableCell key={index} align={'center'}
                   sx={{
                     borderLeft: 1,
-                    backgroundColor: getDayBgColor(day),
+                    backgroundColor: getDayHeadBgColor(day),
                     minWidth: 150,
                   }}
                   style={{
@@ -262,6 +255,56 @@ export default function WeeklyPlan() {
           </TableBody>
         </Table>
       </TableContainer>
+    )
+  }
+  const isNarrowScreen = useMediaQuery('(max-width:600px)');
+  const [selectedTab, setSelectedTab] = useState(0);
+
+  const handleTabChange = (e: any, newValue: any) => {
+    setSelectedTab(newValue);
+  }
+
+  function narrowScreenLayout() {
+    const dailyParties: PartyData[] = partyData.filter(party => party.day === selectedTab)
+    return (
+      <Box display="flex" flexDirection="column" sx={{ mb: 5 }}>
+        <Tabs value={selectedTab} onChange={handleTabChange}>
+          {days.map((day, index) => (
+            <Tab label={day} key={index} sx={{ minWidth: 0, fontFamily: 'Pretendard-Regular', fontWeight: 600 }} />
+          ))}
+        </Tabs>
+        <TableContainer sx={{ maxHeight: '650px', overflow: 'auto' }}>
+          {dailyParties.length > 0 ? (
+            <Table stickyHeader>
+              <TableBody>
+                <TableRow sx={{ background: getDayBgColor(days[dailyParties[0].day]) }}>
+                  <TableCell align={'center'}>
+                    {dailyParties.map((party, index) => (
+                      <Box key={party.id}>
+                        <Typography sx={{ fontFamily: 'Pretendard-Regular', fontWeight: 600 }}>{party.time} 시</Typography>
+                        {makePartyBox(party, index)}
+                      </Box>
+                    ))}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          ) : <Box></Box>}
+        </TableContainer>
+      </Box>
+    )
+  }
+
+  function generatePlan() {
+
+    return (
+      <Grid spacing={1} overflow={'auto'}>
+        {isNarrowScreen ? (
+          narrowScreenLayout()
+        ) : (
+          wideScreenLayout()
+        )}
+      </Grid>
     )
   }
 

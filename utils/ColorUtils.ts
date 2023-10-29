@@ -1,6 +1,9 @@
 
+export function getDayHeadBgColor(index: any): string {
+    return index === '토' ? '#c9daf8' : index === '일' ? '#f4cccc' : '#b7bd98'
+}
 export function getDayBgColor(index: any): string {
-    return index === '토' ? '#c9daf8c8' : index === '일' ? '#f4ccccc8' : '#b7bd98c8'
+    return index === '토' ? '#c9daf8a8' : index === '일' ? '#f4cccca8' : '#b7bd98a8'
 }
 
 export function hexToRgba(hex: string, alpha: number): number[] {
