@@ -1,22 +1,15 @@
 'use client'
 import * as React from 'react';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { supabase } from '@/utils/supabase';
 import { MemberData } from '@/lib/database.types';
@@ -230,7 +223,7 @@ export default function EnhancedTable() {
                             <TableCell scope="row" style={{ padding: 15, fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '30%' }}>닉네임</TableCell>
                             <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '20%' }}>권한</TableCell>
                             <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '20%' }}>컬러</TableCell>
-                            <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '30%' }}>스케쥴</TableCell>
+                            <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '30%', paddingRight: '15px'}}>스케쥴</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -242,7 +235,7 @@ export default function EnhancedTable() {
                                     <TableCell component="th" id={labelId} scope="row" style={{ padding: 15, fontFamily: 'SUIT-Regular' }}>{row.nick_name}</TableCell>
                                     <TableCell align="right" style={{ fontFamily: 'SUIT-Regular' }}>{row.permission}</TableCell>
                                     <TableCell align="right" style={{ backgroundColor: row.personal_color, color: row.text_color, fontFamily: 'SUIT-Regular' }}>{row.personal_color}</TableCell>
-                                    <TableCell align="right">
+                                    <TableCell align="right" style={{ paddingRight: '15px'}}>
                                         {row.schedule_check === true ? (
                                             <CheckIcon color="success" />
                                         ) : (

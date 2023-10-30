@@ -52,7 +52,7 @@ body {
   }
   .page-description {
     font-family: "S-CoreDream-3Light" !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
   }
   .main-post {
     background: #f3e07cc8 !important;
@@ -62,6 +62,7 @@ body {
     font-family: "SUIT-Regular" !important;
     font-weight: 600 !important;
     font-size: 10px !important;
+    padding: 5px;
   }
   .MuiButton-contained {
     background-color: #e6bd76 !important;

@@ -256,22 +256,52 @@ export default function AttendancePage() {
     return (
         <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
             <Typography variant='h3' className='page-title'>출석부</Typography>
-            <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #e6bd76 solid', backgroundColor: '#f3e07c', textAlign: 'center' }} padding='5px' marginBottom={2}>
+            <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #e6bd76 solid', backgroundColor: '#f3e07c', textAlign: 'center' }} padding='5px'>
                 <Typography className='page-description'>캐릭터를 추가하려면 하단 텍스트박스에 캐릭터 이름을 적고 추가 버튼을 눌러주세요.<br />
-                    업데이트 버튼을 누르면 캐릭터 정보가 로아 서버로부터 업데이트 됩니다.<br />
+                    업데이트 버튼을 누르면 캐릭터 정보가 서버로부터 업데이트 됩니다.<br />
                     캐릭터 정보를 모두 업데이트 한 뒤 저장 버튼을 눌러주세요.
                 </Typography>
             </Box>
-            <TableContainer component={Paper} sx={{ maxHeight: '550px', maxWidth: '1800px' }}>
+            <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} marginBottom={1} marginTop={1}>
+                <Button variant="contained" color="primary" style={{ marginLeft: 15, marginRight: 10 }} onClick={handleSave}>저장</Button>
+                <Button variant="contained" color="primary" style={{ marginLeft: 10, marginRight: 15 }} onClick={handleUpdate}>업데이트</Button>
+            </Box>
+            <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '5px' }}>
+                <TextField
+                    variant='outlined'
+                    size='small'
+                    InputProps={{
+                        style: {
+                            border: 'none',
+                            borderRadius: 18,
+                            background: '#fff'
+                        }
+                    }}
+                    value={addCharName}
+                    onChange={(e) => setAddCharName(e.target.value)} />
+                <Button variant="contained" color="primary" onClick={() => {
+                    if (addCharName.length < 2) {
+                        alert('캐릭터 이름을 정확히 입력해주세요.')
+                    } else {
+                        const shouldDelete = window.confirm(`[${addCharName}] 를 추가하시겠습니까?`)
+                        if (shouldDelete) {
+                            handleAddCharacter()
+                        }
+                    }
+                }} style={{ marginLeft: '15px' }}>
+                    캐릭터 추가
+                </Button>
+            </Box>
+            <TableContainer component={Paper} sx={{ maxHeight: '55dvh', maxWidth: '1800px', overflow: 'auto' }}>
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: 'S-CoreDream-3Light', fontSize: '13px' }} sx={{ minWidth: '50px', textAlign: 'center', borderRight: '2px #f3e07c solid', borderBottom: '2px #f3e07c solid' }}>캐릭터</TableCell>
-                            <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }} style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '13px' }}>레벨</TableCell>
+                            <TableCell style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }} sx={{ minWidth: '50px', textAlign: 'center', borderRight: '2px #f3e07c solid', borderBottom: '2px #f3e07c solid' }}>캐릭터</TableCell>
+                            <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }} style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>레벨</TableCell>
                             {raids.map(raid => (
                                 <TableCell sx={{ minWidth: '100px', borderBottom: '2px #f3e07c solid', background: raid.raid_color, color: '#fff' }} key={raid.id} align='center'>
-                                    <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '13px' }}>{raid.raid_name}</Typography>
-                                    <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '13px' }}>{raid.raid_level}</Typography>
+                                    <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>{raid.raid_name}</Typography>
+                                    <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '10px' }}>{raid.raid_level}</Typography>
                                 </TableCell>
                             ))}
                         </TableRow>
@@ -309,36 +339,6 @@ export default function AttendancePage() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
-                <Button variant="contained" color="primary" style={{ marginLeft: 15, marginRight: 10 }} onClick={handleSave}>저장</Button>
-                <Button variant="contained" color="primary" style={{ marginLeft: 10, marginRight: 15 }} onClick={handleUpdate}>업데이트</Button>
-            </Box>
-            <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px', paddingBottom: '5px' }}>
-                <TextField
-                    variant='outlined'
-                    size='small'
-                    InputProps={{
-                        style: {
-                            border: 'none',
-                            borderRadius: 18,
-                            background: '#fff'
-                        }
-                    }}
-                    value={addCharName}
-                    onChange={(e) => setAddCharName(e.target.value)} />
-                <Button variant="contained" color="primary" onClick={() => {
-                    if (addCharName.length < 2) {
-                        alert('캐릭터 이름을 정확히 입력해주세요.')
-                    } else {
-                        const shouldDelete = window.confirm(`[${addCharName}] 를 추가하시겠습니까?`)
-                        if (shouldDelete) {
-                            handleAddCharacter()
-                        }
-                    }
-                }} style={{ marginLeft: '15px' }}>
-                    캐릭터 추가
-                </Button>
-            </Box>
         </Box>
     )
 }

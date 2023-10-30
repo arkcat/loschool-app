@@ -71,7 +71,6 @@ export default function Index() {
   }, [])
 
   function getDayOfWeek(): number {
-    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
     const now = new Date();
     const dayIndex = now.getDay() // 0부터 일요일, 1부터 월요일, ..., 6부터 토요일
 

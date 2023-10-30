@@ -80,13 +80,18 @@ export default function MemberSchedulePage() {
       <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #e6bd76 solid', backgroundColor: '#f3e07c', textAlign: 'center' }} padding='5px' marginBottom={2}>
         <Typography className='page-description'>레이드 참여 가능한 시간을 클릭하면 색상이 채워집니다.<br /> 모두 선택 후 하단에 반영 버튼을 눌러주세요.</Typography>
       </Box>
-      <FormControlLabel
-        control={<Checkbox />}
-        label="스케쥴 확인"
-        sx={{ '& .MuiSvgIcon-root': { fontSize: 24 } }}
-        checked={isChecked}
-        onChange={() => { setIsChecked(!isChecked) }}
-      />
+      <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <FormControlLabel
+          control={<Checkbox />}
+          label="스케쥴 확인"
+          sx={{ '& .MuiSvgIcon-root': { fontSize: 24 } }}
+          checked={isChecked}
+          onChange={() => { setIsChecked(!isChecked) }}
+        />
+        <Button variant="contained" color="primary" onClick={handleApplyClick} >
+          반영
+        </Button>
+      </Box>
       <Box>
         {memberData && daysOfWeek.map((day, index) => (
           <Grid key={day} item container
@@ -108,11 +113,6 @@ export default function MemberSchedulePage() {
             </Grid>
           </Grid>
         ))}
-        <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
-          <Button variant="contained" color="primary" onClick={handleApplyClick} >
-            반영
-          </Button>
-        </Box>
       </Box>
     </Box >
   )

@@ -75,6 +75,12 @@ export default function WeeklyPlan() {
     fetchRaidData()
     fetchCharacterData()
     fetchMemberData()
+
+    const now = new Date();
+    const today = now.getDay() // 0부터 일요일, 1부터 월요일, ..., 6부터 토요일
+    const dayIndex = (today + 4) % 7;
+    setSelectedTab(dayIndex)
+
   }, [])
 
   const [partyStates, setPartyStates] = useState(
@@ -267,7 +273,7 @@ export default function WeeklyPlan() {
   function narrowScreenLayout() {
     const dailyParties: PartyData[] = partyData.filter(party => party.day === selectedTab)
     return (
-      <Box display="flex" flexDirection="column" sx={{ mb: 5 }}>
+      <Box display="flex" flexDirection="column" sx={{ mb: 5, height: '80dvh' }}>
         <Tabs value={selectedTab} onChange={handleTabChange}>
           {days.map((day, index) => (
             <Tab label={day} key={index} sx={{ minWidth: 0, fontFamily: 'Pretendard-Regular', fontWeight: 600 }} />
@@ -298,7 +304,7 @@ export default function WeeklyPlan() {
   function generatePlan() {
 
     return (
-      <Grid spacing={1} overflow={'auto'}>
+      <Grid overflow={'auto'}>
         {isNarrowScreen ? (
           narrowScreenLayout()
         ) : (
