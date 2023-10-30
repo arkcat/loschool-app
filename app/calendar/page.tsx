@@ -189,7 +189,7 @@ export default function WeeklyPlan() {
 
     const weeklyPlan: WeekData[] = []
 
-    for (let j = 13; j <= 26; j++) {
+    for (let j = 14; j <= 26; j++) {
       const hourData = partyData.filter(party => party.time === j)
       const daySchedule = []
       for (let i = 0; i < 7; i++) {
