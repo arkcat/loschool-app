@@ -166,7 +166,7 @@ export default function MemberDetailPage() {
               <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>권한</Typography>
               <Select value={selectedOption}
                 variant='outlined'
-                sx={{background:'#fff', minWidth:250, height:40, borderRadius:18}}
+                sx={{background:'#fff', minWidth:220, height:40, borderRadius:18}}
                 onChange={(e) => {
                   setSelectedOption(e.target.value)
                   setMember({

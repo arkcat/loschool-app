@@ -73,10 +73,10 @@ const SignUp = () => {
     }
 
     return (
-        <div>
-            <Typography variant='h3' paddingBottom={3} paddingTop={3} align='center'>회원 가입 페이지</Typography>
-            <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #ccc solid' }} padding='5px' marginBottom={2}>
-                <Typography>길드 관리자가 알고있는 대표 닉네임을 작성해주세요.<br />
+        <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
+            <Typography variant='h3' className='page-title'>회원 가입</Typography>
+            <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #e6bd76 solid', backgroundColor: '#f3e07c', textAlign: 'center' }} padding='5px'>
+                <Typography className='page-description'>길드 관리자가 알고있는 대표 닉네임을 작성해주세요.<br />
                     이메일은 실제하지 않는 이메일 사용을 권장합니다. (예시 : myname@lo.school.com)<br />
                     비밀번호는 최소 6자리 이상을 입력해주세요. 비밀번호를 분실할 경우 새로 가입해야 합니다.
                 </Typography>
@@ -85,40 +85,64 @@ const SignUp = () => {
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
                     <Grid item xs={12} justifyContent={'center'} alignItems={'center'}>
                         <Grid paddingBottom={2}>
+                            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>닉네임</Typography>
                             <TextField
                                 type="text"
                                 placeholder="대표닉네임"
                                 value={nickname}
                                 onChange={(e) => setNickname(e.target.value)}
+                                InputProps={{
+                                    style: {
+                                        border: 'none',
+                                        borderRadius: 18,
+                                        background: '#fff'
+                                    }
+                                }}
                                 required
                             />
                         </Grid>
                         <Grid paddingBottom={2}>
+                            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>이메일 주소</Typography>
                             <TextField
                                 type="email"
                                 placeholder="이메일"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                InputProps={{
+                                    style: {
+                                        border: 'none',
+                                        borderRadius: 18,
+                                        background: '#fff'
+                                    }
+                                }}
                                 required
                             />
                         </Grid>
                         <Grid paddingBottom={2}>
+                            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>비밀번호 (최소 6자리)</Typography>
                             <TextField
                                 type="password"
                                 placeholder="비밀번호"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                InputProps={{
+                                    style: {
+                                        border: 'none',
+                                        borderRadius: 18,
+                                        background: '#fff'
+                                    }
+                                }}
                                 required
                             />
                         </Grid>
 
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '15px' }}>
-                            <Button variant='outlined' type="submit">가입하기</Button>
+                            <Button variant='contained' type="submit">가입하기</Button>
                         </div>
                     </Grid>
                 </div>
             </form>
-        </div>
+        </Box>
     )
 }
 
