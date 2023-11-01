@@ -17,10 +17,31 @@ export const dynamic = 'force-dynamic'
 export default function Index() {
   const [showLoginForm, setShowLoginForm] = useState(false)
   const [userState, setUserState] = useRecoilState<any | null>(userAtom)
+  const [memberId, setMemberId] = useState<number>(0)
   const [partyData, setPartyData] = useState<PartyData[]>([])
   const [raidData, setRaidData] = useState<RaidData[]>([])
+  const [mainComment, setMainComment] = useState<string>('')
 
   useEffect(() => {
+    const fetchMainComment = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('Member')
+          .select('comment')
+          .eq('id', 9999)
+
+        if (error) {
+          throw error
+        }
+
+        if (data.length > 0) {
+          setMainComment(data[0].comment)
+        }
+      } catch (error: any) {
+        console.error("코멘트 불러오기 오류 : ", error)
+      }
+    }
+
     const fetchUser = async () => {
       try {
         if (!userState) {
@@ -51,7 +72,6 @@ export default function Index() {
       }
     }
 
-
     const fetchRaidData = async () => {
       const { data, error } = await supabase
         .from('Raid')
@@ -66,14 +86,14 @@ export default function Index() {
     }
 
     fetchUser()
+    fetchMainComment()
     fetchPartyData()
     fetchRaidData()
   }, [])
 
   function getDayOfWeek(): number {
     const now = new Date();
-    const dayIndex = now.getDay() // 0부터 일요일, 1부터 월요일, ..., 6부터 토요일
-
+    const dayIndex = now.getDay()
     return (dayIndex + 4) % 7;
   }
 
@@ -108,9 +128,9 @@ export default function Index() {
       return <Box></Box>
     }
     return (
-      <ListItem style={{ textAlign: 'center' }}>
+      <ListItem>
         <ListItemText
-          primary={<span style={{ fontFamily: 'NanumBarunGothic', fontSize: '20px' }}>{`${raidInfo.raid_name} ${data.time} 시`}</span>}
+          primary={<Box style={{ fontFamily: 'NanumBarunGothic', fontSize: '20px' }}>{`${raidInfo.raid_name} ${data.time} 시`}</Box>}
         />
       </ListItem>
     )
@@ -142,7 +162,10 @@ export default function Index() {
             (<Box>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6} >
-                  <Typography sx={{ mt: 2, mb: 2 }} variant="h4" textAlign={'center'} style={{ fontFamily: 'SUIT-Regular', fontSize: '32px', fontWeight: '600' }}>오늘의 공대</Typography>
+                  <Typography variant="h4"
+                    textAlign={'center'}
+                    sx={{ mt: 2, mb: 2 }}
+                    style={{ fontFamily: 'SUIT-Regular', fontSize: '32px', fontWeight: '600' }}>오늘의 공대</Typography>
                   <div className='main-post'>
                     <List dense>
                       {partyData.map((data) => (
@@ -152,9 +175,18 @@ export default function Index() {
                   </div>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <Typography sx={{ mt: 2, mb: 2 }} variant="h4" textAlign={'center'} style={{ fontFamily: 'SUIT-Regular', fontSize: '32px', fontWeight: '600' }}>운영진 공지</Typography>
+                  <Typography variant="h4"
+                    textAlign={'center'}
+                    sx={{ mt: 2, mb: 2 }}
+                    style={{ fontFamily: 'SUIT-Regular', fontSize: '32px', fontWeight: '600' }}>운영진 공지</Typography>
                   <div className='main-post'>
-                    <Typography style={{ fontFamily: 'NanumBarunGothic', fontSize: '20px', textAlign: 'center' }}>지각 금지</Typography>
+                    <Typography style={{ fontFamily: 'NanumBarunGothic', fontSize: '20px', textAlign: 'center' }}>
+                      {mainComment.split('\n').map((line, index) => (
+                        <div key={index}>
+                          {line}
+                        </div>
+                      ))}
+                    </Typography>
                   </div>
                 </Grid>
               </Grid>

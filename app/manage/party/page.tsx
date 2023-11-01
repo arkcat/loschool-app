@@ -484,7 +484,7 @@ export default function PartyPage() {
 
     return (
         <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
-            <Box pb={3} pt={10}>
+            <Box pb={3} pt={10} sx={{width:'90dvw'}}>
                 {showTopMenu()}
                 <Box display="flex" padding={2} style={{ maxHeight: '800px' }}>
                     <Box flex={1} border={1} style={{ overflowY: 'auto' }} padding={1}>

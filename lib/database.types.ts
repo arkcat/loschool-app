@@ -10,6 +10,7 @@ export interface MemberData {
     permission: string
     personal_color: string
     text_color: string
+    comment: string
     schedule_check: boolean
     schedule: {
         [day: string]: {

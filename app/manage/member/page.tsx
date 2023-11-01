@@ -220,10 +220,11 @@ export default function EnhancedTable() {
                 <Table aria-labelledby="tableTitle" size={'small'} stickyHeader>
                     <TableHead>
                         <TableRow>
-                            <TableCell scope="row" style={{ padding: 15, fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '30%' }}>닉네임</TableCell>
-                            <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '20%' }}>권한</TableCell>
-                            <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '20%' }}>컬러</TableCell>
-                            <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, width: '30%', paddingRight: '15px'}}>스케쥴</TableCell>
+                            <TableCell scope="row" style={{ padding: 15, fontFamily: 'SUIT-Regular', fontWeight: 800, width: '25%' }}>닉네임</TableCell>
+                            <TableCell align="right" style={{ fontFamily: 'SUIT-Regular', fontWeight: 800, width: '15%' }}>권한</TableCell>
+                            <TableCell align="right" style={{ fontFamily: 'SUIT-Regular', fontWeight: 800, width: '15%' }}>컬러</TableCell>
+                            <TableCell align="right" style={{ fontFamily: 'SUIT-Regular', fontWeight: 800, width: '15%', paddingRight: '15px'}}>스케쥴</TableCell>
+                            <TableCell align="center" style={{ fontFamily: 'SUIT-Regular', fontWeight: 800, width: '30%', paddingRight: '15px'}}>코멘트</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -232,15 +233,18 @@ export default function EnhancedTable() {
 
                             return (
                                 <TableRow hover tabIndex={-1} key={row.id} sx={{ cursor: 'pointer' }} onClick={() => { routeMemberDetails(row.uid) }}>
-                                    <TableCell component="th" id={labelId} scope="row" style={{ padding: 15, fontFamily: 'SUIT-Regular' }}>{row.nick_name}</TableCell>
-                                    <TableCell align="right" style={{ fontFamily: 'SUIT-Regular' }}>{row.permission}</TableCell>
-                                    <TableCell align="right" style={{ backgroundColor: row.personal_color, color: row.text_color, fontFamily: 'SUIT-Regular' }}>{row.personal_color}</TableCell>
+                                    <TableCell component="th" id={labelId} scope="row" style={{ padding: 15, fontFamily: 'S-CoreDream-3Light' }}>{row.nick_name}</TableCell>
+                                    <TableCell align="right" style={{ fontFamily: 'S-CoreDream-3Light' }}>{row.permission}</TableCell>
+                                    <TableCell align="right" style={{ backgroundColor: row.personal_color, color: row.text_color, fontFamily: 'S-CoreDream-3Light' }}>{row.personal_color}</TableCell>
                                     <TableCell align="right" style={{ paddingRight: '15px'}}>
                                         {row.schedule_check === true ? (
                                             <CheckIcon color="success" />
                                         ) : (
                                             <CancelIcon color="error" />
                                         )}
+                                    </TableCell>
+                                    <TableCell style={{ fontFamily: 'S-CoreDream-3Light', fontWeight: 800, paddingRight: '15px'}}>
+                                        {row.comment}
                                     </TableCell>
                                 </TableRow>
                             );
