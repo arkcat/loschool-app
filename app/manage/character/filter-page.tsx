@@ -47,7 +47,7 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
     const bgColor: string = member?.personal_color;
     const textColor: string = member?.text_color;
     return (
-      <Grid item xs={6} lg={3} key={character.id}>
+      <Grid item xs={6} lg={2} key={character.id}>
         <Card
           style={{ backgroundColor: bgColor, color: textColor }}
           onClick={() => {
@@ -57,7 +57,7 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
           }}
         >
           <CardContent>
-            <Typography variant="h5">{character.char_name}</Typography>
+            <Typography variant="h6">{character.char_name}</Typography>
             <Box>
               <Typography variant="body1">{character.char_class}</Typography>
               <Typography variant="body1">{character.char_level}</Typography>
@@ -69,8 +69,8 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
   }
 
   return (
-    <Box margin={2} sx={{maxHeight: '800px', overflow: 'auto'}}>
-      <Grid container spacing={2}>
+    <Box margin={2} sx={{height: '75dvh', overflow: 'auto'}}>
+      <Grid container spacing={1}>
         {filteredData
           ?.filter((item) => {
             const selectedId = parseInt(selectedOption);

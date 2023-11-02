@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { MouseEvent, useEffect, useMemo, useState } from 'react'
 import { Box, Button, Card, CardContent, Grid, IconButton, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
 import { CharacterData, MemberData, PartyData, RaidData, days, daysOfWeek, timeSlots } from '@/lib/database.types'
 import { supabase } from '@/utils/supabase'
@@ -366,6 +366,51 @@ export default function PartyPage() {
         return ids
     }, [selectedDay, selectedTime, partyData])
 
+    function handleAddCharacterToParty(e: any, character: CharacterData): void {
+        e.preventDefault();
+        console.log(selectedRaid, selectedDay, selectedTime)
+        const selectedRaidId = parseInt(selectedRaid)
+        const selectedDayInt = parseInt(selectedDay)
+        const selectedTimeInt = parseInt(timeSlots[parseInt(selectedTime)])
+        const characterId = character.id
+        const characterType = character.char_type
+        console.log(selectedRaidId, selectedDayInt, selectedTimeInt)
+        setPartyData(prevPartyData => {
+            return prevPartyData.map(party => {
+                if (party.raid_id === selectedRaidId && party.day === selectedDayInt && party.time === selectedTimeInt) {
+                    console.log("found raid party")
+                    let updatedGroup = [...party.member]
+
+                    if (characterType === "D") {
+                        if (updatedGroup[0] === 0) {
+                            updatedGroup[0] = characterId;
+                        } else if (updatedGroup[1] === 0) {
+                            updatedGroup[1] = characterId;
+                        } else if (updatedGroup[2] === 0) {
+                            updatedGroup[2] = characterId;
+                        } else if (updatedGroup[4] === 0) {
+                            updatedGroup[4] = characterId;
+                        } else if (updatedGroup[5] === 0) {
+                            updatedGroup[5] = characterId;
+                        } else if (updatedGroup[6] === 0) {
+                            updatedGroup[6] = characterId;
+                        }
+                    } else if (characterType === "S") {
+                        if (updatedGroup[3] === 0) {
+                            updatedGroup[3] = characterId;
+                        } else if (updatedGroup[7] === 0) {
+                            updatedGroup[7] = characterId;
+                        }
+                    }
+
+                    return { ...party, member: updatedGroup }
+                }
+                console.log("not found raid party")
+                return party
+            })
+        })
+    }
+
     function makeCandiCharacter(key: string, character: CharacterData) {
         const member = memberData.filter(member => member.id === character.member_id)[0]
         const bgColor = member?.personal_color
@@ -384,8 +429,12 @@ export default function PartyPage() {
                     color: textColor, height: '30px', marginTop: '3px'
                 }}
                 draggable={dragable}
-                onDragStart={(e) => handleDragStart(e, character)}>
-
+                onDragStart={(e) => handleDragStart(e, character)}
+                onContextMenu={(e) => {
+                    if (dragable) {
+                        handleAddCharacterToParty(e, character)
+                    }
+                }}>
                 {!dragable && (
                     <Box style={{
                         position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: 'rgba(0, 0, 0, 0.6)',
@@ -484,9 +533,9 @@ export default function PartyPage() {
 
     return (
         <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
-            <Box pb={3} pt={10} sx={{width:'90dvw'}}>
+            <Box pb={3} pt={10} sx={{ width: '90dvw' }}>
                 {showTopMenu()}
-                <Box display="flex" padding={2} style={{ maxHeight: '800px' }}>
+                <Box display="flex" padding={2} style={{ height: '80dvh' }}>
                     <Box flex={1} border={1} style={{ overflowY: 'auto' }} padding={1}>
                         <Typography variant='h6' borderBottom={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>캐릭터 목록
                             <IconButton onClick={() => { setShowSearch(true) }}>

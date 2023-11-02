@@ -216,7 +216,7 @@ export default function EnhancedTable() {
     return (
         <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
             <Typography variant='h3' className='page-title'>멤버 관리</Typography>
-            <TableContainer component={Paper} sx={{ width: '90%', mb: 5, maxHeight: '800px', maxWidth: '550px', overflow: 'auto' }}>
+            <TableContainer component={Paper} sx={{ width: '90%', mb: 5, height: '90dvh', maxWidth: '550px', overflow: 'auto' }}>
                 <Table aria-labelledby="tableTitle" size={'small'} stickyHeader>
                     <TableHead>
                         <TableRow>
