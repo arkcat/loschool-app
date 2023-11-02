@@ -206,7 +206,7 @@ export default function WeeklyPlan() {
     }
 
     return (
-      <TableContainer sx={{ mb: 5 }} style={{ maxHeight: '800px', maxWidth: '1800px' }}>
+      <TableContainer sx={{ mb: 5 }} style={{ maxHeight: '80dvh', maxWidth: '1800px' }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>

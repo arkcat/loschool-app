@@ -6,7 +6,7 @@ import { CharacterData, MemberData, PartyData, RaidData, days, daysOfWeek, timeS
 import { supabase } from '@/utils/supabase'
 import { getDayBgColor, hexToRgba } from '@/utils/ColorUtils'
 import SearchIcon from '@mui/icons-material/SearchOutlined'
-
+import DeleteIcon from '@mui/icons-material/DeleteOutline'
 export const dynamic = 'force-dynamic'
 
 export default function PartyPage() {
@@ -269,16 +269,20 @@ export default function PartyPage() {
             return <Box></Box>
         }
 
+        const selectedRaidId = parseInt(selectedRaid)
+        const selectedDayInt = parseInt(selectedDay)
+        const selectedTimeInt = parseInt(timeSlots[parseInt(selectedTime)])
+        const selected = (partyData.raid_id === selectedRaidId && partyData.day === selectedDayInt && partyData.time === selectedTimeInt)
         return (
             <Box
                 key={partyData.id}
                 marginBottom={1}
-                border={2}
+                border={selected ? 3 : 1}
                 borderRadius={1}
                 padding={1}
                 bgcolor={raidInfo.raid_color}
-                borderColor={raidInfo.raid_color}
-                boxShadow={2}
+                borderColor={selected ? 'red' : raidInfo.raid_color}
+                boxShadow={selected ? 1 : 2}
                 onClick={() => {
                     setSelectedRaid(String(partyData.raid_id))
                     setSelectedDay(String(partyData.day))
@@ -286,7 +290,9 @@ export default function PartyPage() {
                 }}
                 onDrop={(e) => handleDrop(e, partyData)}
                 onDragOver={(e) => handleDragOver(e)}>
-                <Typography fontSize={15} style={{ color: 'white' }}>{raidInfo.short_name} <Button style={{ color: 'white', fontSize: '10px' }} onClick={() => { handleDeleteParty(partyData.id) }}>삭제</Button></Typography>
+                <Typography fontSize={15} style={{ color: 'white', display: 'flex', justifyContent: 'space-between' }} >{raidInfo.short_name}
+                    <DeleteIcon style={{ fontSize: 17 }} onClick={() => { handleDeleteParty(partyData.id) }} />
+                </Typography>
                 <Typography marginBottom={1} fontSize={14} style={{ color: 'white' }}>{days[partyData.day]}요일, {partyData.time}시</Typography>
                 {
                     partyData.member.map((id, characterIdx) => {
