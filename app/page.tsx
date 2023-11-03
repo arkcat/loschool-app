@@ -61,7 +61,12 @@ export default function Index() {
     const fetchPartyData = async () => {
       try {
         const today = getDayOfWeek()
-        const { data, error } = await supabase.from('Party').select().eq('day', today)
+        const { data, error } = await supabase
+          .from('Party')
+          .select()
+          .eq('day', today)
+          .order('time')
+
         if (error) {
           console.error('Error fetching party data:', error)
         } else {

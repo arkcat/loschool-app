@@ -271,7 +271,10 @@ export default function WeeklyPlan() {
   }
 
   function narrowScreenLayout() {
-    const dailyParties: PartyData[] = partyData.filter(party => party.day === selectedTab)
+    const dailyParties: PartyData[] = partyData
+      .filter(party => party.day === selectedTab)
+      .sort((a, b) => { return a.time - b.time })
+
     return (
       <Box display="flex" flexDirection="column" sx={{ mb: 5, height: '80dvh' }}>
         <Tabs value={selectedTab} onChange={handleTabChange}>
