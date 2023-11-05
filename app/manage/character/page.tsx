@@ -12,6 +12,8 @@ import {
   Button,
 } from "@mui/material";
 import AllCharactersUpdate from "@/app/api/UpdateCharacters";
+import MainPageBox from "@/components/MainPageBox";
+import useRequireAuth from "@/utils/AuthUtils";
 
 export default function CharactersPage() {
   const [options, setOptions] = useState<any[]>([]);
@@ -36,9 +38,15 @@ export default function CharactersPage() {
     setSelectedOption(e.target.value);
   };
 
+  const userSession = useRequireAuth();
+
+  if (!userSession) {
+    return <div>Loading...</div>;
+  }
+  
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
-      <Typography variant='h3' className='page-title'>캐릭터 목록</Typography>
+    <MainPageBox>
+      <Typography className='page-title'>캐릭터 목록</Typography>
       <FormControl>
         <Select value={selectedOption}
           variant='outlined'
@@ -56,6 +64,6 @@ export default function CharactersPage() {
         onClick={AllCharactersUpdate}
       >캐릭터 정보 업데이트</Button>
       <FilteredData members={options} selectedOption={selectedOption} />
-    </Box>
+    </MainPageBox>
   );
 }

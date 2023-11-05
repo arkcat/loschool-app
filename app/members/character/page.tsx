@@ -16,6 +16,8 @@ import {
 import { getPlainText } from "@/utils/TextUtils";
 import { CharacterData } from "@/lib/database.types";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import MainPageBox from "@/components/MainPageBox";
+import useRequireAuth from "@/utils/AuthUtils";
 
 export default function CharacterDetailPage() {
   const router = useRouter();
@@ -84,8 +86,14 @@ export default function CharacterDetailPage() {
     }
   };
 
+  const userSession = useRequireAuth();
+
+  if (!userSession) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
+    <MainPageBox>
       <Box pb={3} pt={10}>
         <Box display="flex" position='absolute' left={0}>
           <IconButton
@@ -114,7 +122,7 @@ export default function CharacterDetailPage() {
         >
           <Grid item xs={12}>
             {character && (
-              <Typography variant='h3' className='page-title'>{character?.char_name} 수정</Typography>
+              <Typography className='page-title'>{character?.char_name} 수정</Typography>
             )}
           </Grid>
           <Grid item xs={12}>
@@ -209,6 +217,6 @@ export default function CharacterDetailPage() {
           </Button>
         </Box>
       </Box>
-    </Box>
+    </MainPageBox>
   );
 }

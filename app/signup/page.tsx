@@ -6,6 +6,7 @@ import { Box, Button, Grid, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { parseJsonText } from 'typescript'
 import { MemberData } from '@/lib/database.types'
+import MainPageBox from '@/components/MainPageBox'
 const SignUp = () => {
     const router = useRouter()
     const [email, setEmail] = useState('')
@@ -73,8 +74,8 @@ const SignUp = () => {
     }
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
-            <Typography variant='h3' className='page-title'>회원 가입</Typography>
+        <MainPageBox>
+            <Typography className='page-title'>회원 가입</Typography>
             <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #e6bd76 solid', backgroundColor: '#f3e07c', textAlign: 'center' }} padding='5px'>
                 <Typography className='page-description'>길드 관리자가 알고있는 대표 닉네임을 작성해주세요.<br />
                     이메일은 실제하지 않는 이메일 사용을 권장합니다. (예시 : myname@lo.school.com)<br />
@@ -142,7 +143,7 @@ const SignUp = () => {
                     </Grid>
                 </div>
             </form>
-        </Box>
+        </MainPageBox>
     )
 }
 

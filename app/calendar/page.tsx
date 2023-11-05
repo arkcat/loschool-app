@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/utils/supabase'
-
 import { useSearchParams } from 'next/navigation'
 import { getPlainText } from '@/utils/TextUtils'
 import { PartyData, RaidData, CharacterData, days, daysOfWeek, timeSlots, MemberData } from '@/lib/database.types'
 import { getDayBgColor, getDayHeadBgColor } from '@/utils/ColorUtils'
 import { Card, CardContent, Typography, Tooltip, Box, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid, Tabs, useMediaQuery, Tab } from '@mui/material'
+import { getDayOfWeek } from '@/utils/DateUtils'
+import MainPageBox from '@/components/MainPageBox'
+import useRequireAuth from '@/utils/AuthUtils'
 
 export default function WeeklyPlan() {
 
@@ -76,11 +78,7 @@ export default function WeeklyPlan() {
     fetchCharacterData()
     fetchMemberData()
 
-    const now = new Date();
-    const today = now.getDay() // 0부터 일요일, 1부터 월요일, ..., 6부터 토요일
-    const dayIndex = (today + 4) % 7;
-    setSelectedTab(dayIndex)
-
+    setSelectedTab(getDayOfWeek())
   }, [])
 
   const [partyStates, setPartyStates] = useState(
@@ -220,7 +218,7 @@ export default function WeeklyPlan() {
                 <TableCell key={index} align={'center'}
                   sx={{
                     borderLeft: 1,
-                    backgroundColor: getDayHeadBgColor(day),
+                    backgroundColor: (selectedTab === index ? '#f3e07c' : getDayHeadBgColor(day)),
                     minWidth: 150,
                   }}
                   style={{
@@ -317,11 +315,17 @@ export default function WeeklyPlan() {
     )
   }
 
+  const userSession = useRequireAuth();
+
+  if (!userSession) {
+    return <div>Loading...</div>;
+  }
+  
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
-      <Typography variant='h3' className='page-title'>이번주 시간표</Typography>
+    <MainPageBox>
+      <Typography className='page-title'>이번주 시간표</Typography>
       {generatePlan()}
-    </Box>
+    </MainPageBox>
   )
 
 }

@@ -7,6 +7,7 @@ import { Box, Button, Grid, MenuItem, Select, TextField, Typography } from '@mui
 import { getPlainText } from '@/utils/TextUtils'
 import { supabaseAdmin } from '@/utils/supabaseAdmin'
 import { MemberData } from '@/lib/database.types'
+import useRequireAuth from '@/utils/AuthUtils'
 
 export default function MemberDetailPage() {
   const router = useRouter()
@@ -84,6 +85,12 @@ export default function MemberDetailPage() {
     router.back()
   }
 
+  const userSession = useRequireAuth();
+
+  if (!userSession) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
       <Box pb={3} pt={10}>
@@ -95,7 +102,7 @@ export default function MemberDetailPage() {
           gap={2}>
           <Grid item xs={12}>
             {member && (
-              <Typography variant='h3' className='page-title'>{member.nick_name} 수정</Typography>
+              <Typography className='page-title'>{member.nick_name} 수정</Typography>
             )}
           </Grid>
           <Grid item xs={12}>
@@ -166,7 +173,7 @@ export default function MemberDetailPage() {
               <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>권한</Typography>
               <Select value={selectedOption}
                 variant='outlined'
-                sx={{background:'#fff', minWidth:220, height:40, borderRadius:18}}
+                sx={{ background: '#fff', minWidth: 220, height: 40, borderRadius: 18 }}
                 onChange={(e) => {
                   setSelectedOption(e.target.value)
                   setMember({

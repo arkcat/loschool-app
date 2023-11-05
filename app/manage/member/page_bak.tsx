@@ -6,6 +6,7 @@ import { Grid, Box, Typography, Card, CardContent, Button, Popover } from '@mui/
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { MemberData } from '@/lib/database.types'
+import MainPageBox from '@/components/MainPageBox'
 
 export const dynamic = 'force-dynamic'
 
@@ -57,8 +58,8 @@ export default function MemberPage() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
-      <Typography variant='h3' className='page-title'>멤버 관리</Typography>
+    <MainPageBox>
+      <Typography className='page-title'>멤버 관리</Typography>
       {/* <Box>
         <Grid container spacing={2} style={{ overflow: 'auto', maxHeight: '800px', maxWidth: '1800px' }}>
           {
@@ -68,6 +69,6 @@ export default function MemberPage() {
           }
         </Grid>
       </Box> */}
-    </Box>
+    </MainPageBox>
   )
 }

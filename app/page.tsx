@@ -5,18 +5,12 @@ import { supabase } from '@/utils/supabase'
 import { useRecoilState } from 'recoil'
 import { userAtom } from '../recoil/userAtom'
 import LoginForm from '@/components/LoginForm'
-import { Box, Grid, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { Box, Grid, List, Typography } from '@mui/material'
 import titleImage from './res/title.png'
-import questIcon from './res/Dungeon_Quest_Icon.png'
-import { PartyData, RaidData, CharacterData } from '@/lib/database.types'
+import PartyListItem, { CombinedData } from '@/components/PartyListItem'
+import { getDayOfWeek } from '@/utils/DateUtils'
 
 export const dynamic = 'force-dynamic'
-
-interface CombinedData {
-  party: PartyData
-  raid: RaidData
-  members: CharacterData[]
-}
 
 export default function Index() {
   const [showLoginForm, setShowLoginForm] = useState(false)
@@ -100,12 +94,6 @@ export default function Index() {
     fetchPartyData()
   }, [])
 
-  function getDayOfWeek(): number {
-    const now = new Date();
-    const dayIndex = now.getDay()
-    return (dayIndex + 4) % 7;
-  }
-
   const handleUpdateMember = async (uid: string) => {
     try {
       if (!userState) {
@@ -128,34 +116,8 @@ export default function Index() {
     }
   }
 
-  interface PartyItemProps {
-    data: CombinedData
-  }
-
-  const PartyItem: React.FC<PartyItemProps> = ({ data }) => {
-    if (data === undefined) {
-      return <Box></Box>
-    }
-    console.log(data)
-    const raidInfo = data.raid
-    const isMy = data.members.filter(char => { return char.member_id === userState.id }).length > 0
-    console.log(userState.id, isMy)
-    return (
-      <ListItem>
-        <ListItemText
-          primary={
-            <Box style={{ display: 'flex', alignItems: 'center', fontFamily: 'NanumBarunGothic', fontSize: '20px' }}>
-              <span style={{ lineHeight: '20px' }}>{`${raidInfo.raid_name} ${data.party.time} 시`}</span>
-              {isMy && <img src={questIcon.src} style={{ width: '25px', marginLeft: '10px' }} />}
-            </Box>
-          }
-        />
-      </ListItem>
-    )
-  }
-
   return (
-    <Box display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" height="100dvh">
+    <Box style={{ display: "flex", position: "relative", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100dvh" }}>
       <Box display="flex" position="relative" flexDirection="column" alignItems="center" justifyContent="center" gap={3}>
         <Box>
           <img src={titleImage.src} className='title-image' alt="Title" />
@@ -185,7 +147,7 @@ export default function Index() {
                   <div className='main-post'>
                     <List dense>
                       {combinedData.map((data) => (
-                        <PartyItem key={data.party.id} data={data} />
+                        <PartyListItem key={data.party.id} memberId={userState.id} data={data} />
                       ))}
                     </List>
                   </div>
