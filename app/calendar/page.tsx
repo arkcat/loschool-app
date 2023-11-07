@@ -112,7 +112,7 @@ export default function WeeklyPlan() {
     const textColor = member?.text_color
 
     return (
-      <Tooltip title={member?.nick_name}>
+      <Tooltip title={member?.nick_name} followCursor>
         <Card key={key}
           style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, minHeight: '30px', marginTop: '3px' }}>
           <CardContent style={{ padding: '0 10px' }}>
