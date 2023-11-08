@@ -4,6 +4,7 @@ import {
 } from "@/utils/LostArkApiUtil";
 import { CharacterData } from "@/lib/database.types";
 import { supabase } from "@/utils/supabase";
+import { NextRequest } from "next/server";
 
 const updateCharacterInfo = async (
   id: number,
@@ -29,7 +30,7 @@ const updateCharacterInfo = async (
   }
 };
 
-module.exports = async () => {
+export default async function handler(req: NextRequest) {
   try {
     const { data, error } = await supabase
       .from("Character")
