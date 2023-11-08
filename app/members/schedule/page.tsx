@@ -105,9 +105,9 @@ export default function MemberSchedulePage() {
       <Box>
         {memberData && daysOfWeek.map((day, index) => (
           <Grid key={day} item container
-            justifyContent="center" alignItems="center" paddingBottom={1} sx={{ backgroundColor: '#b7bd98c8' }}>
+            justifyContent="center" alignItems="center" sx={{ backgroundColor: '#b7bd98c8' }}>
             <Grid>
-              <Typography variant="h6" align="center"><strong>{days[index]}요일</strong></Typography>
+              <Typography align="center"><strong>{days[index]}요일</strong></Typography>
             </Grid>
             <Grid item container
               justifyContent="center" alignItems="center" border={1} marginLeft={1} marginRight={1} sx={{ backgroundColor: '#d1d7b1' }}>

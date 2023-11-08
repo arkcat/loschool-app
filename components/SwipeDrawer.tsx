@@ -152,6 +152,20 @@ export default function SwipeableTemporaryDrawer() {
                         <ListItemText primary={'출석부'} />
                     </ListItemButton>
                 </ListItem>
+                <ListItem key={'manage member'} disablePadding>
+                    <ListItemButton onClick={() => {
+                        if (userState?.permission === 'professor') {
+                            router.push('/manage/member')
+                        } else {
+                            router.push('/members/list')
+                        }
+                    }}>
+                        <ListItemIcon>
+                            <ManageMemberIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'길드 멤버'} />
+                    </ListItemButton>
+                </ListItem>
             </List>
         )
     }
@@ -159,14 +173,6 @@ export default function SwipeableTemporaryDrawer() {
     const showManageMenuList = () => {
         return (
             <List>
-                <ListItem key={'manage member'} disablePadding>
-                    <ListItemButton onClick={() => { router.push('/manage/member') }}>
-                        <ListItemIcon>
-                            <ManageMemberIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={'멤버 관리'} />
-                    </ListItemButton>
-                </ListItem>
                 <ListItem key={'manage character'} disablePadding>
                     <ListItemButton onClick={() => {
                         router.push(`/manage/character`)
