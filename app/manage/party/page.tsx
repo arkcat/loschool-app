@@ -338,8 +338,22 @@ export default function PartyPage() {
   }
 
   function checkEntryCharacter(characterId: number): boolean {
-    const includedParty = partyData
-      .filter(p => p.raid_id === parseInt(selectedRaid))
+    const raidId = parseInt(selectedRaid)
+    var filteredParties = []
+    if (raidId === 0 || raidId === 1) {
+      filteredParties = partyData
+        .filter(p => p.raid_id === 0 || p.raid_id === 1)
+    } else if (raidId === 2 || raidId === 3) {
+      filteredParties = partyData
+        .filter(p => p.raid_id === 2 || p.raid_id === 3)
+    } else if (raidId === 7 || raidId === 8) {
+      filteredParties = partyData
+        .filter(p => p.raid_id === 7 || p.raid_id === 8)
+    } else {
+      filteredParties = partyData
+        .filter(p => p.raid_id === raidId)
+    }
+    const includedParty = filteredParties
       .filter(p => p.member.includes(characterId)).length
     return includedParty > 0
   }

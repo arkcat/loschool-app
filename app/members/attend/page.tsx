@@ -172,6 +172,15 @@ export default function AttendancePage() {
   }
 
   const handleCheckboxChange = (raidId: number, characterId: number) => {
+    var relatedRaidId = 0
+    if (raidId === 40002) {
+      relatedRaidId = 40001
+    } else if (raidId === 40004) {
+      relatedRaidId = 40003
+    } else if (raidId === 40009) {
+      relatedRaidId = 40008
+    }
+
     setRaids(prevRaids => {
       return prevRaids.map(raid => {
         if (raid.id === raidId) {
@@ -179,6 +188,12 @@ export default function AttendancePage() {
             ? raid.raid_group.filter(id => id !== characterId)
             : [...raid.raid_group, characterId]
           return { ...raid, raid_group: updatedGroup }
+        }
+        if (relatedRaidId > 0 && raid.id === relatedRaidId) {
+          if (!raid.raid_group.includes(characterId)) {
+            const updatedGroup = [...raid.raid_group, characterId]
+            return { ...raid, raid_group: updatedGroup }
+          }
         }
         return raid
       })
@@ -261,6 +276,48 @@ export default function AttendancePage() {
     return <div>Loading...</div>;
   }
 
+  function checkRelatedRaid(raidId: number, charId: number) {
+    return raids.filter(raid => raid.id === raidId)[0].raid_group.includes(charId)
+  }
+
+  function checkRaidDisabled(raid: RaidData, char: CharacterData) {
+    if (char.char_level < raid.raid_level) {
+      return true
+    }
+
+    var raidFor2Week = false
+    var relRaid = false
+    if (raid.id === 40001 || raid.id === 40002) {
+      relRaid = checkRelatedRaid(40003, char.id) || checkRelatedRaid(40004, char.id)
+    } else if (raid.id === 40003 || raid.id === 40004) {
+      relRaid = checkRelatedRaid(40001, char.id) || checkRelatedRaid(40002, char.id)
+    } else if (raid.id === 40005) {
+      relRaid = checkRelatedRaid(40006, char.id)
+    } else if (raid.id === 40006) {
+      relRaid = checkRelatedRaid(40005, char.id)
+    } else if (raid.id === 40007) {
+      relRaid = checkRelatedRaid(40008, char.id) || checkRelatedRaid(40009, char.id)
+    } else if (raid.id === 40008 || raid.id === 40009) {
+      relRaid = checkRelatedRaid(40007, char.id)
+    }
+    if (relRaid === true) {
+      return true
+    }
+
+    if (raid.id === 40001) {
+      raidFor2Week = checkRelatedRaid(40002, char.id)
+    } else if (raid.id === 40003) {
+      raidFor2Week = checkRelatedRaid(40004, char.id)
+    } else if (raid.id === 40008) {
+      raidFor2Week = checkRelatedRaid(40009, char.id)
+    }
+    if (raidFor2Week === true) {
+      return true
+    }
+
+    return false
+  }
+
   return (
     <MainPageBox>
       <Typography className='page-title'>출석부</Typography>
@@ -333,7 +390,7 @@ export default function AttendancePage() {
                 {raids.map((raid: RaidData) => (
                   <TableCell key={raid.id} style={{ textAlign: 'center' }}>
                     <Checkbox
-                      disabled={character.char_level < raid.raid_level}
+                      disabled={checkRaidDisabled(raid, character)}
                       checked={raid.raid_group.includes(character.id)}
                       onChange={(e) => {
                         handleCheckboxChange(raid.id, character.id)
