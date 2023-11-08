@@ -34,6 +34,7 @@ export default async function AllCharactersUpdate() {
     const { data, error } = await supabase
       .from("Character")
       .select()
+      .gt('id', 200000)
       .order("id");
 
     if (error) {

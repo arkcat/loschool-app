@@ -11,7 +11,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import AllCharactersUpdate from "@/app/api/UpdateCharacters";
+import AllCharactersUpdate from "@/utils/UpdateCharacters";
 import MainPageBox from "@/components/MainPageBox";
 import useRequireAuth from "@/utils/AuthUtils";
 

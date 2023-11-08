@@ -23,6 +23,6 @@ export const fetchCharactersFromServer = async (characterName: string) => {
         });
         return response.data;
     } catch (error) {
-        throw error;
+        return null
     }
 }

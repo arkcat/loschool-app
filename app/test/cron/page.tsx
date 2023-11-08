@@ -1,6 +1,6 @@
 'use client'
 
-import AllCharactersUpdate from "@/app/api/UpdateCharacters";
+import AllCharactersUpdate from "@/utils/UpdateCharacters";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
