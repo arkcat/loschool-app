@@ -266,6 +266,11 @@ export default function WeeklyPlan() {
 
   const handleTabChange = (e: any, newValue: any) => {
     setSelectedTab(newValue);
+
+    const tableContainer = document.getElementById('narrowCalendarTable');
+    if (tableContainer) {
+      tableContainer.scrollTop = 0;
+    }
   }
 
   function narrowScreenLayout() {
@@ -280,7 +285,7 @@ export default function WeeklyPlan() {
             <Tab label={day} key={index} sx={{ minWidth: 0, fontFamily: 'Pretendard-Regular', fontWeight: 600 }} />
           ))}
         </Tabs>
-        <TableContainer sx={{ maxHeight: '650px', overflow: 'auto' }}>
+        <TableContainer id="narrowCalendarTable" sx={{ maxHeight: '650px', overflow: 'auto' }}>
           {dailyParties.length > 0 ? (
             <Table stickyHeader>
               <TableBody>
