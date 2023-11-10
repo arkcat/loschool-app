@@ -166,6 +166,14 @@ export default function SwipeableTemporaryDrawer() {
                         <ListItemText primary={'길드 멤버'} />
                     </ListItemButton>
                 </ListItem>
+                <ListItem key={'raid info'} disablePadding>
+                    <ListItemButton onClick={() => { router.push(`/info/`)}}>
+                        <ListItemIcon>
+                            <CheckBoxIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'레이드 정보'} />
+                    </ListItemButton>
+                </ListItem>
             </List>
         )
     }
