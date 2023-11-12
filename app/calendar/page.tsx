@@ -204,61 +204,63 @@ export default function WeeklyPlan() {
     }
 
     return (
-      <TableContainer sx={{ mb: 5 }} style={{ maxHeight: '80dvh', maxWidth: '1800px' }}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell
-                align={'center'}
-                style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: "NanumBarunGothic", fontSize: '14px' }}
-                sx={{ minWidth: '30px', textAlign: 'center', backgroundColor: '#b7bd98' }}>
-                시간
-              </TableCell>
-              {days.map((day, index) => (
-                <TableCell key={index} align={'center'}
-                  sx={{
-                    borderLeft: 1,
-                    backgroundColor: (selectedTab === index ? '#f3e07c' : getDayHeadBgColor(day)),
-                    minWidth: 150,
-                  }}
-                  style={{
-                    fontFamily: "NanumBarunGothic",
-                    fontSize: '14px'
-                  }}>{day}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {weeklyPlan.map((daySchedule, index) => (
-              <TableRow key={index}>
+      <Box sx={{ maxWidth: '100dvw', overflow: 'auto' }}>
+        <TableContainer sx={{ mb: 5 }} style={{ maxHeight: '80dvh', maxWidth: '1800px' }}>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
                 <TableCell
-                  sx={{
-                    textAlign: 'center',
-                    backgroundColor: '#b7bd98'
-                  }}
-                  style={{
-                    position: 'sticky', left: 0, zIndex: 98,
-                    fontFamily: "NanumBarunGothic",
-                    fontSize: '14px'
-                  }}
-                  key={days[index]}
-                  align={'center'}>{timeSlots[index]}</TableCell>
-                {daySchedule.schedule.map(hourData => (
-                  <TableCell key={hourData.day}
-                    align={'center'}
-                    sx={{ borderLeft: 1, backgroundColor: getDayBgColor(hourData.day) }}>
-                    {hourData.parties.map((party, partyIndex) => (
-                      <Box key={party.id}>
-                        {makePartyBox(party, partyIndex)}
-                      </Box>
-                    ))}
-                  </TableCell >
+                  align={'center'}
+                  style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: "NanumBarunGothic", fontSize: '14px' }}
+                  sx={{ minWidth: '30px', textAlign: 'center', backgroundColor: '#b7bd98' }}>
+                  시간
+                </TableCell>
+                {days.map((day, index) => (
+                  <TableCell key={index} align={'center'}
+                    sx={{
+                      borderLeft: 1,
+                      backgroundColor: (selectedTab === index ? '#f3e07c' : getDayHeadBgColor(day)),
+                      minWidth: 150,
+                    }}
+                    style={{
+                      fontFamily: "NanumBarunGothic",
+                      fontSize: '14px'
+                    }}>{day}</TableCell>
                 ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {weeklyPlan.map((daySchedule, index) => (
+                <TableRow key={index}>
+                  <TableCell
+                    sx={{
+                      textAlign: 'center',
+                      backgroundColor: '#b7bd98'
+                    }}
+                    style={{
+                      position: 'sticky', left: 0, zIndex: 98,
+                      fontFamily: "NanumBarunGothic",
+                      fontSize: '14px'
+                    }}
+                    key={days[index]}
+                    align={'center'}>{timeSlots[index]}</TableCell>
+                  {daySchedule.schedule.map(hourData => (
+                    <TableCell key={hourData.day}
+                      align={'center'}
+                      sx={{ borderLeft: 1, backgroundColor: getDayBgColor(hourData.day) }}>
+                      {hourData.parties.map((party, partyIndex) => (
+                        <Box key={party.id}>
+                          {makePartyBox(party, partyIndex)}
+                        </Box>
+                      ))}
+                    </TableCell >
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     )
   }
   const isNarrowScreen = useMediaQuery('(max-width:600px)');
@@ -325,7 +327,7 @@ export default function WeeklyPlan() {
   if (!userSession) {
     return <div>Loading...</div>;
   }
-  
+
   return (
     <MainPageBox>
       <Typography className='page-title'>이번주 시간표</Typography>
