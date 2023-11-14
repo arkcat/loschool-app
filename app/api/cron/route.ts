@@ -30,7 +30,7 @@ const updateCharacterInfo = async (
   }
 };
 
-export default async function handler(req: NextRequest) {
+export default async function GET() {
   try {
     const { data, error } = await supabase
       .from("Character")
