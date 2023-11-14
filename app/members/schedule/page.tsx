@@ -8,6 +8,7 @@ import ScheduleBox from '@/components/ScheduleBox'
 import { getPlainText } from '@/utils/TextUtils'
 import { MemberData, days, daysOfWeek, timeSlots } from '@/lib/database.types'
 import useRequireAuth from '@/utils/AuthUtils'
+import MainPageBox from '@/components/MainPageBox'
 
 export default function MemberSchedulePage() {
   const searchParams = useSearchParams()
@@ -85,7 +86,7 @@ export default function MemberSchedulePage() {
   }
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" position="relative" height="100dvh">
+    <MainPageBox>
       <Typography className='page-title'>{memberData?.nick_name} 스케쥴</Typography>
       <Box display="flex" alignItems="center" justifyContent={'center'} sx={{ border: '1px #e6bd76 solid', backgroundColor: '#f3e07c', textAlign: 'center' }} padding='5px'>
         <Typography className='page-description'>레이드 참여 가능한 시간을 클릭하면 색상이 채워집니다.<br /> 모두 선택 후 하단에 반영 버튼을 눌러주세요.</Typography>
@@ -144,6 +145,6 @@ export default function MemberSchedulePage() {
           }
         />
       </Box>
-    </Box >
+    </MainPageBox>
   )
 }
