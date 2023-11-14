@@ -4,7 +4,7 @@ import {
 } from "@/utils/LostArkApiUtil";
 import { CharacterData } from "@/lib/database.types";
 import { supabase } from "@/utils/supabase";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const updateCharacterInfo = async (
   id: number,
@@ -30,7 +30,7 @@ const updateCharacterInfo = async (
   }
 };
 
-export default async function GET() {
+export async function GET() {
   try {
     const { data, error } = await supabase
       .from("Character")
@@ -95,7 +95,18 @@ export default async function GET() {
     }
 
     console.log("캐릭터 정보 업데이트 완료");
+    return NextResponse.json(
+      {message:'Update success'},
+      {status:200}
+    )
   } catch (error) {
     console.error("에러 발생 : ", error);
+    return NextResponse.json(
+      {error:'Failed to update char info'},
+      {status: 500}
+    )
+
   }
+
+  
 }
