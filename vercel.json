@@ -1,8 +1,15 @@
 {
-  "crons": [
+  "version": 2,
+  "builds": [
     {
-      "path": "/api/cron",
-      "schedule": "0 4 * * *"
+      "src": "api/updateCharacters.js",
+      "use": "@vercel/node"
     }
-  ]
+  ],
+  "functions": {
+    "api/updateCharacters": {
+      "maxDuration": 10
+    }
+  },
+  "schedule": ["cron(0 4 * * *)"]
 }
