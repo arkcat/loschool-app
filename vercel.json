@@ -11,5 +11,5 @@
       "maxDuration": 10
     }
   },
-  "schedule": ["cron(0 4 * * *)"]
+  "schedule": ["cron(0 4 * * ? *)"]
 }
