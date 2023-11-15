@@ -204,7 +204,7 @@ export default function WeeklyPlan() {
     }
 
     return (
-      <Box sx={{ maxWidth: '100dvw', maxHeight:'80dvh', overflow: 'auto' }}>
+      <Box sx={{ maxWidth: '100dvw', maxHeight: '80dvh', overflow: 'auto' }}>
         <TableContainer>
           <Table stickyHeader>
             <TableHead>
@@ -248,6 +248,18 @@ export default function WeeklyPlan() {
                     <TableCell key={hourData.day}
                       align={'center'}
                       sx={{ borderLeft: 1, backgroundColor: getDayBgColor(hourData.day) }}>
+                      {daySchedule.hour === 21 && hourData.day === '일' && (
+                        <Box key={'토벌전'}
+                          border={1}
+                          borderRadius={6}
+                          padding={2}
+                          boxShadow={2}
+                          bgcolor={'#f3e07c'}
+                          borderColor={'#f3e07c'}>
+                          <Typography style={{ fontFamily: 'NanumBarunGothic', fontSize: 19 }}>길드 토벌전</Typography>
+                          <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: 15 }}>21시 20분 시작<br />본길드부터 2회씩</Typography>
+                        </Box>
+                      )}
                       {hourData.parties.map((party, partyIndex) => (
                         <Box key={party.id}>
                           {makePartyBox(party, partyIndex)}
@@ -288,22 +300,37 @@ export default function WeeklyPlan() {
           ))}
         </Tabs>
         <TableContainer id="narrowCalendarTable" sx={{ maxHeight: '650px', overflow: 'auto' }}>
-          {dailyParties.length > 0 ? (
-            <Table stickyHeader>
-              <TableBody>
-                <TableRow sx={{ background: getDayBgColor(days[dailyParties[0].day]) }}>
-                  <TableCell align={'center'}>
-                    {dailyParties.map((party, index) => (
-                      <Box key={party.id}>
-                        <Typography sx={{ fontFamily: 'Pretendard-Regular', fontWeight: 600 }}>{party.time} 시</Typography>
-                        {makePartyBox(party, index)}
-                      </Box>
-                    ))}
+          <Table>
+            <TableBody>
+              {selectedTab === 4 && (
+                <TableRow>
+                  <TableCell align={'center'} sx={{ border: 'none' }}>
+                    <Box key={'토벌전'}
+                      border={1}
+                      borderRadius={6}
+                      padding={2}
+                      boxShadow={2}
+                      bgcolor={'#f3e07c'}
+                      borderColor={'#f3e07c'}>
+                      <Typography style={{ fontFamily: 'NanumBarunGothic', fontSize: 19 }}>길드 토벌전</Typography>
+                      <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: 15 }}>21시 20분 시작<br />본길드부터 2회씩</Typography>
+                    </Box>
                   </TableCell>
                 </TableRow>
-              </TableBody>
-            </Table>
-          ) : <Box></Box>}
+              )}
+              {dailyParties.length > 0 && (<TableRow sx={{ background: getDayBgColor(days[selectedTab]) }}>
+                <TableCell align={'center'} sx={{ border: 'none' }}>
+                  {dailyParties.map((party, index) => (
+                    <Box key={party.id}>
+                      <Typography sx={{ fontFamily: 'Pretendard-Regular', fontWeight: 600 }}>{party.time} 시</Typography>
+                      {makePartyBox(party, index)}
+                    </Box>
+                  ))}
+                </TableCell>
+              </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </TableContainer>
       </Box>
     )
