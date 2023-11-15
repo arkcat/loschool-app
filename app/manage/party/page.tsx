@@ -96,7 +96,7 @@ export default function PartyPage() {
 
     if (currentRaidInfo) {
       const includeRaidCharacters = characterData.filter(character => currentRaidInfo.raid_group.includes(character.id))
-      const canMembers = memberData.filter(member => member.schedule[day][time] === 1)
+      const canMembers = memberData.filter(member => member.schedule_check === true && member.schedule[day][time] === 1)
       const canCharacters = includeRaidCharacters.filter(character => canMembers.filter(member => member.id === character.member_id).length > 0)
       return canCharacters
     } else {
