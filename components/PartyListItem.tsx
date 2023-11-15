@@ -27,7 +27,8 @@ const PartyListItem: React.FC<PartyItemProps> = ({ memberId, data }) => {
       <ListItemText
         primary={
           <Box style={{ display: 'flex', alignItems: 'center', fontFamily: 'NanumBarunGothic', fontSize: '20px' }}>
-            <span style={{ lineHeight: '20px' }}>{`${raidInfo.raid_name} ${data.party.time} 시`}</span>
+            <span style={{ lineHeight: '20px', color: 'green' }}>{`${data.party.time}:00`}</span>
+            <span style={{ lineHeight: '20px', paddingLeft: '10px' }}>{`${raidInfo.raid_name}`}</span>
             {isMy && <img src={questIcon.src} style={{ width: '25px', marginLeft: '10px' }} />}
           </Box>
         }
