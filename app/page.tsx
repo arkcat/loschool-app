@@ -5,7 +5,7 @@ import { supabase } from '@/utils/supabase'
 import { useRecoilState } from 'recoil'
 import { userAtom } from '../recoil/userAtom'
 import LoginForm from '@/components/LoginForm'
-import { Box, Grid, List, Typography } from '@mui/material'
+import { Box, Grid, List, ListItem, ListItemText, Typography } from '@mui/material'
 import titleImage from './res/title.png'
 import PartyListItem, { CombinedData } from '@/components/PartyListItem'
 import { getDayOfWeek } from '@/utils/DateUtils'
@@ -17,7 +17,7 @@ export default function Index() {
   const [userState, setUserState] = useRecoilState<any | null>(userAtom)
   const [mainComment, setMainComment] = useState<string>('')
   const [combinedData, setCombinedData] = useState<CombinedData[]>([])
-
+  const [subjug, setSubjug] = useState<boolean>(false)
   useEffect(() => {
     const fetchMainComment = async () => {
       try {
@@ -41,6 +41,10 @@ export default function Index() {
     const fetchPartyData = async () => {
       // PartyData 가져오기
       const today = getDayOfWeek()
+      if (today == 4) {
+        setSubjug(true)
+      }
+
       const { data: partyData, error: partyError } = await supabase
         .from('Party')
         .select('*')
@@ -146,9 +150,32 @@ export default function Index() {
                     style={{ fontFamily: 'SUIT-Regular', fontSize: '32px', fontWeight: '600' }}>오늘의 공대</Typography>
                   <div className='main-post'>
                     <List dense>
+                      {subjug === true && (
+                        <ListItem>
+                          <ListItemText
+                            primary={
+                              <Box style={{ display: 'flex', alignItems: 'center', fontFamily: 'NanumBarunGothic', fontSize: '20px' }}>
+                                <span style={{ lineHeight: '20px', color: 'green' }}>{`09:20`}</span>
+                                <span style={{ lineHeight: '20px', paddingLeft: '10px' }}>{`길드 토벌전`}</span>
+                              </Box>
+                            }
+                          />
+                        </ListItem>
+                      )}
                       {combinedData.map((data) => (
                         <PartyListItem key={data.party.id} memberId={userState.id} data={data} />
                       ))}
+                      {combinedData.length === 0 && subjug === false && (
+                        <ListItem>
+                        <ListItemText
+                          primary={
+                            <Box style={{ display: 'flex', alignItems: 'center', fontFamily: 'NanumBarunGothic', fontSize: '20px' }}>
+                              <span style={{ lineHeight: '20px', paddingLeft: '10px' }}>{`오늘은 일정이 없어요`}</span>
+                            </Box>
+                          }
+                        />
+                      </ListItem>
+                      )}
                     </List>
                   </div>
                 </Grid>
