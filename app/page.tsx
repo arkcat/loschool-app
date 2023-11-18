@@ -155,7 +155,7 @@ export default function Index() {
                           <ListItemText
                             primary={
                               <Box style={{ display: 'flex', alignItems: 'center', fontFamily: 'NanumBarunGothic', fontSize: '20px' }}>
-                                <span style={{ lineHeight: '20px', color: 'green' }}>{`09:20`}</span>
+                                <span style={{ lineHeight: '20px', color: 'green' }}>{`21:20`}</span>
                                 <span style={{ lineHeight: '20px', paddingLeft: '10px' }}>{`길드 토벌전`}</span>
                               </Box>
                             }
