@@ -1,7 +1,7 @@
 'use client'
 
 import { MouseEvent, useEffect, useMemo, useState } from 'react'
-import { Box, Button, Card, CardContent, Grid, IconButton, MenuItem, Paper, Select, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, Grid, IconButton, MenuItem, Paper, Select, TextField, Typography, useMediaQuery } from '@mui/material'
 import { CharacterData, MemberData, PartyData, RaidData, days, daysOfWeek, timeSlots } from '@/lib/database.types'
 import { supabase } from '@/utils/supabase'
 import { getDayBgColor, hexToRgba } from '@/utils/ColorUtils'
@@ -16,7 +16,7 @@ export default function PartyPage() {
   const [raidData, setRaidData] = useState<RaidData[]>([])
   const [characterData, setCharacterData] = useState<CharacterData[]>([])
   const [memberData, setMemberData] = useState<MemberData[]>([])
-
+  const isNarrowScreen = useMediaQuery('(max-width:600px)');
   useEffect(() => {
 
     const fetchPartyData = async () => {
@@ -553,13 +553,64 @@ export default function PartyPage() {
 
   const [showSearch, setShowSearch] = useState<boolean>(false)
 
-  const userSession = useRequireAuth();
+  function narrowScreenPage() {
+    return (
+      <Box pb={3} pt={8} sx={{ width: '100dvw' }}>
+        <Box display="flex">
+          <Box display="flex" flex={1} justifyContent="flex-start" paddingLeft={2} gap={2}>
+            <Button variant='contained'
+              onClick={saveParties}>파티 편성 확정</Button>
+          </Box>
+          <Box display="flex" flex={1} justifyContent="flex-end" paddingRight={2} gap={2}>
+            <Select value={selectedDay} onChange={(e) => {
+              setSelectedDay(e.target.value)
+            }}>
+              {days?.map((day, index) => {
+                return <MenuItem key={day} value={index}>{day}요일</MenuItem>
+              })}
+            </Select>
+          </Box>
+        </Box>
 
-  if (!userSession) {
-    return <div>Loading...</div>;
+        <Box display="flex" padding={2} style={{ height: '74dvh' }}>
+          <Box flex={1} border={1} style={{ overflowY: 'auto' }} padding={1}>
+            <Typography variant='h6' borderBottom={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>캐릭터 목록
+              <IconButton onClick={() => { setShowSearch(true) }}>
+                <SearchIcon />
+              </IconButton>
+            </Typography>
+            <Box>
+              {showSearch === true ?
+                <TextField
+                  size='small'
+                  type="text"
+                  sx={{ marginTop: 1, marginBottom: 1 }}
+                  fullWidth
+                  value={searchCharacterName}
+                  onChange={(e) =>
+                    setSearchCharacterName(e.target.value)
+                  }
+                /> : <Box></Box>
+              }
+            </Box>
+            {
+              getFilteredCharacters().map((character) => {
+                return makeCandiCharacter(String(character.id), character)
+              })
+            }
+          </Box>
+          <Box flex={1} border={1} sx={{ overflowY: 'auto' }} marginLeft={2}>
+            {tableData.filter(dayData => dayData.day === days[parseInt(selectedDay)]).map(dayData => (
+              <DayComponent key={dayData.day} dayData={dayData} />
+            ))}
+          </Box>
+        </Box>
+      </Box>
+    )
   }
-  return (
-    <MainPageBox>
+
+  function wideScreenPage() {
+    return (
       <Box pb={3} pt={10} sx={{ width: '90dvw' }}>
         {showTopMenu()}
         <Box display="flex" padding={2} style={{ height: '80dvh' }}>
@@ -595,6 +646,30 @@ export default function PartyPage() {
           </Box>
         </Box>
       </Box>
+    )
+  }
+
+  function makePartyPage() {
+    return (
+      <Box>
+        {isNarrowScreen ? (
+          narrowScreenPage()
+        ) : (
+          wideScreenPage()
+        )}
+      </Box>
+    )
+  }
+
+  const userSession = useRequireAuth();
+
+  if (!userSession) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <MainPageBox>
+      {makePartyPage()}
     </MainPageBox>
   )
 }
