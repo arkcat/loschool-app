@@ -293,7 +293,7 @@ export default function PartyPage() {
         onDrop={(e) => handleDrop(e, partyData)}
         onDragOver={(e) => handleDragOver(e)}>
         <Typography fontSize={15} style={{ color: 'white', display: 'flex', justifyContent: 'space-between' }} >{raidInfo.short_name}
-          <DeleteIcon style={{ fontSize: 17 }} onClick={() => { handleDeleteParty(partyData.id) }} />
+          {!isNarrowScreen && <DeleteIcon style={{ fontSize: 17 }} onClick={() => { handleDeleteParty(partyData.id) }} />}
         </Typography>
         <Typography marginBottom={1} fontSize={14} style={{ color: 'white' }}>{days[partyData.day]}요일, {partyData.time}시</Typography>
         {
