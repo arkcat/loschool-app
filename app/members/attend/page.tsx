@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/utils/supabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { getBase64Text, getPlainText } from '@/utils/TextUtils'
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Button, Typography, TextField } from '@mui/material'
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Button, Typography, TextField, useMediaQuery } from '@mui/material'
 import { RaidData, CharacterData, MemberData } from '@/lib/database.types'
 import { LostArkCharacterData, fetchCharactersFromServer } from '@/utils/LostArkApiUtil'
 import MainPageBox from '@/components/MainPageBox'
@@ -22,7 +22,7 @@ export default function AttendancePage() {
   const [colorInfo, setColorInfo] = useState<any>({})
 
   const [addCharName, setAddCharName] = useState('')
-
+  const isNarrowScreen = useMediaQuery('(max-width:600px)');
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -318,6 +318,113 @@ export default function AttendancePage() {
     return false
   }
 
+  function narrowScreenLayout() {
+    return (
+      <TableContainer component={Paper} sx={{ maxHeight: '55dvh', width: '85dvw', overflow: 'auto' }}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }} sx={{ minWidth: '50px', textAlign: 'center', borderRight: '2px #f3e07c solid', borderBottom: '2px #f3e07c solid' }}>캐릭터</TableCell>
+              <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }} style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>레벨</TableCell>
+              <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }} style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>참여 레이드</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {characters.map((character: any) => (
+              <TableRow key={character.id}>
+                <TableCell sx={{ textAlign: 'center', borderRight: '2px #f3e07c solid' }}
+                  style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor, position: 'sticky', left: 0, zIndex: 98 }}
+                  onClick={() => {
+                    router.push(`/members/character?id=${getBase64Text(String(character.id))}`)
+                  }}>
+                  {character.char_name}<br />
+                  [{character.char_class}]
+                </TableCell>
+                <TableCell sx={{ textAlign: 'center' }} style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
+                  {character.char_level}
+                </TableCell>
+                <TableCell sx={{ textAlign: 'center' }} >
+                  {raids.filter(raid => raid.raid_group.includes(character.id)).map(raid => (
+                    <Box key={raid.id} borderRadius={2} padding={1} margin={0.4} style={{ fontFamily: 'NanumBarunGothic', textAlign: 'center', background: raid.raid_color, color: '#fff' }}>
+                      {raid.raid_name}
+                    </Box>
+                  ))}
+                  <Box>
+                    <Button variant='contained' onClick={()=>{
+                      router.push(`/members/attend-character?id=${getBase64Text(String(character.id))}`)
+                    }}>변경</Button>
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )
+  }
+
+  function wideScreenLayout() {
+    return (
+      <TableContainer component={Paper} sx={{ maxHeight: '55dvh', maxWidth: '1800px', overflow: 'auto' }}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }} sx={{ minWidth: '50px', textAlign: 'center', borderRight: '2px #f3e07c solid', borderBottom: '2px #f3e07c solid' }}>캐릭터</TableCell>
+              <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }} style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>레벨</TableCell>
+              {raids.map(raid => (
+                <TableCell sx={{ minWidth: '80px', borderBottom: '2px #f3e07c solid', background: raid.raid_color, color: '#fff' }} key={raid.id} align='center'>
+                  <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>{raid.raid_name}</Typography>
+                  <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '10px' }}>{raid.raid_level}</Typography>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {characters.map((character: any) => (
+              <TableRow key={character.id}>
+                <TableCell sx={{ textAlign: 'center', borderRight: '2px #f3e07c solid' }}
+                  style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor, position: 'sticky', left: 0, zIndex: 98 }}
+                  onClick={() => {
+                    router.push(`/members/character?id=${getBase64Text(String(character.id))}`)
+                  }}>
+                  {character.char_name}<br />
+                  [{character.char_class}]
+                </TableCell>
+                <TableCell sx={{ textAlign: 'center' }} style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
+                  {character.char_level}
+                </TableCell>
+                {raids.map((raid: RaidData) => (
+                  <TableCell key={raid.id} style={{ textAlign: 'center' }}>
+                    <Checkbox
+                      disabled={checkRaidDisabled(raid, character)}
+                      checked={raid.raid_group.includes(character.id)}
+                      onChange={(e) => {
+                        handleCheckboxChange(raid.id, character.id)
+                      }}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )
+  }
+
+  function generateTable() {
+    return (
+      <Box sx={{ maxWidth: '100dvw', overflow: 'auto' }}>
+        {isNarrowScreen ? (
+          narrowScreenLayout()
+        ) : (
+          wideScreenLayout()
+        )}
+      </Box>
+    )
+  }
+
   return (
     <MainPageBox>
       <Typography className='page-title'>출석부</Typography>
@@ -357,53 +464,7 @@ export default function AttendancePage() {
           캐릭터 추가
         </Button>
       </Box>
-      <Box sx={{ maxWidth: '100dvw', overflow: 'auto' }}>
-        <TableContainer component={Paper} sx={{ maxHeight: '55dvh', maxWidth: '1800px', overflow: 'auto' }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }} sx={{ minWidth: '50px', textAlign: 'center', borderRight: '2px #f3e07c solid', borderBottom: '2px #f3e07c solid' }}>캐릭터</TableCell>
-                <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }} style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>레벨</TableCell>
-                {raids.map(raid => (
-                  <TableCell sx={{ minWidth: '80px', borderBottom: '2px #f3e07c solid', background: raid.raid_color, color: '#fff' }} key={raid.id} align='center'>
-                    <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>{raid.raid_name}</Typography>
-                    <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '10px' }}>{raid.raid_level}</Typography>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {characters.map((character: any) => (
-                <TableRow key={character.id}>
-                  <TableCell sx={{ textAlign: 'center', borderRight: '2px #f3e07c solid' }}
-                    style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor, position: 'sticky', left: 0, zIndex: 98 }}
-                    onClick={() => {
-                      router.push(`/members/character?id=${getBase64Text(String(character.id))}`)
-                    }}>
-                    {character.char_name}<br />
-                    [{character.char_class}]
-                  </TableCell>
-                  <TableCell sx={{ textAlign: 'center' }} style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
-                    {character.char_level}
-                  </TableCell>
-                  {raids.map((raid: RaidData) => (
-                    <TableCell key={raid.id} style={{ textAlign: 'center' }}>
-                      <Checkbox
-                        disabled={checkRaidDisabled(raid, character)}
-                        checked={raid.raid_group.includes(character.id)}
-                        onChange={(e) => {
-                          handleCheckboxChange(raid.id, character.id)
-                        }}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                      />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+      {generateTable()}
     </MainPageBox>
   )
 }
