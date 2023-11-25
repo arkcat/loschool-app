@@ -52,7 +52,7 @@ const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
     <Box display={'flex'}>
       <TableContainer sx={{ mb: '3px', backgroundColor: '#b7bd98', border: '2px solid', borderColor: raid.color }}>
         <TableRow>
-          <TableCell rowSpan={2} sx={{ minWidth: '120px', textAlign: 'center', border: 'none' }}>
+          <TableCell rowSpan={2} sx={{ minWidth: '120px', textAlign: 'center', borderRight: '2px solid', borderColor: raid.color }}>
             <Box sx={{ minWidth: '120px' }}>
               <Typography component="div" style={{ fontFamily: 'SUIT-Regular', fontSize: '20px', fontWeight: '600' }}>
                 {name}
@@ -66,10 +66,13 @@ const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
               </Typography>
             </TableCell>
             {!isNarrowScreen && normal.reward.map((reward, index) => (
-              <TableRow>
+              <TableRow key={index}>
+                <TableCell sx={{ border: 'none' }}>
+                  {reward.step}관
+                </TableCell>
                 <TableCell sx={{ minWidth: '120px', border: 'none' }}>
                   <Typography style={{ fontFamily: 'SUIT-Regular', fontWeight: '200', fontSize: '15px' }}>
-                    {reward.step}관 <GoldImage />{reward.gold}
+                    <GoldImage />{reward.gold}
                   </Typography>
                 </TableCell>
                 <TableCell sx={{ minWidth: '120px', border: 'none' }}>
@@ -80,10 +83,10 @@ const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
               </TableRow>
             ))}
 
-            <TableCell sx={{ border: 'none' }} />
+            <TableCell sx={{ border: 'none', width: '1px', padding: '1px', backgroundColor: raid.color }} />
 
             {!isNarrowScreen && normal.reward.map((reward, index) => (
-              <TableRow>
+              <TableRow key={index}>
                 <TableCell sx={{ minWidth: '120px', border: 'none' }}>
                   <Typography style={{ fontFamily: 'SUIT-Regular', fontWeight: '200', fontSize: '15px' }}>
                     <GoldImage />{reward.gold}
@@ -112,10 +115,13 @@ const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
                 </Typography>
               </TableCell>
               {!isNarrowScreen && hard.reward.map((reward, index) => (
-                <TableRow>
+                <TableRow key={index}>
+                  <TableCell sx={{ border: 'none' }}>
+                    {reward.step}관
+                  </TableCell>
                   <TableCell sx={{ minWidth: '120px', border: 'none' }}>
                     <Typography style={{ fontFamily: 'SUIT-Regular', fontWeight: '200', fontSize: '15px' }}>
-                      {reward.step}관 <GoldImage />{reward.gold}
+                      <GoldImage />{reward.gold}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ minWidth: '120px', border: 'none' }}>
@@ -126,10 +132,10 @@ const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
                 </TableRow>
               ))}
 
-              <TableCell sx={{ border: 'none' }} />
+              <TableCell sx={{ border: 'none', width: '1px', padding: '1px', backgroundColor: raid.color }} />
 
               {!isNarrowScreen && hard.reward.map((reward, index) => (
-                <TableRow>
+                <TableRow key={index}>
                   <TableCell sx={{ minWidth: '120px', border: 'none' }}>
                     <Typography style={{ fontFamily: 'SUIT-Regular', fontWeight: '200', fontSize: '15px' }}>
                       <GoldImage />{reward.gold}
