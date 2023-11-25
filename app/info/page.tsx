@@ -1,94 +1,101 @@
 "use client";
 
-import { supabase } from "@/utils/supabase";
-import { useState, useEffect } from "react";
-
-import {
-  FormControl,
-  Select,
-  MenuItem,
-  Typography,
-  Box,
-  Button,
-  Grid,
-} from "@mui/material";
+import { Typography, TableContainer, Box, } from "@mui/material";
 import MainPageBox from "@/components/MainPageBox";
 import useRequireAuth from "@/utils/AuthUtils";
 import RaidInfo, { RaidReward } from "./RaidInfo";
-
+import 시련의빛 from "@/app/res/items/시련의빛.png"
+import 관조의빛무리 from "@/app/res/items/관조의빛무리.png"
+import 노말기운 from "@/app/res/items/선명한지혜의기운.png"
+import 노말엘릭서 from "@/app/res/items/선명한지혜의엘릭서.png"
+import 하드기운 from "@/app/res/items/빛나는지혜의기운.png"
+import 하드엘릭서 from "@/app/res/items/빛나는지혜의엘릭서.png"
+import 마수의뼈 from "@/app/res/items/마수의뼈.png"
+import 욕망의날개 from "@/app/res/items/욕망의날개.png"
+import 광기의나팔 from "@/app/res/items/광기의나팔.png"
+import 몽환의사념 from "@/app/res/items/몽환의사념.png"
+import 쇠락의눈동자 from "@/app/res/items/쇠락의눈동자.png"
+import 마력의샘물 from "@/app/res/items/마력의샘물.png"
+import 어둠의불 from "@/app/res/items/어둠의불.png"
 
 const raidList: RaidReward[] = [
   {
-    name: '카양겔', normal: {
+    name: '카양겔',
+    color: "#fce5cd",
+    normal: {
       totalGold: 4500, reward: [
-        { step: 1, gold: 1000, item: [{ name: '빛', count: 11 },] },
-        { step: 2, gold: 1500, item: [{ name: '빛', count: 12 }, { name: '빛무리', count: 1 },] },
-        { step: 3, gold: 2000, item: [{ name: '빛', count: 17 }, { name: '빛무리', count: 2 },] }
+        { step: 1, gold: 1000, item: [{ image: 시련의빛.src, count: 11 },] },
+        { step: 2, gold: 1500, item: [{ image: 시련의빛.src, count: 12 }, { image: 관조의빛무리.src, count: 1 },] },
+        { step: 3, gold: 2000, item: [{ image: 시련의빛.src, count: 17 }, { image: 관조의빛무리.src, count: 2 },] }
       ]
     }, hard: {
       totalGold: 6500, reward: [
-        { step: 1, gold: 1500, item: [{ name: '빛', count: 14 }, { name: '빛무리', count: 1 },] },
-        { step: 2, gold: 2000, item: [{ name: '빛', count: 16 }, { name: '빛무리', count: 1 },] },
-        { step: 3, gold: 3000, item: [{ name: '빛', count: 20 }, { name: '빛무리', count: 3 },] }
+        { step: 1, gold: 1500, item: [{ image: 시련의빛.src, count: 14 }, { image: 관조의빛무리.src, count: 1 },] },
+        { step: 2, gold: 2000, item: [{ image: 시련의빛.src, count: 16 }, { image: 관조의빛무리.src, count: 1 },] },
+        { step: 3, gold: 3000, item: [{ image: 시련의빛.src, count: 20 }, { image: 관조의빛무리.src, count: 3 },] }
       ]
     }
   },
   {
     name: '혼돈의 상아탑',
+    color: "#fce5cd",
     normal: {
       totalGold: 9000, reward: [
-        { step: 1, gold: 1500, item: [{ name: '기운', count: 2 }] },
-        { step: 2, gold: 1750, item: [{ name: '기운', count: 2 }] },
-        { step: 3, gold: 2500, item: [{ name: '기운', count: 3 }] },
-        { step: 4, gold: 3250, item: [{ name: '기운', count: 1 }, { name: '엘릭서', count: 1 }] }
+        { step: 1, gold: 1500, item: [{ image: 노말기운.src, count: 2 }] },
+        { step: 2, gold: 1750, item: [{ image: 노말기운.src, count: 2 }] },
+        { step: 3, gold: 2500, item: [{ image: 노말기운.src, count: 3 }] },
+        { step: 4, gold: 3250, item: [{ image: 노말기운.src, count: 1 }, { image: 노말엘릭서.src, count: 1 }] }
       ]
     },
     hard: {
       totalGold: 14500, reward: [
-        { step: 1, gold: 2000, item: [{ name: '기운', count: 2 }] },
-        { step: 2, gold: 2500, item: [{ name: '기운', count: 2 }] },
-        { step: 3, gold: 4000, item: [{ name: '기운', count: 3 }] },
-        { step: 4, gold: 6000, item: [{ name: '기운', count: 1 }, { name: '엘릭서', count: 1 }] }
+        { step: 1, gold: 2000, item: [{ image: 하드기운.src, count: 2 }] },
+        { step: 2, gold: 2500, item: [{ image: 하드기운.src, count: 2 }] },
+        { step: 3, gold: 4000, item: [{ image: 하드기운.src, count: 3 }] },
+        { step: 4, gold: 6000, item: [{ image: 하드기운.src, count: 1 }, { image: 하드엘릭서.src, count: 1 }] }
       ]
     }
   },
   {
     name: '발탄',
+    color: "#6d9eeb",
     normal: {
       totalGold: 1200, reward: [
-        { step: 1, gold: 500, item: [{ name: '뼈', count: 1 }] },
-        { step: 2, gold: 700, item: [{ name: '뼈', count: 2 }] }
+        { step: 1, gold: 500, item: [{ image: 마수의뼈.src, count: 1 }] },
+        { step: 2, gold: 700, item: [{ image: 마수의뼈.src, count: 2 }] }
       ]
     },
     hard: {
       totalGold: 1800, reward: [
-        { step: 1, gold: 700, item: [{ name: '뼈', count: 3 }] },
-        { step: 2, gold: 1100, item: [{ name: '뼈', count: 3 }] }
+        { step: 1, gold: 700, item: [{ image: 마수의뼈.src, count: 3 }] },
+        { step: 2, gold: 1100, item: [{ image: 마수의뼈.src, count: 3 }] }
       ]
     }
   },
   {
     name: '비아키스',
+    color: "#e06666",
     normal: {
       totalGold: 1600, reward: [
-        { step: 1, gold: 600, item: [{ name: '날개', count: 1 }] },
-        { step: 2, gold: 1000, item: [{ name: '날개', count: 2 }] }
+        { step: 1, gold: 600, item: [{ image: 욕망의날개.src, count: 1 }] },
+        { step: 2, gold: 1000, item: [{ image: 욕망의날개.src, count: 2 }] }
       ]
     },
     hard: {
       totalGold: 2400, reward: [
-        { step: 1, gold: 900, item: [{ name: '날개', count: 3 }] },
-        { step: 2, gold: 1500, item: [{ name: '날개', count: 3 }] }
+        { step: 1, gold: 900, item: [{ image: 욕망의날개.src, count: 3 }] },
+        { step: 2, gold: 1500, item: [{ image: 욕망의날개.src, count: 3 }] }
       ]
     }
   },
   {
     name: '쿠크세이튼',
+    color: "#ffff00",
     normal: {
       totalGold: 3000, reward: [
-        { step: 1, gold: 600, item: [{ name: '나팔', count: 1 }] },
-        { step: 2, gold: 900, item: [{ name: '나팔', count: 2 }] },
-        { step: 3, gold: 1500, item: [{ name: '나팔', count: 2 }] }
+        { step: 1, gold: 600, item: [{ image: 광기의나팔.src, count: 1 }] },
+        { step: 2, gold: 900, item: [{ image: 광기의나팔.src, count: 2 }] },
+        { step: 3, gold: 1500, item: [{ image: 광기의나팔.src, count: 2 }] }
       ]
     },
     hard: {
@@ -97,84 +104,58 @@ const raidList: RaidReward[] = [
   },
   {
     name: '아브렐슈드',
+    color: "#8e7cc3",
     normal: {
       totalGold: 7000, reward: [
-        { step: 1, gold: 1500, item: [{ name: '사념', count: 4 }] },
-        { step: 2, gold: 1500, item: [{ name: '사념', count: 4 }] },
-        { step: 3, gold: 1500, item: [{ name: '사념', count: 5 }] },
-        { step: 4, gold: 2500, item: [{ name: '사념', count: 7 }] }
+        { step: 1, gold: 1500, item: [{ image: 몽환의사념.src, count: 4 }] },
+        { step: 2, gold: 1500, item: [{ image: 몽환의사념.src, count: 4 }] },
+        { step: 3, gold: 1500, item: [{ image: 몽환의사념.src, count: 5 }] },
+        { step: 4, gold: 2500, item: [{ image: 몽환의사념.src, count: 7 }] }
       ]
     },
     hard: {
       totalGold: 9000, reward: [
-        { step: 1, gold: 2000, item: [{ name: '사념', count: 6 }] },
-        { step: 2, gold: 2000, item: [{ name: '사념', count: 6 }] },
-        { step: 3, gold: 2000, item: [{ name: '사념', count: 7 }] },
-        { step: 4, gold: 3000, item: [{ name: '사념', count: 10 }] }
+        { step: 1, gold: 2000, item: [{ image: 몽환의사념.src, count: 6 }] },
+        { step: 2, gold: 2000, item: [{ image: 몽환의사념.src, count: 6 }] },
+        { step: 3, gold: 2000, item: [{ image: 몽환의사념.src, count: 7 }] },
+        { step: 4, gold: 3000, item: [{ image: 몽환의사념.src, count: 10 }] }
       ]
     }
   },
   {
     name: '일리아칸',
+    color: "#38761d",
     normal: {
       totalGold: 7500, reward: [
-        { step: 1, gold: 1500, item: [{ name: '눈동자', count: 3 }] },
-        { step: 2, gold: 2000, item: [{ name: '눈동자', count: 3 }] },
-        { step: 3, gold: 4000, item: [{ name: '눈동자', count: 5 }] }
+        { step: 1, gold: 1500, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
+        { step: 2, gold: 2000, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
+        { step: 3, gold: 4000, item: [{ image: 쇠락의눈동자.src, count: 5 }] }
       ]
     },
     hard: {
       totalGold: 10000, reward: [
-        { step: 1, gold: 1750, item: [{ name: '눈동자', count: 7 }] },
-        { step: 2, gold: 2500, item: [{ name: '눈동자', count: 7 }] },
-        { step: 3, gold: 5750, item: [{ name: '눈동자', count: 8 }] }
+        { step: 1, gold: 1750, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
+        { step: 2, gold: 2500, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
+        { step: 3, gold: 5750, item: [{ image: 쇠락의눈동자.src, count: 8 }] }
       ]
     }
   },
   {
     name: '카멘',
+    color: "#073763",
     normal: {
       totalGold: 13000, reward: [
-        {
-          step: 1, gold: 3500, item: [
-            { name: '불', count: 3 },
-            { name: '샘물', count: 2 },
-          ]
-        },
-        {
-          step: 2, gold: 4000, item: [
-            { name: '불', count: 4 },
-            { name: '샘물', count: 3 },]
-        },
-        {
-          step: 3, gold: 5500, item: [
-            { name: '불', count: 6 },
-            { name: '샘물', count: 4 },]
-        }
+        { step: 1, gold: 3500, item: [{ image: 어둠의불.src, count: 3 }, { image: 마력의샘물.src, count: 2 },] },
+        { step: 2, gold: 4000, item: [{ image: 어둠의불.src, count: 4 }, { image: 마력의샘물.src, count: 3 },] },
+        { step: 3, gold: 5500, item: [{ image: 어둠의불.src, count: 6 }, { image: 마력의샘물.src, count: 4 },] }
       ]
     },
     hard: {
       totalGold: 41000, reward: [
-        {
-          step: 1, gold: 5000, item: [
-            { name: '불', count: 6 },
-            { name: '샘물', count: 6 },]
-        },
-        {
-          step: 2, gold: 6000, item: [
-            { name: '불', count: 8 },
-            { name: '샘물', count: 9 },]
-        },
-        {
-          step: 3, gold: 9000, item: [
-            { name: '불', count: 12 },
-            { name: '샘물', count: 12 },]
-        },
-        {
-          step: 4, gold: 21000, item: [
-            { name: '불', count: 12 },
-            { name: '샘물', count: 12 },]
-        }
+        { step: 1, gold: 5000, item: [{ image: 어둠의불.src, count: 6 }, { image: 마력의샘물.src, count: 6 },] },
+        { step: 2, gold: 6000, item: [{ image: 어둠의불.src, count: 8 }, { image: 마력의샘물.src, count: 9 },] },
+        { step: 3, gold: 9000, item: [{ image: 어둠의불.src, count: 12 }, { image: 마력의샘물.src, count: 12 },] },
+        { step: 4, gold: 21000, item: [{ image: 어둠의불.src, count: 12 }, { image: 마력의샘물.src, count: 12 },] }
       ]
     }
   },
@@ -191,13 +172,11 @@ export default function CharactersPage() {
   return (
     <MainPageBox>
       <Typography className='page-title'>레이드 보상 정보</Typography>
-      <Grid container spacing={2} sx={{ height: '100%', overflow: 'auto' }} padding={2}>
+      <Box sx={{ mb: 4, height: '95dvh', overflowY: 'auto' }}>
         {raidList.map((raid, index) => (
-          <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-            <RaidInfo raid={raid} />
-          </Grid>
+          <RaidInfo key={index} raid={raid} />
         ))}
-      </Grid>
+      </Box>
     </MainPageBox>
   );
 }
