@@ -17,6 +17,7 @@ import ManageCharacterIcon from '@mui/icons-material/ManageAccountsSharp'
 import PartyIcon from '@mui/icons-material/AppRegistrationOutlined';
 import ManageRaidIcon from '@mui/icons-material/ManageSearchOutlined'
 import MenuIcon from '@mui/icons-material/Menu'
+import MailIcon from '@mui/icons-material/MailLockOutlined'
 import userAtom from '@/recoil/userAtom'
 
 import { useRecoilState } from 'recoil'
@@ -215,6 +216,24 @@ export default function SwipeableTemporaryDrawer() {
         )
     }
 
+    const showOtherMenuList = () => {
+        return (
+            <List>
+                <ListItem key={'other mailbox'} disablePadding>
+                    <ListItemButton onClick={() => {
+                        const newTabUrl = 'https://naver.me/GqsVB4Bt';
+                        window.open(newTabUrl, '_blank');
+                    }}>
+                        <ListItemIcon>
+                            <MailIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'익명 건의함'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        )
+    }
+
     const list = (anchor: Anchor) => (
         <Box
             sx={{ width: 'auto', padding: '20px' }}
@@ -238,6 +257,7 @@ export default function SwipeableTemporaryDrawer() {
             </List>
             {(userState?.permission === 'senior' || userState?.permission === 'professor') && showMenuList()}
             {userState?.permission === 'professor' && showManageMenuList()}
+            {(userState?.permission === 'senior' || userState?.permission === 'professor') && showOtherMenuList()}
         </Box>
     )
 
