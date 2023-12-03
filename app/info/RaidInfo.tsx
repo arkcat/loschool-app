@@ -13,13 +13,16 @@ export interface Reward {
 export interface RaidReward {
   name: string;
   color: string;
+  itemLevel: string;
   normal: {
-    totalGold: number
+    totalGold: number;
     reward: Reward[];
+    moreReward: Reward[];
   };
   hard: {
     totalGold: number;
     reward: Reward[];
+    moreReward: Reward[];
   };
 }
 
@@ -57,6 +60,11 @@ const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
               <Typography component="div" style={{ fontFamily: 'SUIT-Regular', fontSize: '20px', fontWeight: '600' }}>
                 {name}
               </Typography>
+              {raid.itemLevel.split('\n').map((line, index) => (
+                <Typography key={index} style={{ fontFamily: 'NanumBarunGothic', fontSize: '13px', textAlign: 'center' }}>
+                  {line}
+                </Typography>
+              ))}
             </Box>
           </TableCell>
           <TableRow>
@@ -85,7 +93,7 @@ const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
 
             <TableCell sx={{ border: 'none', width: '1px', padding: '1px', backgroundColor: raid.color }} />
 
-            {!isNarrowScreen && normal.reward.map((reward, index) => (
+            {!isNarrowScreen && normal.moreReward.map((reward, index) => (
               <TableRow key={index}>
                 <TableCell sx={{ minWidth: '120px', border: 'none' }}>
                   <Typography style={{ fontFamily: 'SUIT-Regular', fontWeight: '200', fontSize: '15px' }}>
@@ -134,7 +142,7 @@ const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
 
               <TableCell sx={{ border: 'none', width: '1px', padding: '1px', backgroundColor: raid.color }} />
 
-              {!isNarrowScreen && hard.reward.map((reward, index) => (
+              {!isNarrowScreen && hard.moreReward.map((reward, index) => (
                 <TableRow key={index}>
                   <TableCell sx={{ minWidth: '120px', border: 'none' }}>
                     <Typography style={{ fontFamily: 'SUIT-Regular', fontWeight: '200', fontSize: '15px' }}>
