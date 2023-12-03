@@ -10,6 +10,7 @@ import { Card, CardContent, Typography, Tooltip, Box, TableContainer, Paper, Tab
 import { getDayOfWeek } from '@/utils/DateUtils'
 import MainPageBox from '@/components/MainPageBox'
 import useRequireAuth from '@/utils/AuthUtils'
+import tag4thImg from '@/app/res/4th.png'
 
 export default function WeeklyPlan() {
 
@@ -112,8 +113,8 @@ export default function WeeklyPlan() {
     const textColor = member?.text_color
 
     return (
-      <Tooltip title={member?.nick_name} followCursor>
-        <Card key={key}
+      <Tooltip key={key} title={member?.nick_name} followCursor>
+        <Card
           style={{ display: 'flex', alignItems: 'center', border: '1px solid #ccc', backgroundColor: bgColor, color: textColor, minHeight: '30px', marginTop: '3px' }}>
           <CardContent style={{ padding: '0 10px' }}>
             <Typography style={{ fontSize: '14px', fontFamily: 'SUIT-Regular' }}>{character.char_name} [{character.char_class}]</Typography>
@@ -355,9 +356,32 @@ export default function WeeklyPlan() {
     return <div>Loading...</div>;
   }
 
+  function checkWeek() {
+    const startDate = new Date('2023-11-29');
+    const currentDate = new Date();
+    const timeDifference = currentDate.getTime() - startDate.getTime();
+    const weeksPassed = Math.floor(timeDifference / (6 * 24 * 60 * 60 * 1000));
+    return weeksPassed % 2 === 0
+  }
+
   return (
     <MainPageBox>
-      <Typography className='page-title'>이번주 시간표</Typography>
+      <Box display="flex" flexDirection={'column'} position="relative">
+        <Typography variant="h4" className="page-title">
+          이번주 시간표
+        </Typography>
+        {checkWeek() && (
+          <Box position="absolute" bottom={isNarrowScreen ? -47 : -33} width="100%">
+            <Box display="flex" justifyContent="center">
+              <img
+                src={tag4thImg.src}
+                style={{ width: '125px' }}
+                alt="이미지 설명"
+              />
+            </Box>
+          </Box>
+        )}
+      </Box>
       {generatePlan()}
     </MainPageBox>
   )
