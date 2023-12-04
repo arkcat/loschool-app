@@ -205,8 +205,8 @@ export default function WeeklyPlan() {
     }
 
     return (
-      <Box sx={{ maxWidth: '100dvw', maxHeight: '80dvh', overflow: 'auto' }}>
-        <TableContainer>
+      <Box>
+        <TableContainer sx={{ maxWidth: '100dvw', maxHeight: '80dvh', overflow: 'auto' }}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
