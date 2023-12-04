@@ -10,7 +10,7 @@ import { Card, CardContent, Typography, Tooltip, Box, TableContainer, Paper, Tab
 import { getDayOfWeek } from '@/utils/DateUtils'
 import MainPageBox from '@/components/MainPageBox'
 import useRequireAuth from '@/utils/AuthUtils'
-import tag4thImg from '@/app/res/4th.png'
+import tag4thImg from '@/app/res/gate4.png'
 
 export default function WeeklyPlan() {
 
@@ -357,11 +357,12 @@ export default function WeeklyPlan() {
   }
 
   function checkWeek() {
-    const startDate = new Date('2023-11-29');
-    const currentDate = new Date();
+    const startDate = new Date(2023,10,29,6,0,0,0);
+    const currentDate = new Date();    
     const timeDifference = currentDate.getTime() - startDate.getTime();
-    const weeksPassed = Math.floor(timeDifference / (6 * 24 * 60 * 60 * 1000));
-    return weeksPassed % 2 === 0
+    const weeksPassed = Math.floor(timeDifference / (7 * 24 * 60 * 60 * 1000));
+    console.log(weeksPassed)
+    return weeksPassed % 2 !== 0
   }
 
   return (
@@ -371,11 +372,11 @@ export default function WeeklyPlan() {
           이번주 시간표
         </Typography>
         {checkWeek() && (
-          <Box position="absolute" bottom={isNarrowScreen ? -47 : -33} width="100%">
+          <Box position="absolute" bottom={isNarrowScreen ? -10 : 10} left={isNarrowScreen ? 50 : 150} width="100%">
             <Box display="flex" justifyContent="center">
               <img
                 src={tag4thImg.src}
-                style={{ width: '125px' }}
+                style={{ width: '170px' }}
                 alt="이미지 설명"
               />
             </Box>
