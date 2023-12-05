@@ -4,11 +4,13 @@ import { MouseEvent, useEffect, useMemo, useState } from 'react'
 import { Box, Button, Card, CardContent, Grid, IconButton, MenuItem, Paper, Select, TextField, Typography, useMediaQuery } from '@mui/material'
 import { CharacterData, MemberData, PartyData, RaidData, days, daysOfWeek, timeSlots } from '@/lib/database.types'
 import { supabase } from '@/utils/supabase'
-import { getDayBgColor, hexToRgba } from '@/utils/ColorUtils'
+import { getDayBgColor, getDayHeadBgColor, hexToRgba } from '@/utils/ColorUtils'
 import SearchIcon from '@mui/icons-material/SearchOutlined'
 import DeleteIcon from '@mui/icons-material/DeleteOutline'
 import MainPageBox from '@/components/MainPageBox'
 import useRequireAuth from '@/utils/AuthUtils'
+import { checkWeek } from '@/utils/DateUtils'
+import tag4thImg from '@/app/res/gate4.png'
 export const dynamic = 'force-dynamic'
 
 export default function PartyPage() {
@@ -532,8 +534,10 @@ export default function PartyPage() {
 
   const DayComponent: React.FC<{ dayData: any }> = ({ dayData }) => {
     return (
-      <Grid item xs borderLeft={1} borderTop={1} bgcolor={getDayBgColor(dayData.day)}>
-        <Typography variant="h6" borderBottom={1} style={{ textAlign: 'center' }} onClick={() => { setSelectedDay(String(dayData.index)) }}>{dayData.day}</Typography>
+      <Grid item xs borderLeft={1}>
+        <Grid borderTop={1} style={{ position: 'sticky', top: 0, zIndex: 1, backgroundColor: getDayHeadBgColor(dayData.day) }}>
+          <Typography variant="h6" borderBottom={1} style={{ textAlign: 'center' }} onClick={() => { setSelectedDay(String(dayData.index)) }}>{dayData.day}</Typography>
+        </Grid>
         {dayData.parties.map((party: any) => (
           <PartyComponent key={party.id} party={party} />
         ))}
@@ -640,8 +644,7 @@ export default function PartyPage() {
               })
             }
           </Box>
-          <Box flex={6} borderRight={1} borderTop={1} borderBottom={1} style={{ overflowY: 'auto' }} marginLeft={2}>
-            <Typography variant='h6' borderLeft={1} style={{ fontWeight: 'bold', textAlign: 'center' }}>파티 목록</Typography>
+          <Box flex={6} borderRight={1} borderBottom={1} style={{ overflowY: 'auto' }} marginLeft={2}>
             <TableComponent />
           </Box>
         </Box>
@@ -669,6 +672,17 @@ export default function PartyPage() {
 
   return (
     <MainPageBox>
+      {checkWeek() && (
+          <Box position="absolute" top={isNarrowScreen ? 20 : 50} width="100%">
+            <Box display="flex" justifyContent="center">
+              <img
+                src={tag4thImg.src}
+                style={{ width: '170px' }}
+                alt="이미지 설명"
+              />
+            </Box>
+          </Box>
+        )}
       {makePartyPage()}
     </MainPageBox>
   )

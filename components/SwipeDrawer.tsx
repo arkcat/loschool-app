@@ -168,7 +168,7 @@ export default function SwipeableTemporaryDrawer() {
                     </ListItemButton>
                 </ListItem>
                 <ListItem key={'raid info'} disablePadding>
-                    <ListItemButton onClick={() => { router.push(`/info/`)}}>
+                    <ListItemButton onClick={() => { router.push(`/info/`) }}>
                         <ListItemIcon>
                             <CheckBoxIcon />
                         </ListItemIcon>
