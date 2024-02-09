@@ -17,6 +17,8 @@ import 몽환의사념 from "@/app/res/items/몽환의사념.png"
 import 쇠락의눈동자 from "@/app/res/items/쇠락의눈동자.png"
 import 마력의샘물 from "@/app/res/items/마력의샘물.png"
 import 어둠의불 from "@/app/res/items/어둠의불.png"
+import 아그리스의비늘 from "@/app/res/items/아그리스비늘.png"
+import 알키오네의눈 from "@/app/res/items/알키오네눈.png"
 
 const raidList: RaidReward[] = [
   {
@@ -24,7 +26,7 @@ const raidList: RaidReward[] = [
     color: "#fce5cd",
     itemLevel: "1540 / 1580",
     normal: {
-      totalGold: 4500, reward: [
+      totalGold: '4500', reward: [
         { step: 1, gold: 1000, item: [{ image: 시련의빛.src, count: 11 },] },
         { step: 2, gold: 1500, item: [{ image: 시련의빛.src, count: 12 }, { image: 관조의빛무리.src, count: 1 },] },
         { step: 3, gold: 2000, item: [{ image: 시련의빛.src, count: 17 }, { image: 관조의빛무리.src, count: 2 },] }
@@ -35,7 +37,7 @@ const raidList: RaidReward[] = [
         { step: 3, gold: 1000, item: [{ image: 시련의빛.src, count: 17 }, { image: 관조의빛무리.src, count: 2 },] }
       ]
     }, hard: {
-      totalGold: 6500, reward: [
+      totalGold: '6500', reward: [
         { step: 1, gold: 1500, item: [{ image: 시련의빛.src, count: 14 }, { image: 관조의빛무리.src, count: 1 },] },
         { step: 2, gold: 2000, item: [{ image: 시련의빛.src, count: 16 }, { image: 관조의빛무리.src, count: 1 },] },
         { step: 3, gold: 3000, item: [{ image: 시련의빛.src, count: 20 }, { image: 관조의빛무리.src, count: 3 },] }
@@ -52,7 +54,7 @@ const raidList: RaidReward[] = [
     color: "#fce5cd",
     itemLevel: "1600 / 1620",
     normal: {
-      totalGold: 9000, reward: [
+      totalGold: '9000', reward: [
         { step: 1, gold: 1500, item: [{ image: 노말기운.src, count: 2 }] },
         { step: 2, gold: 1750, item: [{ image: 노말기운.src, count: 2 }] },
         { step: 3, gold: 2500, item: [{ image: 노말기운.src, count: 3 }] },
@@ -66,7 +68,7 @@ const raidList: RaidReward[] = [
       ]
     },
     hard: {
-      totalGold: 14500, reward: [
+      totalGold: '14500', reward: [
         { step: 1, gold: 2000, item: [{ image: 하드기운.src, count: 2 }] },
         { step: 2, gold: 2500, item: [{ image: 하드기운.src, count: 2 }] },
         { step: 3, gold: 4000, item: [{ image: 하드기운.src, count: 3 }] },
@@ -85,7 +87,7 @@ const raidList: RaidReward[] = [
     color: "#6d9eeb",
     itemLevel: "1415 / 1445",
     normal: {
-      totalGold: 1200, reward: [
+      totalGold: '1200', reward: [
         { step: 1, gold: 500, item: [{ image: 마수의뼈.src, count: 1 }] },
         { step: 2, gold: 700, item: [{ image: 마수의뼈.src, count: 2 }] }
       ],
@@ -95,7 +97,7 @@ const raidList: RaidReward[] = [
       ]
     },
     hard: {
-      totalGold: 1800, reward: [
+      totalGold: '1800', reward: [
         { step: 1, gold: 700, item: [{ image: 마수의뼈.src, count: 3 }] },
         { step: 2, gold: 1100, item: [{ image: 마수의뼈.src, count: 3 }] }
       ],
@@ -110,7 +112,7 @@ const raidList: RaidReward[] = [
     color: "#e06666",
     itemLevel: "1430 / 1460",
     normal: {
-      totalGold: 1600, reward: [
+      totalGold: '1600', reward: [
         { step: 1, gold: 600, item: [{ image: 욕망의날개.src, count: 1 }] },
         { step: 2, gold: 1000, item: [{ image: 욕망의날개.src, count: 2 }] }
       ],
@@ -120,7 +122,7 @@ const raidList: RaidReward[] = [
       ]
     },
     hard: {
-      totalGold: 2400, reward: [
+      totalGold: '2400', reward: [
         { step: 1, gold: 900, item: [{ image: 욕망의날개.src, count: 3 }] },
         { step: 2, gold: 1500, item: [{ image: 욕망의날개.src, count: 3 }] }
       ],
@@ -135,7 +137,7 @@ const raidList: RaidReward[] = [
     color: "#ffff00",
     itemLevel: "1475",
     normal: {
-      totalGold: 3000, reward: [
+      totalGold: '3000', reward: [
         { step: 1, gold: 600, item: [{ image: 광기의나팔.src, count: 1 }] },
         { step: 2, gold: 900, item: [{ image: 광기의나팔.src, count: 2 }] },
         { step: 3, gold: 1500, item: [{ image: 광기의나팔.src, count: 2 }] }
@@ -147,7 +149,7 @@ const raidList: RaidReward[] = [
       ]
     },
     hard: {
-      totalGold: 0, reward: [], moreReward: []
+      totalGold: '0', reward: [], moreReward: []
     }
   },
   {
@@ -155,7 +157,7 @@ const raidList: RaidReward[] = [
     color: "#8e7cc3",
     itemLevel: "1~2 : 1500 / 1540\n3 : 1500 / 1550\n4 : 1520 / 1560",
     normal: {
-      totalGold: 7000, reward: [
+      totalGold: '1-3: 4500 \n4: 2500', reward: [
         { step: 1, gold: 1500, item: [{ image: 몽환의사념.src, count: 4 }] },
         { step: 2, gold: 1500, item: [{ image: 몽환의사념.src, count: 4 }] },
         { step: 3, gold: 1500, item: [{ image: 몽환의사념.src, count: 5 }] },
@@ -169,7 +171,7 @@ const raidList: RaidReward[] = [
       ]
     },
     hard: {
-      totalGold: 9000, reward: [
+      totalGold: '1-3: 6000 \n4: 3000', reward: [
         { step: 1, gold: 2000, item: [{ image: 몽환의사념.src, count: 6 }] },
         { step: 2, gold: 2000, item: [{ image: 몽환의사념.src, count: 6 }] },
         { step: 3, gold: 2000, item: [{ image: 몽환의사념.src, count: 7 }] },
@@ -188,7 +190,7 @@ const raidList: RaidReward[] = [
     color: "#38761d",
     itemLevel: "1580 / 1600",
     normal: {
-      totalGold: 7500, reward: [
+      totalGold: '7500', reward: [
         { step: 1, gold: 1500, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
         { step: 2, gold: 2000, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
         { step: 3, gold: 4000, item: [{ image: 쇠락의눈동자.src, count: 5 }] }
@@ -200,7 +202,7 @@ const raidList: RaidReward[] = [
       ]
     },
     hard: {
-      totalGold: 10000, reward: [
+      totalGold: '10000', reward: [
         { step: 1, gold: 1750, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
         { step: 2, gold: 2500, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
         { step: 3, gold: 5750, item: [{ image: 쇠락의눈동자.src, count: 8 }] }
@@ -217,7 +219,7 @@ const raidList: RaidReward[] = [
     color: "#073763",
     itemLevel: "1610 / 1630",
     normal: {
-      totalGold: 13000, reward: [
+      totalGold: '13000', reward: [
         { step: 1, gold: 3500, item: [{ image: 어둠의불.src, count: 3 }, { image: 마력의샘물.src, count: 2 },] },
         { step: 2, gold: 4000, item: [{ image: 어둠의불.src, count: 4 }, { image: 마력의샘물.src, count: 3 },] },
         { step: 3, gold: 5500, item: [{ image: 어둠의불.src, count: 6 }, { image: 마력의샘물.src, count: 4 },] }
@@ -229,7 +231,7 @@ const raidList: RaidReward[] = [
       ]
     },
     hard: {
-      totalGold: 41000, reward: [
+      totalGold: '1-3: 20000 \n4: 21000', reward: [
         { step: 1, gold: 5000, item: [{ image: 어둠의불.src, count: 6 }, { image: 마력의샘물.src, count: 6 },] },
         { step: 2, gold: 6000, item: [{ image: 어둠의불.src, count: 8 }, { image: 마력의샘물.src, count: 9 },] },
         { step: 3, gold: 9000, item: [{ image: 어둠의불.src, count: 12 }, { image: 마력의샘물.src, count: 12 },] },
@@ -240,6 +242,31 @@ const raidList: RaidReward[] = [
         { step: 2, gold: 2400, item: [{ image: 어둠의불.src, count: 8 }, { image: 마력의샘물.src, count: 9 },] },
         { step: 3, gold: 2800, item: [{ image: 어둠의불.src, count: 12 }, { image: 마력의샘물.src, count: 12 },] },
         { step: 4, gold: 3600, item: [{ image: 어둠의불.src, count: 12 }, { image: 마력의샘물.src, count: 12 },] }
+      ]
+    }
+  },
+  {
+    name: '에키드나',
+    color: "#e06666",
+    itemLevel: "1620 / 1630",
+    normal: {
+      totalGold: '14500', reward: [
+        { step: 1, gold: 5000, item: [{ image: 아그리스의비늘.src, count: 3 }] },
+        { step: 2, gold: 9500, item: [{ image: 아그리스의비늘.src, count: 6 }] }
+      ],
+      moreReward: [
+        { step: 1, gold: 2200, item: [{ image: 아그리스의비늘.src, count: 3 }] },
+        { step: 2, gold: 3400, item: [{ image: 아그리스의비늘.src, count: 6 }] }
+      ]
+    },
+    hard: {
+      totalGold: '18500', reward: [
+        { step: 1, gold: 6000, item: [{ image: 알키오네의눈.src, count: 3 }] },
+        { step: 2, gold: 12500, item: [{ image: 알키오네의눈.src, count: 6 }] }
+      ],
+      moreReward: [
+        { step: 1, gold: 2800, item: [{ image: 알키오네의눈.src, count: 3 }] },
+        { step: 2, gold: 4100, item: [{ image: 알키오네의눈.src, count: 6 }] }
       ]
     }
   },

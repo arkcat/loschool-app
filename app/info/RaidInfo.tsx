@@ -15,12 +15,12 @@ export interface RaidReward {
   color: string;
   itemLevel: string;
   normal: {
-    totalGold: number;
+    totalGold: string;
     reward: Reward[];
     moreReward: Reward[];
   };
   hard: {
-    totalGold: number;
+    totalGold: string;
     reward: Reward[];
     moreReward: Reward[];
   };
@@ -44,6 +44,10 @@ const ImageIcon: React.FC<ImageIconProps> = ({ source, count }) => {
 
 interface RaidInfoProps {
   raid: RaidReward;
+}
+
+function printGold(gold: string) {
+  return <div style={{whiteSpace:'pre-wrap'}}>{gold}</div>
 }
 
 const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
@@ -70,7 +74,7 @@ const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
           <TableRow>
             <TableCell sx={{ minWidth: '120px', textAlign: 'center', border: 'none' }}>
               <Typography style={{ fontFamily: 'SUIT-Regular' }}>
-                노말 <GoldImage />{normal.totalGold}
+                노말 <GoldImage />{printGold(normal.totalGold)}
               </Typography>
             </TableCell>
             {!isNarrowScreen && normal.reward.map((reward, index) => (
@@ -109,17 +113,17 @@ const RaidInfo: React.FC<RaidInfoProps> = ({ raid }) => {
             ))}
           </TableRow>
 
-          {!isNarrowScreen && hard.totalGold > 0 && (
+          {!isNarrowScreen && hard.totalGold !== '0' && (
             <TableRow sx={{ backgroundColor: raid.color }}>
               <TableCell colSpan={4} sx={{ minHeight: '1px', maxHeight: '1px', padding: '1px', border: 'none' }}></TableCell>
             </TableRow>
           )}
 
-          {hard.totalGold > 0 && (
+          {hard.totalGold !== '0' && (
             <TableRow>
               <TableCell sx={{ minWidth: '120px', textAlign: 'center', border: 'none' }}>
                 <Typography style={{ fontFamily: 'SUIT-Regular' }}>
-                  하드 <GoldImage />{hard.totalGold}
+                  하드 <GoldImage />{printGold(hard.totalGold)}
                 </Typography>
               </TableCell>
               {!isNarrowScreen && hard.reward.map((reward, index) => (
