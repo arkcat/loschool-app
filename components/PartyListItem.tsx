@@ -35,7 +35,7 @@ const PartyListItem: React.FC<PartyItemProps> = ({ memberId, data }) => {
         }
         secondary={isMy &&
           <Typography style={{ textAlign: 'center', fontFamily: 'NanumBarunGothic', fontSize: '18px' }}>
-            {`- 참여 캐릭터 : ${myChar} -`}
+            {`- ${myChar} -`}
           </Typography>
         }
       />
