@@ -288,13 +288,43 @@ export default function WeeklyPlan() {
     }
   }
 
+  function handleSwipe(direction: string) {
+    if (direction === 'left') {
+      if (selectedTab < days.length - 1) {
+        setSelectedTab(selectedTab + 1);
+      }
+    } else if (direction === 'right') {
+      if (selectedTab > 0) {
+        setSelectedTab(selectedTab - 1);
+      }
+    }
+  }
+
+  let touchStartX = 0;
+
+  function handleTouchStart(e: any) {
+    touchStartX = e.touches[0].clientX;
+  }
+
+  function handleTouchEnd(e: any) {
+    const touchEndX = e.changedTouches[0].clientX;
+    const deltaX = touchEndX - touchStartX;
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX > 0) {
+        handleSwipe('right');
+      } else {
+        handleSwipe('left');
+      }
+    }
+  }
+
   function narrowScreenLayout() {
     const dailyParties: PartyData[] = partyData
       .filter(party => party.day === selectedTab)
       .sort((a, b) => { return a.time - b.time })
 
     return (
-      <Box display="flex" flexDirection="column" sx={{ mb: 5, height: '80dvh' }}>
+      <Box display="flex" flexDirection="column" sx={{ mb: 5, height: '80dvh' }} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         <Tabs value={selectedTab} onChange={handleTabChange}>
           {days.map((day, index) => (
             <Tab label={day} key={index} sx={{ minWidth: 0, fontFamily: 'Pretendard-Regular', fontWeight: 600 }} />
@@ -357,8 +387,8 @@ export default function WeeklyPlan() {
   }
 
   function checkWeek() {
-    const startDate = new Date(2023,10,29,6,0,0,0);
-    const currentDate = new Date();    
+    const startDate = new Date(2023, 10, 29, 6, 0, 0, 0);
+    const currentDate = new Date();
     const timeDifference = currentDate.getTime() - startDate.getTime();
     const weeksPassed = Math.floor(timeDifference / (7 * 24 * 60 * 60 * 1000));
     console.log(weeksPassed)
