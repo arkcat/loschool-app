@@ -192,7 +192,7 @@ export default function pages() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {raids.map((raid: RaidData) => (
+                {raids.filter(raid => raid.id >= 40003).map((raid: RaidData) => (
                   <TableRow key={raid.id} style={{ textAlign: 'center' }}>
                     <TableCell sx={{ minWidth: '80px', borderBottom: '2px #f3e07c solid', background: raid.raid_color, color: '#fff' }} key={raid.id} align='center'>
                       <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>{raid.raid_name}</Typography>
