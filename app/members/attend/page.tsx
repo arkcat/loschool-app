@@ -344,7 +344,7 @@ export default function AttendancePage() {
                   {character.char_level}
                 </TableCell>
                 <TableCell sx={{ textAlign: 'center' }} >
-                  {raids.filter(raid => raid.raid_group.includes(character.id)).map(raid => (
+                  {raids.filter(raid => raid.id >= 40003).filter(raid => raid.raid_group.includes(character.id)).map(raid => (
                     <Box key={raid.id} borderRadius={2} padding={1} margin={0.4} style={{ fontFamily: 'NanumBarunGothic', textAlign: 'center', background: raid.raid_color, color: '#fff' }}>
                       {raid.raid_name}
                     </Box>
@@ -371,7 +371,7 @@ export default function AttendancePage() {
             <TableRow>
               <TableCell style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }} sx={{ minWidth: '50px', textAlign: 'center', borderRight: '2px #f3e07c solid', borderBottom: '2px #f3e07c solid' }}>캐릭터</TableCell>
               <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }} style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>레벨</TableCell>
-              {raids.map(raid => (
+              {raids.filter(raid => raid.id >= 40003).map(raid => (
                 <TableCell sx={{ minWidth: '80px', borderBottom: '2px #f3e07c solid', background: raid.raid_color, color: '#fff' }} key={raid.id} align='center'>
                   <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>{raid.raid_name}</Typography>
                   <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '10px' }}>{raid.raid_level}</Typography>
@@ -393,7 +393,7 @@ export default function AttendancePage() {
                 <TableCell sx={{ textAlign: 'center' }} style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
                   {character.char_level}
                 </TableCell>
-                {raids.map((raid: RaidData) => (
+                {raids.filter(raid => raid.id >= 40003).map((raid: RaidData) => (
                   <TableCell key={raid.id} style={{ textAlign: 'center' }}>
                     <Checkbox
                       disabled={checkRaidDisabled(raid, character)}
