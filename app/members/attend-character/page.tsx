@@ -119,7 +119,7 @@ export default function pages() {
     if (raid.id === 40001 || raid.id === 40002) {
       relRaid = checkRelatedRaid(40003, char.id) || checkRelatedRaid(40004, char.id)
     } else if (raid.id === 40003 || raid.id === 40004) {
-      relRaid = checkRelatedRaid(40001, char.id) || checkRelatedRaid(40002, char.id)
+      //relRaid = checkRelatedRaid(40001, char.id) || checkRelatedRaid(40002, char.id)
     } else if (raid.id === 40005) {
       relRaid = checkRelatedRaid(40006, char.id)
     } else if (raid.id === 40006) {
