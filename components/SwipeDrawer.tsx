@@ -212,6 +212,16 @@ export default function SwipeableTemporaryDrawer() {
                         <ListItemText primary={'파티 편성'} />
                     </ListItemButton>
                 </ListItem>
+                <ListItem key={'checking memeber'} disablePadding>
+                    <ListItemButton onClick={() => {
+                        router.push(`/manage/CheckingMembers`)
+                    }}>
+                        <ListItemIcon>
+                            <PartyIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'공대참여현황'} />
+                    </ListItemButton>
+                </ListItem>
             </List>
         )
     }

@@ -19,6 +19,7 @@ import 마력의샘물 from "@/app/res/items/마력의샘물.png"
 import 어둠의불 from "@/app/res/items/어둠의불.png"
 import 아그리스의비늘 from "@/app/res/items/아그리스비늘.png"
 import 알키오네의눈 from "@/app/res/items/알키오네눈.png"
+import 베히모스의비늘 from "@/app/res/items/베히모스의비늘.png"
 
 const raidList: RaidReward[] = [
   {
@@ -171,7 +172,7 @@ const raidList: RaidReward[] = [
       ]
     },
     hard: {
-      totalGold: '1-3: 6000 \n4: 3000', reward: [
+      totalGold: '1-3: 6000 \n4: 30 00', reward: [
         { step: 1, gold: 2000, item: [{ image: 몽환의사념.src, count: 6 }] },
         { step: 2, gold: 2000, item: [{ image: 몽환의사념.src, count: 6 }] },
         { step: 3, gold: 2000, item: [{ image: 몽환의사념.src, count: 7 }] },
@@ -268,6 +269,24 @@ const raidList: RaidReward[] = [
         { step: 1, gold: 2800, item: [{ image: 알키오네의눈.src, count: 3 }] },
         { step: 2, gold: 4100, item: [{ image: 알키오네의눈.src, count: 6 }] }
       ]
+    }
+  },
+  {
+    name: '베히모스',
+    color: "#375995",
+    itemLevel: "1640",
+    normal: {
+      totalGold: '21500', reward: [
+        { step: 1, gold: 7000, item: [{ image: 베히모스의비늘.src, count: 10 }, { image: 마력의샘물.src, count: 10 }] },
+        { step: 2, gold: 14500, item: [{ image: 베히모스의비늘.src, count: 10 }, { image: 마력의샘물.src, count: 10 }] }
+      ],
+      moreReward: [
+        { step: 1, gold: 3100, item: [{ image: 베히모스의비늘.src, count: 10 }, { image: 마력의샘물.src, count: 10 }] },
+        { step: 2, gold: 4900, item: [{ image: 베히모스의비늘.src, count: 20 }, { image: 마력의샘물.src, count: 18 }] }
+      ]
+    },
+    hard: {
+      totalGold: '0', reward: [], moreReward: []
     }
   },
 ]
