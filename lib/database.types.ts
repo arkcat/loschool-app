@@ -31,6 +31,7 @@ export interface CharacterData {
 export interface RaidData {
     id: number
     raid_name: string
+    raid_type: number
     short_name: string
     raid_color: string
     raid_level: number
@@ -43,4 +44,11 @@ export interface PartyData {
     day: number
     time: number
     member: number[]
+    real_raid_id: number
+}
+
+export interface PenaltyData {
+    id: number
+    name: string
+    date: Date
 }

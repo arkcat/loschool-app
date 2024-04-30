@@ -137,13 +137,21 @@ export default function PartyPage() {
     const selectedRaidId = parseInt(selectedRaid)
     const selectedDayInt = parseInt(selectedDay)
     const selectedTimeInt = parseInt(timeSlots[parseInt(selectedTime)])
+    const raidInfo = raidData[parseInt(selectedRaid)]
+    let memberTable = []
+    if (raidInfo.raid_type === 8) {
+      memberTable = [0, 0, 0, 0, 0, 0, 0, 0]
+    } else {
+      memberTable = [0, 0, 0, 0]
+    }
 
     const newParty = {
       id: id + 1,
       raid_id: selectedRaidId,
-      member: [0, 0, 0, 0, 0, 0, 0, 0],
+      member: memberTable,
       day: selectedDayInt,
-      time: selectedTimeInt
+      time: selectedTimeInt,
+      real_raid_id: raidInfo.id
     }
 
     setPartyData(prevPartyData => [...prevPartyData, newParty])
@@ -673,16 +681,16 @@ export default function PartyPage() {
   return (
     <MainPageBox>
       {checkWeek() && (
-          <Box position="absolute" top={isNarrowScreen ? 20 : 50} width="100%">
-            <Box display="flex" justifyContent="center">
-              <img
-                src={tag4thImg.src}
-                style={{ width: '170px' }}
-                alt="이미지 설명"
-              />
-            </Box>
+        <Box position="absolute" top={isNarrowScreen ? 20 : 50} width="100%">
+          <Box display="flex" justifyContent="center">
+            <img
+              src={tag4thImg.src}
+              style={{ width: '170px' }}
+              alt="이미지 설명"
+            />
           </Box>
-        )}
+        </Box>
+      )}
       {makePartyPage()}
     </MainPageBox>
   )

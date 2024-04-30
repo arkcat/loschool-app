@@ -142,10 +142,12 @@ export default function WeeklyPlan() {
       return <Box></Box>
     }
 
+    const maxDealerCount = (raidInfo.raid_type / 4) * 3
+    const maxSupporterCount = (raidInfo.raid_type / 4)
     const dealerCount = partyData.member.filter(id => isDealer(id)).length
     const supperterCount = partyData.member.filter(id => isSupporter(id)).length
-    const remainingDealers = dealerCount < 6 ? 6 - dealerCount : 0
-    const remainingSupporters = supperterCount < 2 ? 2 - supperterCount : 0
+    const remainingDealers = dealerCount < maxDealerCount ? maxDealerCount - dealerCount : 0
+    const remainingSupporters = supperterCount < maxSupporterCount ? maxSupporterCount - supperterCount : 0
 
     if (partyData.member.map((id) => {
       const hasCharacter = characterData.filter(character => character.id === id && character.member_id === currentMember?.id).length > 0
@@ -164,7 +166,7 @@ export default function WeeklyPlan() {
           borderColor={raidInfo.raid_color}
           boxShadow={2}>
           <Typography style={{ fontFamily: 'NanumBarunGothic', fontSize: 14, color: 'white' }} onClick={() => handleToggle(partyData.id)}>
-            {raidInfo.raid_name + ` ${dealerCount + supperterCount}/8`} <br />
+            {raidInfo.raid_name + ` ${dealerCount + supperterCount}/${raidInfo.raid_type}`} <br />
             {remainingDealers > 0 && `랏딜: ${remainingDealers}`} {remainingSupporters > 0 && ` 랏폿: ${remainingSupporters}`}
           </Typography>
 

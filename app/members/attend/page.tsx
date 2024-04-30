@@ -173,11 +173,7 @@ export default function AttendancePage() {
 
   const handleCheckboxChange = (raidId: number, characterId: number) => {
     var relatedRaidId = 0
-    if (raidId === 40002) {
-      relatedRaidId = 40001
-    } else if (raidId === 40004) {
-      relatedRaidId = 40003
-    } else if (raidId === 40009) {
+    if (raidId === 40009) {
       relatedRaidId = 40008
     }
 
@@ -287,10 +283,10 @@ export default function AttendancePage() {
 
     var raidFor2Week = false
     var relRaid = false
-    if (raid.id === 40001 || raid.id === 40002) {
-      relRaid = checkRelatedRaid(40003, char.id) || checkRelatedRaid(40004, char.id)
-    } else if (raid.id === 40003 || raid.id === 40004) {
-      //relRaid = checkRelatedRaid(40001, char.id) || checkRelatedRaid(40002, char.id)
+    if (raid.id === 40003) {
+      relRaid = checkRelatedRaid(40004, char.id)
+    } else if (raid.id === 40004) {
+      relRaid = checkRelatedRaid(40003, char.id)
     } else if (raid.id === 40005) {
       relRaid = checkRelatedRaid(40006, char.id)
     } else if (raid.id === 40006) {
@@ -299,18 +295,20 @@ export default function AttendancePage() {
       relRaid = checkRelatedRaid(40008, char.id) || checkRelatedRaid(40009, char.id)
     } else if (raid.id === 40008 || raid.id === 40009) {
       relRaid = checkRelatedRaid(40007, char.id)
+    } else if (raid.id === 40010) {
+      relRaid = checkRelatedRaid(40011, char.id)
+    } else if (raid.id === 40011) {
+      relRaid = checkRelatedRaid(40010, char.id)
     }
+
     if (relRaid === true) {
       return true
     }
 
-    if (raid.id === 40001) {
-      raidFor2Week = checkRelatedRaid(40002, char.id)
-    } else if (raid.id === 40003) {
-      raidFor2Week = checkRelatedRaid(40004, char.id)
-    } else if (raid.id === 40008) {
+    if (raid.id === 40008) {
       raidFor2Week = checkRelatedRaid(40009, char.id)
     }
+
     if (raidFor2Week === true) {
       return true
     }
@@ -344,13 +342,13 @@ export default function AttendancePage() {
                   {character.char_level}
                 </TableCell>
                 <TableCell sx={{ textAlign: 'center' }} >
-                  {raids.filter(raid => raid.id >= 40003).filter(raid => raid.raid_group.includes(character.id)).map(raid => (
+                  {raids.filter(raid => raid.raid_group.includes(character.id)).map(raid => (
                     <Box key={raid.id} borderRadius={2} padding={1} margin={0.4} style={{ fontFamily: 'NanumBarunGothic', textAlign: 'center', background: raid.raid_color, color: '#fff' }}>
                       {raid.raid_name}
                     </Box>
                   ))}
                   <Box>
-                    <Button variant='contained' onClick={()=>{
+                    <Button variant='contained' onClick={() => {
                       router.push(`/members/attend-character?id=${getBase64Text(String(character.id))}`)
                     }}>변경</Button>
                   </Box>
@@ -371,7 +369,7 @@ export default function AttendancePage() {
             <TableRow>
               <TableCell style={{ position: 'sticky', left: 0, zIndex: 99, fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }} sx={{ minWidth: '50px', textAlign: 'center', borderRight: '2px #f3e07c solid', borderBottom: '2px #f3e07c solid' }}>캐릭터</TableCell>
               <TableCell sx={{ minWidth: '30px', textAlign: 'center', borderBottom: '2px #f3e07c solid' }} style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>레벨</TableCell>
-              {raids.filter(raid => raid.id >= 40003).map(raid => (
+              {raids.map(raid => (
                 <TableCell sx={{ minWidth: '80px', borderBottom: '2px #f3e07c solid', background: raid.raid_color, color: '#fff' }} key={raid.id} align='center'>
                   <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>{raid.raid_name}</Typography>
                   <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '10px' }}>{raid.raid_level}</Typography>
@@ -393,7 +391,7 @@ export default function AttendancePage() {
                 <TableCell sx={{ textAlign: 'center' }} style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor }}>
                   {character.char_level}
                 </TableCell>
-                {raids.filter(raid => raid.id >= 40003).map((raid: RaidData) => (
+                {raids.map((raid: RaidData) => (
                   <TableCell key={raid.id} style={{ textAlign: 'center' }}>
                     <Checkbox
                       disabled={checkRaidDisabled(raid, character)}
