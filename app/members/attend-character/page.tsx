@@ -78,11 +78,7 @@ export default function pages() {
 
   const handleCheckboxChange = (raidId: number, characterId: number) => {
     var relatedRaidId = 0
-    if (raidId === 40002) {
-      relatedRaidId = 40001
-    } else if (raidId === 40004) {
-      relatedRaidId = 40003
-    } else if (raidId === 40009) {
+    if (raidId === 40009) {
       relatedRaidId = 40008
     }
 
@@ -116,10 +112,10 @@ export default function pages() {
 
     var raidFor2Week = false
     var relRaid = false
-    if (raid.id === 40001 || raid.id === 40002) {
-      relRaid = checkRelatedRaid(40003, char.id) || checkRelatedRaid(40004, char.id)
-    } else if (raid.id === 40003 || raid.id === 40004) {
-      //relRaid = checkRelatedRaid(40001, char.id) || checkRelatedRaid(40002, char.id)
+    if (raid.id === 40003) {
+      relRaid = checkRelatedRaid(40004, char.id)
+    } else if (raid.id === 40004) {
+      relRaid = checkRelatedRaid(40003, char.id)
     } else if (raid.id === 40005) {
       relRaid = checkRelatedRaid(40006, char.id)
     } else if (raid.id === 40006) {
@@ -128,18 +124,20 @@ export default function pages() {
       relRaid = checkRelatedRaid(40008, char.id) || checkRelatedRaid(40009, char.id)
     } else if (raid.id === 40008 || raid.id === 40009) {
       relRaid = checkRelatedRaid(40007, char.id)
+    } else if (raid.id === 40010) {
+      relRaid = checkRelatedRaid(40011, char.id)
+    } else if (raid.id === 40011) {
+      relRaid = checkRelatedRaid(40010, char.id)
     }
+
     if (relRaid === true) {
       return true
     }
 
-    if (raid.id === 40001) {
-      raidFor2Week = checkRelatedRaid(40002, char.id)
-    } else if (raid.id === 40003) {
-      raidFor2Week = checkRelatedRaid(40004, char.id)
-    } else if (raid.id === 40008) {
+    if (raid.id === 40008) {
       raidFor2Week = checkRelatedRaid(40009, char.id)
     }
+
     if (raidFor2Week === true) {
       return true
     }
@@ -192,7 +190,7 @@ export default function pages() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {raids.filter(raid => raid.id >= 40003).map((raid: RaidData) => (
+                {raids.map((raid: RaidData) => (
                   <TableRow key={raid.id} style={{ textAlign: 'center' }}>
                     <TableCell sx={{ minWidth: '80px', borderBottom: '2px #f3e07c solid', background: raid.raid_color, color: '#fff' }} key={raid.id} align='center'>
                       <Typography style={{ fontFamily: 'S-CoreDream-3Light', fontSize: '12px' }}>{raid.raid_name}</Typography>
