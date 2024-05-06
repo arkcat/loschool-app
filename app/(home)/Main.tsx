@@ -2,7 +2,7 @@
 import LoginForm from "@/components/LoginForm";
 import PartyListItem from "@/components/PartyListItem";
 import SwipeDrawer from "@/components/SwipeDrawer";
-import { supabase } from "@/utils/supabase";
+import useMember from "@/hooks/useMember";
 import {
   Box,
   Grid,
@@ -11,8 +11,9 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RecoilRoot } from "recoil";
+import styles from "../../styles/home.module.css";
 
 interface Props {
   mainComment: any;
@@ -21,40 +22,24 @@ interface Props {
 
 export default function Main({ mainComment, raidList }: Props) {
   const [showLoginForm, setShowLoginForm] = useState(false);
-  const [userState, setUserState] = useState<any>({});
   const [subjug, setSubjug] = useState<boolean>(false);
 
-  console.log(String(mainComment));
-  const handleUpdateMember = async (uid: string) => {
-    try {
-      if (!userState) {
-        const { data, error } = await supabase
-          .from("Member")
-          .select()
-          .eq("uid", uid);
+  const { user, handleUpdateMember } = useMember();
 
-        if (error) {
-          throw error;
-        }
-
-        if (data.length > 0) {
-          setUserState(data[0]);
-          setShowLoginForm(false);
-        }
-      }
-    } catch (error: any) {
-      console.error("Error updating member:", error.message);
+  useEffect(() => {
+    console.log(user);
+    if (user) {
+      setShowLoginForm(false);
     }
-  };
+  }, [user]);
+
   return (
     <Box>
       <main
         className="100dvh bg-background flex flex-col items-center"
         style={{ position: "relative", backgroundColor: "#d1d7b1" }}
       >
-        <RecoilRoot>
-          <SwipeDrawer />
-        </RecoilRoot>
+        <SwipeDrawer />
         {/* <img className="mokoko-image" src={mokokoImage.src} alt="mokoko" /> */}
         <Box
           sx={{
@@ -86,30 +71,13 @@ export default function Main({ mainComment, raidList }: Props) {
             <Box>
               {/* <img src={titleImage.src} className="title-image" alt="Title" /> */}
             </Box>
+            {!user.uid && (
+              <Box className={styles.box}>
+                <LoginForm onLoginSuccess={handleUpdateMember} />
+              </Box>
+            )}
             <Box>
-              {!userState && (
-                <div className="outlined">
-                  {showLoginForm === false ? (
-                    <div
-                      onClick={() => setShowLoginForm(true)}
-                      style={{
-                        cursor: "pointer",
-                        fontFamily: "NanumBarunGothic",
-                        fontSize: "30px",
-                      }}
-                    >
-                      로그인
-                    </div>
-                  ) : (
-                    <div className="loginForm">
-                      <LoginForm onLoginSuccess={handleUpdateMember} />
-                    </div>
-                  )}
-                </div>
-              )}
-            </Box>
-            <Box>
-              {userState && (
+              {user && (
                 <Box>
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
@@ -159,7 +127,7 @@ export default function Main({ mainComment, raidList }: Props) {
                           {raidList.map((data) => (
                             <PartyListItem
                               key={data.party.id}
-                              memberId={userState.id}
+                              memberId={user.id}
                               data={data}
                             />
                           ))}

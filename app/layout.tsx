@@ -1,4 +1,5 @@
-import "./globals.css";
+import RecoilRootProvider from "@/provider/RecoilRootProvider";
+import "../styles/globals.css";
 
 export const metadata = {
   title: "로스쿨",
@@ -12,7 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <RecoilRootProvider>{children}</RecoilRootProvider>
+      </body>
     </html>
   );
 }
