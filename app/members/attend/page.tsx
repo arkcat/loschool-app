@@ -23,6 +23,8 @@ export default function AttendancePage() {
 
   const [addCharName, setAddCharName] = useState('')
   const isNarrowScreen = useMediaQuery('(max-width:600px)');
+
+  const [draggedItemIndex, setDraggedItemIndex] = useState<number | any>(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -72,7 +74,7 @@ export default function AttendancePage() {
         .from('Character')
         .select()
         .eq('member_id', memberId)
-        .order('id')
+        .order('order')
 
       if (data) {
         setCharacters(data)
@@ -316,6 +318,40 @@ export default function AttendancePage() {
     return false
   }
 
+  const handleDragStart = (e: any, index: number) => {
+    setDraggedItemIndex(index)
+  };
+
+  const handleDrop = async (e: any, targetIndex: number) => {
+    console.log(targetIndex)
+    const draggedIndex = draggedItemIndex
+    if (draggedIndex == null)
+      return
+    const draggedItem = characters[draggedIndex];
+    const reorderedChars = characters.filter((item, index) => index !== draggedIndex);
+    reorderedChars.splice(targetIndex, 0, draggedItem);
+
+    const reorderedItems = reorderedChars.map((item, index) => {
+      return {
+        ...item,
+        order: index,
+      };
+    });
+
+    try {
+      await supabase.from('Character')
+        .upsert(reorderedItems);
+      setCharacters(reorderedChars);
+    } catch (error: any) {
+      console.error('Error updating order items:', error.message);
+    }
+    setDraggedItemIndex(null)
+  };
+
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
+  };
+
   function narrowScreenLayout() {
     return (
       <TableContainer component={Paper} sx={{ maxHeight: '55dvh', width: '85dvw', overflow: 'auto' }}>
@@ -328,7 +364,7 @@ export default function AttendancePage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {characters.map((character: any) => (
+            {characters.map((character: CharacterData, index) => (
               <TableRow key={character.id}>
                 <TableCell sx={{ textAlign: 'center', borderRight: '2px #f3e07c solid' }}
                   style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor, position: 'sticky', left: 0, zIndex: 98 }}
@@ -378,13 +414,16 @@ export default function AttendancePage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {characters.map((character: any) => (
-              <TableRow key={character.id}>
+            {characters.map((character: any, index: number) => (
+              <TableRow key={character.id}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, index)}>
                 <TableCell sx={{ textAlign: 'center', borderRight: '2px #f3e07c solid' }}
                   style={{ backgroundColor: colorInfo.pColor, color: colorInfo.tColor, position: 'sticky', left: 0, zIndex: 98 }}
                   onClick={() => {
                     router.push(`/members/character?id=${getBase64Text(String(character.id))}`)
-                  }}>
+                  }}
+                  draggable onDragStart={(e) => handleDragStart(e, index)}>
                   {character.char_name}<br />
                   [{character.char_class}]
                 </TableCell>

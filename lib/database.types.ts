@@ -26,6 +26,7 @@ export interface CharacterData {
     char_class: string
     char_type: string
     char_level: number
+    order: number
 }
 
 export interface RaidData {
