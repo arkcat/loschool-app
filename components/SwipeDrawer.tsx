@@ -18,13 +18,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
-import userAtom from "@/recoil/userAtom";
+import { Member, fetchSessionId, logout } from "@/api/supabase";
+import useMember from "@/hooks/useMember";
 import { getBase64Text } from "@/utils/TextUtils";
-import { supabase } from "@/utils/supabase";
 import { Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
 
 type Anchor = "left";
 
@@ -37,59 +36,28 @@ export default function SwipeableTemporaryDrawer() {
   });
 
   const router = useRouter();
-
-  const [userState, setUserState] = useRecoilState<any | null>(userAtom);
+  const { user, setUser, handleUpdateMember } = useMember();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const authSession = supabase.auth.getSession();
-        const currentSession = (await authSession).data.session;
-        if (currentSession !== null) {
-          getLoginMember(currentSession.user.id);
-        } else {
-          setUserState(null);
-        }
-      } catch (error: any) {
-        console.error("사용자 정보 가져오기 오류:", error.message);
+    const checkSession = async () => {
+      const userId = await fetchSessionId();
+      if (userId) {
+        handleUpdateMember(userId);
+      } else {
+        setUser({} as Member);
       }
     };
-
-    fetchUser();
+    checkSession();
   }, []);
 
-  const getLoginMember = async (uid: string) => {
-    try {
-      console.log("get login memeber info : " + uid);
-      const { data, error } = await supabase
-        .from("Member")
-        .select()
-        .eq("uid", uid);
-
-      if (error) {
-        throw error;
-      }
-
-      if (data) {
-        setUserState(data[0]);
-      }
-    } catch (error: any) {
-      console.error("Error updating member:", error.message);
-    }
-  };
-
   function routeMemberDetails(): void {
-    router.push(`/members/details?id=${getBase64Text(userState.uid)}`);
+    router.push(`/members/details?id=${getBase64Text(user.uid)}`);
   }
 
   async function handleLogout() {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("로그아웃 오류:", error.message);
-    } else {
-      setUserState(null);
-      router.push("/");
-    }
+    await logout();
+    setUser({} as Member);
+    router.push("/");
   }
 
   const toggleDrawer =
@@ -117,7 +85,7 @@ export default function SwipeableTemporaryDrawer() {
         gap={1}
       >
         <Typography variant="h6">환영합니다,</Typography>
-        <Typography variant="h5">{userState.nick_name} 님!</Typography>
+        <Typography variant="h5">{user.nick_name} 님!</Typography>
         <Box>
           <Button
             variant="contained"
@@ -141,7 +109,7 @@ export default function SwipeableTemporaryDrawer() {
         <ListItem key={"weekly"} disablePadding>
           <ListItemButton
             onClick={() => {
-              router.push(`/calendar?id=${getBase64Text(userState.uid)}`);
+              router.push(`/calendar?id=${getBase64Text(user.uid)}`);
             }}
           >
             <ListItemIcon>
@@ -153,9 +121,7 @@ export default function SwipeableTemporaryDrawer() {
         <ListItem key={"schedule"} disablePadding>
           <ListItemButton
             onClick={() => {
-              router.push(
-                `/members/schedule?id=${getBase64Text(userState.uid)}`
-              );
+              router.push(`/members/schedule?id=${getBase64Text(user.uid)}`);
             }}
           >
             <ListItemIcon>
@@ -167,7 +133,7 @@ export default function SwipeableTemporaryDrawer() {
         <ListItem key={"attend"} disablePadding>
           <ListItemButton
             onClick={() => {
-              router.push(`/members/attend?id=${getBase64Text(userState.uid)}`);
+              router.push(`/members/attend?id=${getBase64Text(user.uid)}`);
             }}
           >
             <ListItemIcon>
@@ -179,7 +145,7 @@ export default function SwipeableTemporaryDrawer() {
         <ListItem key={"manage member"} disablePadding>
           <ListItemButton
             onClick={() => {
-              if (userState?.permission === "professor") {
+              if (user?.permission === "professor") {
                 router.push("/manage/member");
               } else {
                 router.push("/members/list");
@@ -289,7 +255,7 @@ export default function SwipeableTemporaryDrawer() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      {userState ? showLoginBox() : <h1>로그인해주세요</h1>}
+      {user.uid ? showLoginBox() : <h1>로그인해주세요</h1>}
 
       <Divider sx={{ padding: "10px" }} />
 
@@ -307,12 +273,10 @@ export default function SwipeableTemporaryDrawer() {
           </ListItemButton>
         </ListItem>
       </List>
-      {(userState?.permission === "senior" ||
-        userState?.permission === "professor") &&
+      {(user?.permission === "senior" || user?.permission === "professor") &&
         showMenuList()}
-      {userState?.permission === "professor" && showManageMenuList()}
-      {(userState?.permission === "senior" ||
-        userState?.permission === "professor") &&
+      {user?.permission === "professor" && showManageMenuList()}
+      {(user?.permission === "senior" || user?.permission === "professor") &&
         showOtherMenuList()}
     </Box>
   );
@@ -334,7 +298,7 @@ export default function SwipeableTemporaryDrawer() {
           >
             <MenuIcon className="header-icon" />
             <Typography variant="h4" className="header-text">
-              {userState?.nick_name}
+              {user?.nick_name}
             </Typography>
           </Button>
 
