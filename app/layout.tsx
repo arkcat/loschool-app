@@ -14,7 +14,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <RecoilRootProvider>{children}</RecoilRootProvider>
+        <main
+          className="100dvh bg-background flex flex-col items-center"
+          style={{ position: "relative", backgroundColor: "#d1d7b1" }}
+        >
+          <RecoilRootProvider>{children}</RecoilRootProvider>
+        </main>
       </body>
     </html>
   );
