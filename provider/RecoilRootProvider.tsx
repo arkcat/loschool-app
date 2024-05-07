@@ -1,4 +1,5 @@
 "use client";
+import SwipeDrawer from "@/components/SwipeDrawer";
 import { RecoilRoot } from "recoil";
 
 export default function RecoilRootProvider({
@@ -6,5 +7,10 @@ export default function RecoilRootProvider({
 }: {
   children: React.ReactNode;
 }) {
-  return <RecoilRoot>{children}</RecoilRoot>;
+  return (
+    <RecoilRoot>
+      <SwipeDrawer />
+      {children}
+    </RecoilRoot>
+  );
 }
