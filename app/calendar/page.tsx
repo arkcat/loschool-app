@@ -308,10 +308,11 @@ export default function WeeklyPlan() {
     touchStartX = e.touches[0].clientX;
   }
 
+  const thresholdX = 135
   function handleTouchEnd(e: any) {
     const touchEndX = e.changedTouches[0].clientX;
     const deltaX = touchEndX - touchStartX;
-    if (Math.abs(deltaX) > 50) {
+    if (Math.abs(deltaX) > thresholdX) {
       if (deltaX > 0) {
         handleSwipe('right');
       } else {
