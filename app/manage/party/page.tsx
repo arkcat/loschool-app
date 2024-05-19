@@ -79,6 +79,7 @@ export default function PartyPage() {
     fetchPartyData()
   }, [])
 
+  const [selectedParty, setSelectedParty] = useState<string>('0')
   const [selectedRaid, setSelectedRaid] = useState<string>('0')
   const [selectedDay, setSelectedDay] = useState<string>('0')
   const [selectedTime, setSelectedTime] = useState<string>('0')
@@ -281,10 +282,11 @@ export default function PartyPage() {
       return <Box></Box>
     }
 
+    const selectedPartyId = parseInt(selectedParty)
     const selectedRaidId = parseInt(selectedRaid)
     const selectedDayInt = parseInt(selectedDay)
     const selectedTimeInt = parseInt(timeSlots[parseInt(selectedTime)])
-    const selected = (partyData.raid_id === selectedRaidId && partyData.day === selectedDayInt && partyData.time === selectedTimeInt)
+    const selected = (partyData.id === selectedPartyId && partyData.raid_id === selectedRaidId && partyData.day === selectedDayInt && partyData.time === selectedTimeInt)
     return (
       <Box
         key={partyData.id}
@@ -296,6 +298,7 @@ export default function PartyPage() {
         borderColor={selected ? 'red' : raidInfo.raid_color}
         boxShadow={selected ? 1 : 2}
         onClick={() => {
+          setSelectedParty(String(partyData.id))
           setSelectedRaid(String(partyData.raid_id))
           setSelectedDay(String(partyData.day))
           setSelectedTime(String(timeSlots.indexOf(String(partyData.time))))
@@ -400,47 +403,45 @@ export default function PartyPage() {
 
   function handleAddCharacterToParty(e: any, character: CharacterData): void {
     e.preventDefault();
-    console.log(selectedRaid, selectedDay, selectedTime)
+    const selectedPartyId = parseInt(selectedParty)
     const selectedRaidId = parseInt(selectedRaid)
     const selectedDayInt = parseInt(selectedDay)
     const selectedTimeInt = parseInt(timeSlots[parseInt(selectedTime)])
     const characterId = character.id
     const characterType = character.char_type
-    console.log(selectedRaidId, selectedDayInt, selectedTimeInt)
-    setPartyData(prevPartyData => {
-      return prevPartyData.map(party => {
-        if (party.raid_id === selectedRaidId && party.day === selectedDayInt && party.time === selectedTimeInt) {
-          console.log("found raid party")
-          let updatedGroup = [...party.member]
+    console.log(selectedPartyId, selectedRaidId, selectedDayInt, selectedTimeInt)
+    const updateParty = partyData.map(party => {
+      if (party.id === selectedPartyId && party.raid_id === selectedRaidId && party.day === selectedDayInt && party.time === selectedTimeInt) {
+        console.log("found raid party")
+        let updatedGroup = [...party.member]
 
-          if (characterType === "D") {
-            if (updatedGroup[0] === 0) {
-              updatedGroup[0] = characterId;
-            } else if (updatedGroup[1] === 0) {
-              updatedGroup[1] = characterId;
-            } else if (updatedGroup[2] === 0) {
-              updatedGroup[2] = characterId;
-            } else if (updatedGroup[4] === 0) {
-              updatedGroup[4] = characterId;
-            } else if (updatedGroup[5] === 0) {
-              updatedGroup[5] = characterId;
-            } else if (updatedGroup[6] === 0) {
-              updatedGroup[6] = characterId;
-            }
-          } else if (characterType === "S") {
-            if (updatedGroup[3] === 0) {
-              updatedGroup[3] = characterId;
-            } else if (updatedGroup[7] === 0) {
-              updatedGroup[7] = characterId;
-            }
+        if (characterType === "D") {
+          if (updatedGroup[0] === 0) {
+            updatedGroup[0] = characterId;
+          } else if (updatedGroup[1] === 0) {
+            updatedGroup[1] = characterId;
+          } else if (updatedGroup[2] === 0) {
+            updatedGroup[2] = characterId;
+          } else if (updatedGroup[4] === 0) {
+            updatedGroup[4] = characterId;
+          } else if (updatedGroup[5] === 0) {
+            updatedGroup[5] = characterId;
+          } else if (updatedGroup[6] === 0) {
+            updatedGroup[6] = characterId;
           }
-
-          return { ...party, member: updatedGroup }
+        } else if (characterType === "S") {
+          if (updatedGroup[3] === 0) {
+            updatedGroup[3] = characterId;
+          } else if (updatedGroup[7] === 0) {
+            updatedGroup[7] = characterId;
+          }
         }
-        console.log("not found raid party")
+        return { ...party, member: updatedGroup }
+      } else {
         return party
-      })
+      }
     })
+    setPartyData(updateParty)
   }
 
   function makeCandiCharacter(key: string, character: CharacterData) {
