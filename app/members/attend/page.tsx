@@ -216,24 +216,21 @@ export default function AttendancePage() {
 
   const handleAddCharacter = async () => {
     if (member) {
-      let id
-      if (characters.length === 0) {
-        id = ((member.id - 8000) * 100)
-      } else {
-        id = characters[characters.length - 1].id
-      }
+      let id = ((member.id - 8000) * 100) + characters.length + 1
+      console.log(`add char id = ${id}`)
 
       try {
         const { data, error } = await supabase
           .from('Character')
           .insert([
             {
-              id: id + 1,
+              id: id,
               member_id: member.id,
               char_name: addCharName,
               char_class: '',
               char_type: '',
               char_level: 0,
+              order: id,
             }
           ])
 
