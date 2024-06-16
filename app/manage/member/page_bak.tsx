@@ -1,65 +1,74 @@
-'use client'
+"use client";
 
-import { getBase64Text } from '@/utils/TextUtils'
-import { supabase } from '@/utils/supabase'
-import { Grid, Box, Typography, Card, CardContent, Button, Popover } from '@mui/material'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { MemberData } from '@/lib/database.types'
-import MainPageBox from '@/components/MainPageBox'
+import { getBase64Text } from "@/utils/TextUtils";
+import { supabase } from "@/utils/supabase";
+import {
+  Grid,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  Popover,
+} from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { MemberData } from "@/lib/database.types";
+import MainPageBox from "@/components/MainPageBox";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default function MemberPage() {
-
-  const router = useRouter()
-  const [members, setMembers] = useState<MemberData[]>([])
+  const router = useRouter();
+  const [members, setMembers] = useState<MemberData[]>([]);
 
   useEffect(() => {
     const fetchMembers = async () => {
       const { data, error } = await supabase
-        .from('Member')
+        .from("Member")
         .select()
-        .neq('id', 9999)
-        .order('id')
-      if (error) console.error('Error fetching members:', error)
-      else setMembers(data)
-    }
+        .neq("id", 9999)
+        .order("id");
+      if (error) console.error("Error fetching members:", error);
+      else setMembers(data);
+    };
 
-    fetchMembers()
-  }, [])
+    fetchMembers();
+  }, []);
 
   function makeMemberCard(member: MemberData) {
-
     function handleClickMemberCard(): void {
-      router.push(`/members/details?id=${getBase64Text(String(member.id))}`)
+      router.push(`/members/details?id=${getBase64Text(String(member.id))}`);
     }
 
-    const bgColor = member.personal_color
-    const textColor = member.text_color
-    console.log(member)
+    const bgColor = member.personal_color;
+    const textColor = member.text_color;
+    console.log(member);
     return (
       <Grid item xs={6} lg={2} key={member.id}>
-        <Card onClick={handleClickMemberCard} style={{ backgroundColor: bgColor, color: textColor }}>
+        <Card
+          onClick={handleClickMemberCard}
+          style={{ backgroundColor: bgColor, color: textColor }}
+        >
           <CardContent>
-            <Typography variant="h4">
-              {member.nick_name}
-            </Typography>
+            <Typography variant="h4">{member.nick_name}</Typography>
             <Box marginTop={2}>
               <Typography variant="body2">{bgColor}</Typography>
               <Typography variant="body2">{textColor}</Typography>
               <Typography variant="body2">{member.permission}</Typography>
-              <Typography variant="body2">{String(member.schedule_check)}</Typography>
+              <Typography variant="body2">
+                {String(member.schedule_check)}
+              </Typography>
             </Box>
           </CardContent>
         </Card>
       </Grid>
-    )
+    );
   }
 
   return (
     <MainPageBox>
-      <Typography className='page-title'>멤버 관리</Typography>
+      <Typography className="page-title">멤버 관리</Typography>
       {/* <Box>
         <Grid container spacing={2} style={{ overflow: 'auto', maxHeight: '800px', maxWidth: '1800px' }}>
           {
@@ -70,5 +79,5 @@ export default function MemberPage() {
         </Grid>
       </Box> */}
     </MainPageBox>
-  )
+  );
 }

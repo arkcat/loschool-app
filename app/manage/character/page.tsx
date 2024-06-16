@@ -43,15 +43,22 @@ export default function CharactersPage() {
   if (!userSession) {
     return <div>Loading...</div>;
   }
-  
+
   return (
     <MainPageBox>
-      <Typography className='page-title'>캐릭터 목록</Typography>
+      <Typography className="page-title">캐릭터 목록</Typography>
       <FormControl>
-        <Select value={selectedOption}
-          variant='outlined'
-          sx={{ background: '#fff', minWidth: 250, height: 40, borderRadius: 18 }}
-          onChange={handleChange}>
+        <Select
+          value={selectedOption}
+          variant="outlined"
+          sx={{
+            background: "#fff",
+            minWidth: 250,
+            height: 40,
+            borderRadius: 18,
+          }}
+          onChange={handleChange}
+        >
           <MenuItem value="0">전체</MenuItem>
           {options?.map((option) => {
             return <MenuItem value={option.id}>{option.nick_name}</MenuItem>;
@@ -62,7 +69,9 @@ export default function CharactersPage() {
         variant="contained"
         sx={{ margin: "5px" }}
         onClick={AllCharactersUpdate}
-      >캐릭터 정보 업데이트</Button>
+      >
+        캐릭터 정보 업데이트
+      </Button>
       <FilteredData members={options} selectedOption={selectedOption} />
     </MainPageBox>
   );

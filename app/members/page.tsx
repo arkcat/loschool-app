@@ -1,88 +1,103 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabase } from '@/utils/supabase'
-import Link from 'next/link'
-import { Button, Stack, Typography } from '@mui/material'
-import { getBase64Text } from '@/utils/TextUtils'
-import { supabaseAdmin } from '@/utils/supabaseAdmin'
-import { MemberData } from '@/lib/database.types'
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/utils/supabase";
+import Link from "next/link";
+import { Button, Stack, Typography } from "@mui/material";
+import { getBase64Text } from "@/utils/TextUtils";
+import { supabaseAdmin } from "@/utils/supabaseAdmin";
+import { MemberData } from "@/lib/database.types";
 
 export default function MembersPage() {
-    const router = useRouter()
-    const [members, setMembers] = useState<MemberData[]>([])
+  const router = useRouter();
+  const [members, setMembers] = useState<MemberData[]>([]);
 
-    useEffect(() => {
-        const fetchMembers = async () => {
-            const { data, error } = await supabase
-                .from('Member')
-                .select()
-                .order('id')
-            if (error) console.error('Error fetching members:', error)
-            else setMembers(data)
-        }
+  useEffect(() => {
+    const fetchMembers = async () => {
+      const { data, error } = await supabase
+        .from("Member")
+        .select()
+        .order("id");
+      if (error) console.error("Error fetching members:", error);
+      else setMembers(data);
+    };
 
-        fetchMembers()
-    }, [])
+    fetchMembers();
+  }, []);
 
-    const updateMemberList = async () => {
-        const { data, error } = await supabase
-            .from('Member')
-            .select()
-            .order('id')
-        if (error) console.error('Error fetching members:', error)
-        else setMembers(data)
+  const updateMemberList = async () => {
+    const { data, error } = await supabase.from("Member").select().order("id");
+    if (error) console.error("Error fetching members:", error);
+    else setMembers(data);
+  };
+
+  const deleteMember = async (name: string, uid: string) => {
+    const { data, error } = await supabaseAdmin.auth.admin.deleteUser(uid);
+    if (error) {
+      console.error("유저 삭제 실패");
+      return;
     }
 
-    const deleteMember = async (name: string, uid: string) => {
-        const { data, error } = await supabaseAdmin.auth.admin.deleteUser(uid)
-        if (error) {
-            console.error("유저 삭제 실패")
-            return
-        }
+    const deletePromises = members.map(async (member: any) => {
+      const { error: deleteError } = await supabase
+        .from("Member")
+        .delete()
+        .eq("uid", uid);
 
-        const deletePromises = members.map(async (member: any) => {
-            const { error: deleteError } = await supabase
-                .from('Member')
-                .delete()
-                .eq('uid', uid)
+      if (deleteError) {
+        throw deleteError;
+      }
 
-            if (deleteError) {
-                throw deleteError
-            }
+      updateMemberList();
+    });
 
-            updateMemberList()
-        })
+    await Promise.all(deletePromises);
+  };
 
-        await Promise.all(deletePromises)
-    }
+  return (
+    <div>
+      <h1>Member 목록</h1>
+      <ul>
+        {members.map((member: any) => (
+          <div key={member.id}>
+            <Stack direction="row" spacing={2}>
+              <Typography
+                onClick={() => {
+                  router.push(
+                    `/members/details?id=${getBase64Text(String(member.uid))}`
+                  );
+                }}
+              >
+                {member.nick_name}
+              </Typography>
 
-    return (
-        <div>
-            <h1>Member 목록</h1>
-            <ul>
-                {members.map((member: any) => (
-                    <div key={member.id}>
-                        <Stack direction="row" spacing={2}>
-                            <Typography onClick={() => {
-                                router.push(`/members/details?id=${getBase64Text(String(member.uid))}`)
-                            }}>{member.nick_name}</Typography>
+              <Typography
+                onClick={() => {
+                  router.push(
+                    `/members/schedule?id=${getBase64Text(String(member.uid))}`
+                  );
+                }}
+              >
+                스케쥴
+              </Typography>
 
-                            <Typography onClick={() => {
-                                router.push(`/members/schedule?id=${getBase64Text(String(member.uid))}`)
-                            }}>스케쥴</Typography>
-
-                            <Button onClick={() => {
-                                const shouldDelete = window.confirm(`[${member.nick_name}] 정말로 삭제하시겠습니까?`)
-                                if (shouldDelete) {
-                                    deleteMember(member.nick_name, member.uid)
-                                }
-                            }}>삭제</Button>
-                        </Stack>
-                    </div>
-                ))}
-            </ul>
-        </div>
-    )
+              <Button
+                onClick={() => {
+                  const shouldDelete = window.confirm(
+                    `[${member.nick_name}] 정말로 삭제하시겠습니까?`
+                  );
+                  if (shouldDelete) {
+                    deleteMember(member.nick_name, member.uid);
+                  }
+                }}
+              >
+                삭제
+              </Button>
+            </Stack>
+          </div>
+        ))}
+      </ul>
+    </div>
+  );
 }

@@ -95,7 +95,7 @@ export default function CharacterDetailPage() {
   return (
     <MainPageBox>
       <Box pb={3} pt={10}>
-        <Box display="flex" position='absolute' left={0}>
+        <Box display="flex" position="absolute" left={0}>
           <IconButton
             edge="start"
             color="inherit"
@@ -122,21 +122,32 @@ export default function CharacterDetailPage() {
         >
           <Grid item xs={12}>
             {character && (
-              <Typography className='page-title'>{character?.char_name} 수정</Typography>
+              <Typography className="page-title">
+                {character?.char_name} 수정
+              </Typography>
             )}
           </Grid>
           <Grid item xs={12}>
-            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>이름</Typography>
+            <Typography
+              style={{
+                marginLeft: 10,
+                fontFamily: "S-CoreDream-3Light",
+                fontWeight: 700,
+                fontSize: "20px",
+              }}
+            >
+              이름
+            </Typography>
             <TextField
               size="small"
               type="text"
               value={character?.char_name}
               InputProps={{
                 style: {
-                  border: 'none',
+                  border: "none",
                   borderRadius: 18,
-                  background: '#fff'
-                }
+                  background: "#fff",
+                },
               }}
               onChange={(e) =>
                 setCharacter({
@@ -147,17 +158,26 @@ export default function CharacterDetailPage() {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>직업</Typography>
+            <Typography
+              style={{
+                marginLeft: 10,
+                fontFamily: "S-CoreDream-3Light",
+                fontWeight: 700,
+                fontSize: "20px",
+              }}
+            >
+              직업
+            </Typography>
             <TextField
               size="small"
               type="text"
               value={character?.char_class}
               InputProps={{
                 style: {
-                  border: 'none',
+                  border: "none",
                   borderRadius: 18,
-                  background: '#fff'
-                }
+                  background: "#fff",
+                },
               }}
               onChange={(e) =>
                 setCharacter({
@@ -168,17 +188,26 @@ export default function CharacterDetailPage() {
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography style={{ marginLeft: 10, fontFamily: 'S-CoreDream-3Light', fontWeight: 700, fontSize: '20px' }}>레벨</Typography>
+            <Typography
+              style={{
+                marginLeft: 10,
+                fontFamily: "S-CoreDream-3Light",
+                fontWeight: 700,
+                fontSize: "20px",
+              }}
+            >
+              레벨
+            </Typography>
             <TextField
               size="small"
               type="text"
               value={character?.char_level}
               InputProps={{
                 style: {
-                  border: 'none',
+                  border: "none",
                   borderRadius: 18,
-                  background: '#fff'
-                }
+                  background: "#fff",
+                },
               }}
               onChange={(e) =>
                 setCharacter({

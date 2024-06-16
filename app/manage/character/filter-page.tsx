@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/utils/supabase";
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-} from "@mui/material";
+import { Box, Typography, Card, CardContent, Grid } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { getBase64Text } from "@/utils/TextUtils";
 import React from "react";
@@ -28,7 +22,7 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
       const { data, error } = await supabase
         .from("Character")
         .select()
-        .gt('id', 200000)
+        .gt("id", 200000)
         .order("id");
 
       if (data) {
@@ -70,7 +64,7 @@ export default function CharactersFilterPage(props: FilteredDataProps) {
   }
 
   return (
-    <Box margin={2} sx={{height: '75dvh', overflow: 'auto'}}>
+    <Box margin={2} sx={{ height: "75dvh", overflow: "auto" }}>
       <Grid container spacing={1}>
         {filteredData
           ?.filter((item) => {
