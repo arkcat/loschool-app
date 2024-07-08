@@ -56,7 +56,11 @@ export default function CharactersPage() {
 
   useEffect(() => {
     const fetchRaid = async () => {
-      const { data, error } = await supabase.from("Raid").select().order("id");
+      const { data, error } = await supabase
+        .from("Raid")
+        .select("*")
+        .order("raid_level", { ascending: true })
+        .order("id", { ascending: true });
 
       if (error) console.error("Error fetching raids:", error);
       else setRaids(data);
