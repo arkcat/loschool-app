@@ -12,9 +12,10 @@ import React from "react";
 interface RaidDataProps {
   raid: RaidData;
   isReadOnly: boolean;
+  onTextChanged: (updatedText: string) => void;
 }
 
-function narrowBox(raid: RaidData, isReadOnly: boolean) {
+function narrowBox(raid: RaidData, isReadOnly: boolean, handleChange: any) {
   return (
     <TableRow sx={{ padding: "0px" }}>
       <TableCell
@@ -32,6 +33,8 @@ function narrowBox(raid: RaidData, isReadOnly: boolean) {
         <textarea
           placeholder="여기에 메모하세요..."
           readOnly={isReadOnly}
+          value={raid.raid_qualify}
+          onChange={handleChange}
           style={{
             width: "100%",
             height: "100%",
@@ -48,7 +51,7 @@ function narrowBox(raid: RaidData, isReadOnly: boolean) {
   );
 }
 
-function wideBox(raid: RaidData, isReadOnly: boolean) {
+function wideBox(raid: RaidData, isReadOnly: boolean, handleChange: any) {
   return (
     <TableCell
       sx={{
@@ -63,6 +66,8 @@ function wideBox(raid: RaidData, isReadOnly: boolean) {
       <textarea
         placeholder="여기에 메모하세요..."
         readOnly={isReadOnly}
+        value={raid.raid_qualify}
+        onChange={handleChange}
         style={{
           width: "100%",
           height: "100%",
@@ -71,13 +76,14 @@ function wideBox(raid: RaidData, isReadOnly: boolean) {
           outline: "none",
           boxSizing: "border-box",
           padding: "4px",
+          minHeight: "70px",
         }}
       />
     </TableCell>
   );
 }
 
-function commonBox(raid: RaidData, isReadOnly: boolean) {
+function commonBox(raid: RaidData, isReadOnly: boolean, handleChange: any) {
   const isNarrowScreen = useMediaQuery("(max-width:600px)");
   return (
     <Box display={"flex"}>
@@ -129,16 +135,32 @@ function commonBox(raid: RaidData, isReadOnly: boolean) {
               {raid.raid_level}
             </Typography>
           </TableCell>
-          {!isNarrowScreen ? wideBox(raid, isReadOnly) : <div></div>}
+          {!isNarrowScreen ? (
+            wideBox(raid, isReadOnly, handleChange)
+          ) : (
+            <div></div>
+          )}
         </TableRow>
-        {isNarrowScreen ? narrowBox(raid, isReadOnly) : <div></div>}
+        {isNarrowScreen ? (
+          narrowBox(raid, isReadOnly, handleChange)
+        ) : (
+          <div></div>
+        )}
       </TableContainer>
     </Box>
   );
 }
 
-const QualificationInfo: React.FC<RaidDataProps> = ({ raid, isReadOnly }) => {
-  return commonBox(raid, isReadOnly);
+const QualificationInfo: React.FC<RaidDataProps> = ({
+  raid,
+  isReadOnly,
+  onTextChanged,
+}) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    onTextChanged(value);
+  };
+  return commonBox(raid, isReadOnly, handleChange);
 };
 
 export default QualificationInfo;

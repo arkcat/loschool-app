@@ -69,11 +69,42 @@ export default function CharactersPage() {
     return <div>Loading...</div>;
   }
 
+  const handleTextUpdate = (index: number, updatedText: string) => {
+    const newRaidData = [...raids];
+    newRaidData[index].raid_qualify = updatedText;
+    console.log(updatedText);
+    setRaids(newRaidData);
+  };
+
+  const handleSave = async () => {
+    try {
+      for (const raid of raids) {
+        const { data, error } = await supabase
+          .from("Raid")
+          .update({ raid_qualify: raid.raid_qualify })
+          .eq("id", raid.id);
+
+        if (error) {
+          throw error;
+        }
+      }
+
+      alert("데이터가 성공적으로 저장되었습니다!");
+    } catch (error: any) {
+      console.error("데이터 저장 중 오류 발생:", error.message);
+      alert("데이터 저장 중 오류가 발생했습니다.");
+    }
+  };
+
   return (
     <MainPageBox>
-      <Typography className="page-title">레이드 최소 스펙</Typography>
+      <Typography className="page-title">레이드 참여 스펙</Typography>
       {userPermission === "professor" && (
-        <Button variant="contained" sx={{ marginBottom: "5px" }}>
+        <Button
+          variant="contained"
+          sx={{ marginBottom: "5px" }}
+          onClick={handleSave}
+        >
           업데이트
         </Button>
       )}
@@ -83,6 +114,9 @@ export default function CharactersPage() {
             key={index}
             raid={raid}
             isReadOnly={userPermission !== "professor"}
+            onTextChanged={(updatedText) =>
+              handleTextUpdate(index, updatedText)
+            }
           />
         ))}
       </Box>

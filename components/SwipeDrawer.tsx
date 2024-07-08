@@ -18,6 +18,7 @@ import PartyIcon from '@mui/icons-material/AppRegistrationOutlined';
 import ManageRaidIcon from '@mui/icons-material/ManageSearchOutlined'
 import MenuIcon from '@mui/icons-material/Menu'
 import MailIcon from '@mui/icons-material/MailLockOutlined'
+import TokenIcon from '@mui/icons-material/TokenOutlined'
 import userAtom from '@/recoil/userAtom'
 
 import { useRecoilState } from 'recoil'
@@ -173,6 +174,14 @@ export default function SwipeableTemporaryDrawer() {
                             <CheckBoxIcon />
                         </ListItemIcon>
                         <ListItemText primary={'레이드 정보'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key={'raid qualify'} disablePadding>
+                    <ListItemButton onClick={() => { router.push(`/qualification/`) }}>
+                        <ListItemIcon>
+                            <TokenIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'레이드 참여 스펙'} />
                     </ListItemButton>
                 </ListItem>
             </List>
