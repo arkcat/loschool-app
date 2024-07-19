@@ -27,26 +27,26 @@ const raidList: RaidReward[] = [
     color: "#fce5cd",
     itemLevel: "1540 / 1580",
     normal: {
-      totalGold: '4500', reward: [
-        { step: 1, gold: 1000, item: [{ image: 시련의빛.src, count: 11 },] },
-        { step: 2, gold: 1500, item: [{ image: 시련의빛.src, count: 12 }, { image: 관조의빛무리.src, count: 1 },] },
-        { step: 3, gold: 2000, item: [{ image: 시련의빛.src, count: 17 }, { image: 관조의빛무리.src, count: 2 },] }
+      totalGold: '3600', reward: [
+        { step: 1, gold: 800, item: [{ image: 시련의빛.src, count: 11 },] },
+        { step: 2, gold: 1200, item: [{ image: 시련의빛.src, count: 12 }, { image: 관조의빛무리.src, count: 1 },] },
+        { step: 3, gold: 1600, item: [{ image: 시련의빛.src, count: 17 }, { image: 관조의빛무리.src, count: 2 },] }
       ],
       moreReward: [
-        { step: 1, gold: 600, item: [{ image: 시련의빛.src, count: 11 },] },
-        { step: 2, gold: 800, item: [{ image: 시련의빛.src, count: 12 }, { image: 관조의빛무리.src, count: 1 },] },
-        { step: 3, gold: 1000, item: [{ image: 시련의빛.src, count: 17 }, { image: 관조의빛무리.src, count: 2 },] }
+        { step: 1, gold: 300, item: [{ image: 시련의빛.src, count: 11 },] },
+        { step: 2, gold: 400, item: [{ image: 시련의빛.src, count: 12 }, { image: 관조의빛무리.src, count: 1 },] },
+        { step: 3, gold: 500, item: [{ image: 시련의빛.src, count: 17 }, { image: 관조의빛무리.src, count: 2 },] }
       ]
     }, hard: {
-      totalGold: '6500', reward: [
-        { step: 1, gold: 1500, item: [{ image: 시련의빛.src, count: 14 }, { image: 관조의빛무리.src, count: 1 },] },
-        { step: 2, gold: 2000, item: [{ image: 시련의빛.src, count: 16 }, { image: 관조의빛무리.src, count: 1 },] },
-        { step: 3, gold: 3000, item: [{ image: 시련의빛.src, count: 20 }, { image: 관조의빛무리.src, count: 3 },] }
+      totalGold: '4800', reward: [
+        { step: 1, gold: 1000, item: [{ image: 시련의빛.src, count: 14 }, { image: 관조의빛무리.src, count: 1 },] },
+        { step: 2, gold: 1600, item: [{ image: 시련의빛.src, count: 16 }, { image: 관조의빛무리.src, count: 1 },] },
+        { step: 3, gold: 2200, item: [{ image: 시련의빛.src, count: 20 }, { image: 관조의빛무리.src, count: 3 },] }
       ],
       moreReward: [
-        { step: 1, gold: 700, item: [{ image: 시련의빛.src, count: 14 }, { image: 관조의빛무리.src, count: 1 },] },
-        { step: 2, gold: 900, item: [{ image: 시련의빛.src, count: 16 }, { image: 관조의빛무리.src, count: 1 },] },
-        { step: 3, gold: 1100, item: [{ image: 시련의빛.src, count: 20 }, { image: 관조의빛무리.src, count: 3 },] }
+        { step: 1, gold: 350, item: [{ image: 시련의빛.src, count: 14 }, { image: 관조의빛무리.src, count: 1 },] },
+        { step: 2, gold: 500, item: [{ image: 시련의빛.src, count: 16 }, { image: 관조의빛무리.src, count: 1 },] },
+        { step: 3, gold: 700, item: [{ image: 시련의빛.src, count: 20 }, { image: 관조의빛무리.src, count: 3 },] }
       ]
     }
   },
@@ -55,31 +55,27 @@ const raidList: RaidReward[] = [
     color: "#fce5cd",
     itemLevel: "1600 / 1620",
     normal: {
-      totalGold: '9000', reward: [
-        { step: 1, gold: 1500, item: [{ image: 노말기운.src, count: 2 }] },
-        { step: 2, gold: 1750, item: [{ image: 노말기운.src, count: 2 }] },
-        { step: 3, gold: 2500, item: [{ image: 노말기운.src, count: 3 }] },
-        { step: 4, gold: 3250, item: [{ image: 노말기운.src, count: 1 }, { image: 노말엘릭서.src, count: 1 }] }
+      totalGold: '6500', reward: [
+        { step: 1, gold: 1500, item: [{ image: 노말기운.src, count: 4 }] },
+        { step: 2, gold: 2000, item: [{ image: 노말기운.src, count: 4 }] },
+        { step: 3, gold: 3000, item: [{ image: 노말기운.src, count: 8 }, { image: 노말엘릭서.src, count: 2 }] }
       ],
       moreReward: [
-        { step: 1, gold: 700, item: [{ image: 노말기운.src, count: 2 }] },
-        { step: 2, gold: 800, item: [{ image: 노말기운.src, count: 2 }] },
-        { step: 3, gold: 900, item: [{ image: 노말기운.src, count: 3 }] },
-        { step: 4, gold: 1100, item: [{ image: 노말기운.src, count: 1 }, { image: 노말엘릭서.src, count: 1 }] }
+        { step: 1, gold: 600, item: [{ image: 노말기운.src, count: 4 }] },
+        { step: 2, gold: 650, item: [{ image: 노말기운.src, count: 4 }] },
+        { step: 4, gold: 1000, item: [{ image: 노말기운.src, count: 8 }, { image: 노말엘릭서.src, count: 2 }] }
       ]
     },
     hard: {
-      totalGold: '14500', reward: [
-        { step: 1, gold: 2000, item: [{ image: 하드기운.src, count: 2 }] },
-        { step: 2, gold: 2500, item: [{ image: 하드기운.src, count: 2 }] },
-        { step: 3, gold: 4000, item: [{ image: 하드기운.src, count: 3 }] },
-        { step: 4, gold: 6000, item: [{ image: 하드기운.src, count: 1 }, { image: 하드엘릭서.src, count: 1 }] }
+      totalGold: '13000', reward: [
+        { step: 1, gold: 3000, item: [{ image: 하드기운.src, count: 4 }] },
+        { step: 2, gold: 4000, item: [{ image: 하드기운.src, count: 4 }] },
+        { step: 4, gold: 6000, item: [{ image: 하드기운.src, count: 8 }, { image: 하드엘릭서.src, count: 2 }] }
       ],
       moreReward: [
-        { step: 1, gold: 1000, item: [{ image: 하드기운.src, count: 2 }] },
-        { step: 2, gold: 1000, item: [{ image: 하드기운.src, count: 2 }] },
-        { step: 3, gold: 1500, item: [{ image: 하드기운.src, count: 3 }] },
-        { step: 4, gold: 2000, item: [{ image: 하드기운.src, count: 1 }, { image: 하드엘릭서.src, count: 1 }] }
+        { step: 1, gold: 1200, item: [{ image: 하드기운.src, count: 4 }] },
+        { step: 2, gold: 1450, item: [{ image: 하드기운.src, count: 4 }] },
+        { step: 4, gold: 2000, item: [{ image: 하드기운.src, count: 8 }, { image: 하드엘릭서.src, count: 2 }] }
       ]
     }
   },
@@ -158,31 +154,31 @@ const raidList: RaidReward[] = [
     color: "#8e7cc3",
     itemLevel: "1~2 : 1500 / 1540\n3 : 1500 / 1550\n4 : 1520 / 1560",
     normal: {
-      totalGold: '1-3: 4500 \n4: 2500', reward: [
-        { step: 1, gold: 1500, item: [{ image: 몽환의사념.src, count: 4 }] },
-        { step: 2, gold: 1500, item: [{ image: 몽환의사념.src, count: 4 }] },
-        { step: 3, gold: 1500, item: [{ image: 몽환의사념.src, count: 5 }] },
-        { step: 4, gold: 2500, item: [{ image: 몽환의사념.src, count: 7 }] }
+      totalGold: '1-3: 3000 \n4: 1600', reward: [
+        { step: 1, gold: 1000, item: [{ image: 몽환의사념.src, count: 4 }] },
+        { step: 2, gold: 1000, item: [{ image: 몽환의사념.src, count: 4 }] },
+        { step: 3, gold: 1000, item: [{ image: 몽환의사념.src, count: 5 }] },
+        { step: 4, gold: 1600, item: [{ image: 몽환의사념.src, count: 7 }] }
       ],
       moreReward: [
-        { step: 1, gold: 400, item: [{ image: 몽환의사념.src, count: 4 }] },
-        { step: 2, gold: 600, item: [{ image: 몽환의사념.src, count: 4 }] },
-        { step: 3, gold: 800, item: [{ image: 몽환의사념.src, count: 5 }] },
-        { step: 4, gold: 1500, item: [{ image: 몽환의사념.src, count: 7 }] }
+        { step: 1, gold: 250, item: [{ image: 몽환의사념.src, count: 4 }] },
+        { step: 2, gold: 300, item: [{ image: 몽환의사념.src, count: 4 }] },
+        { step: 3, gold: 400, item: [{ image: 몽환의사념.src, count: 5 }] },
+        { step: 4, gold: 600, item: [{ image: 몽환의사념.src, count: 7 }] }
       ]
     },
     hard: {
-      totalGold: '1-3: 6000 \n4: 30 00', reward: [
-        { step: 1, gold: 2000, item: [{ image: 몽환의사념.src, count: 6 }] },
-        { step: 2, gold: 2000, item: [{ image: 몽환의사념.src, count: 6 }] },
-        { step: 3, gold: 2000, item: [{ image: 몽환의사념.src, count: 7 }] },
-        { step: 4, gold: 3000, item: [{ image: 몽환의사념.src, count: 10 }] }
+      totalGold: '1-3: 3600 \n4: 2000', reward: [
+        { step: 1, gold: 1200, item: [{ image: 몽환의사념.src, count: 6 }] },
+        { step: 2, gold: 1200, item: [{ image: 몽환의사념.src, count: 6 }] },
+        { step: 3, gold: 1200, item: [{ image: 몽환의사념.src, count: 7 }] },
+        { step: 4, gold: 2000, item: [{ image: 몽환의사념.src, count: 10 }] }
       ],
       moreReward: [
-        { step: 1, gold: 700, item: [{ image: 몽환의사념.src, count: 6 }] },
-        { step: 2, gold: 900, item: [{ image: 몽환의사념.src, count: 6 }] },
-        { step: 3, gold: 1100, item: [{ image: 몽환의사념.src, count: 7 }] },
-        { step: 4, gold: 1800, item: [{ image: 몽환의사념.src, count: 10 }] }
+        { step: 1, gold: 400, item: [{ image: 몽환의사념.src, count: 6 }] },
+        { step: 2, gold: 400, item: [{ image: 몽환의사념.src, count: 6 }] },
+        { step: 3, gold: 500, item: [{ image: 몽환의사념.src, count: 7 }] },
+        { step: 4, gold: 800, item: [{ image: 몽환의사념.src, count: 10 }] }
       ]
     }
   },
@@ -191,27 +187,27 @@ const raidList: RaidReward[] = [
     color: "#38761d",
     itemLevel: "1580 / 1600",
     normal: {
-      totalGold: '7500', reward: [
-        { step: 1, gold: 1500, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
-        { step: 2, gold: 2000, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
-        { step: 3, gold: 4000, item: [{ image: 쇠락의눈동자.src, count: 5 }] }
+      totalGold: '4800', reward: [
+        { step: 1, gold: 1000, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
+        { step: 2, gold: 1600, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
+        { step: 3, gold: 2200, item: [{ image: 쇠락의눈동자.src, count: 5 }] }
       ],
       moreReward: [
-        { step: 1, gold: 900, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
-        { step: 2, gold: 1100, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
-        { step: 3, gold: 1500, item: [{ image: 쇠락의눈동자.src, count: 5 }] }
+        { step: 1, gold: 350, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
+        { step: 2, gold: 500, item: [{ image: 쇠락의눈동자.src, count: 3 }] },
+        { step: 3, gold: 700, item: [{ image: 쇠락의눈동자.src, count: 5 }] }
       ]
     },
     hard: {
-      totalGold: '10000', reward: [
-        { step: 1, gold: 1750, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
+      totalGold: '7500', reward: [
+        { step: 1, gold: 1500, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
         { step: 2, gold: 2500, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
-        { step: 3, gold: 5750, item: [{ image: 쇠락의눈동자.src, count: 8 }] }
+        { step: 3, gold: 3500, item: [{ image: 쇠락의눈동자.src, count: 8 }] }
       ],
       moreReward: [
-        { step: 1, gold: 1200, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
-        { step: 2, gold: 1400, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
-        { step: 3, gold: 1900, item: [{ image: 쇠락의눈동자.src, count: 8 }] }
+        { step: 1, gold: 600, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
+        { step: 2, gold: 650, item: [{ image: 쇠락의눈동자.src, count: 7 }] },
+        { step: 3, gold: 950, item: [{ image: 쇠락의눈동자.src, count: 8 }] }
       ]
     }
   },
