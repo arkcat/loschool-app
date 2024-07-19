@@ -116,6 +116,20 @@ export default function AttendancePage() {
     }
   }
 
+  const handleClear = async() => {
+    characters.map((c) => {
+      setRaids(prevRaids => {
+        return prevRaids.map(raid => {
+          const updatedGroup = raid.raid_group.includes(c.id)
+              ? raid.raid_group.filter(id => id !== c.id)
+              : raid.raid_group
+            return { ...raid, raid_group: updatedGroup }
+        })
+      })
+    })
+    alert("초기화 후 꼭 저장하시길 바랍니다.")
+  }
+
   const handleUpdate = async () => {
     try {
       let characterNames: string[] = characters.map((c) => c.char_name);
@@ -470,7 +484,8 @@ export default function AttendancePage() {
       </Box>
       <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} marginBottom={1} marginTop={1}>
         <Button variant="contained" color="primary" style={{ marginLeft: 15, marginRight: 10 }} onClick={handleSave}>저장</Button>
-        <Button variant="contained" color="primary" style={{ marginLeft: 10, marginRight: 15 }} onClick={handleUpdate}>업데이트</Button>
+        <Button variant="contained" color="primary" style={{ marginLeft: 10, marginRight: 10 }} onClick={handleUpdate}>업데이트</Button>
+        <Button variant="contained" color="primary" style={{ marginLeft: 10, marginRight: 15 }} onClick={handleClear}>초기화</Button>
       </Box>
       <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: '5px' }}>
         <TextField
