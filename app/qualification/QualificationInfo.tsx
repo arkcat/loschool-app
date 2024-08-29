@@ -44,6 +44,7 @@ function narrowBox(raid: RaidData, isReadOnly: boolean, handleChange: any) {
             boxSizing: "border-box",
             padding: "4px",
             margin: "0px",
+            minHeight: "90px",
           }}
         />
       </TableCell>
@@ -76,7 +77,7 @@ function wideBox(raid: RaidData, isReadOnly: boolean, handleChange: any) {
           outline: "none",
           boxSizing: "border-box",
           padding: "4px",
-          minHeight: "70px",
+          minHeight: "90px",
         }}
       />
     </TableCell>

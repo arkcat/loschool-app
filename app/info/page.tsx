@@ -20,6 +20,7 @@ import 어둠의불 from "@/app/res/items/어둠의불.png"
 import 아그리스의비늘 from "@/app/res/items/아그리스비늘.png"
 import 알키오네의눈 from "@/app/res/items/알키오네눈.png"
 import 베히모스의비늘 from "@/app/res/items/베히모스의비늘.png"
+import 업화의쐐기돌 from "@/app/res/items/업화의쐐기돌.png"
 
 const raidList: RaidReward[] = [
   {
@@ -283,6 +284,31 @@ const raidList: RaidReward[] = [
     },
     hard: {
       totalGold: '0', reward: [], moreReward: []
+    }
+  },
+  {
+    name: '에기르',
+    color: "#7F7F7F",
+    itemLevel: "1660 / 1680",
+    normal: {
+      totalGold: '23000', reward: [
+        { step: 1, gold: 7500, item: [{ image: 업화의쐐기돌.src, count: 4 }] },
+        { step: 2, gold: 15500, item: [{ image: 업화의쐐기돌.src, count: 6 }] }
+      ],
+      moreReward: [
+        { step: 1, gold: 3200, item: [{ image: 업화의쐐기돌.src, count: 4 }] },
+        { step: 2, gold: 5300, item: [{ image: 업화의쐐기돌.src, count: 6 }] }
+      ]
+    },
+    hard: {
+      totalGold: '27500', reward: [
+        { step: 1, gold: 9000, item: [{ image: 업화의쐐기돌.src, count: 8 }] },
+        { step: 2, gold: 18500, item: [{ image: 업화의쐐기돌.src, count: 12 }] }
+      ],
+      moreReward: [
+        { step: 1, gold: 4100, item: [{ image: 업화의쐐기돌.src, count: 8 }] },
+        { step: 2, gold: 6600, item: [{ image: 업화의쐐기돌.src, count: 12 }] }
+      ]
     }
   },
 ]
