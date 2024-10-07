@@ -253,9 +253,18 @@ export default function AttendancePage() {
     alert("레이드 정보를 업데이트 했습니다.");
   };
 
+  function getAvailableNextId(memberId: number) {
+    let id = (memberId - 8000) * 100 + 1;
+    const existIds = characters.map((c) => c.id);
+    while (existIds.includes(id)) {
+      id++;
+    }
+    return id;
+  }
+
   const handleAddCharacter = async () => {
     if (member) {
-      let id = (member.id - 8000) * 100 + characters.length + 1;
+      let id = getAvailableNextId(member.id);
       console.log(`add char id = ${id}`);
 
       try {
@@ -278,7 +287,7 @@ export default function AttendancePage() {
         alert("캐릭터 추가 성공");
         fetchCharactersData(member.id);
       } catch (error) {
-        console.error("캐릭터 추가 에러:", error);
+        alert(`캐릭터 추가 에러 : ID = ${id}`);
       }
     }
   };
