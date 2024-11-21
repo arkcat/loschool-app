@@ -16,6 +16,7 @@ import {
 import titleImage from "./res/title.png";
 import PartyListItem, { CombinedData } from "@/components/PartyListItem";
 import { getDayOfWeek } from "@/utils/DateUtils";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -220,6 +221,30 @@ export default function Index() {
                         </ListItem>
                       )}
                     </List>
+                  </div>
+                  <div>
+                    <Typography variant="body1" textAlign={"center"}>
+                      <Link
+                        legacyBehavior
+                        href="https://docs.google.com/spreadsheets/d/1T7hfww6gQEiQ1UCnNZfqBhoyfU-Lf0gG-w2OZ22mk8g/edit?gid=0#gid=0"
+                        passHref
+                      >
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            fontFamily: "SUIT-Regular",
+                            fontSize: "24px",
+                            fontWeight: "600",
+                            textDecoration: "underline",
+                            color: "#1976d2",
+                            cursor: "pointer",
+                          }}
+                        >
+                          벌금 확인 페이지
+                        </a>
+                      </Link>
+                    </Typography>
                   </div>
                 </Grid>
                 <Grid item xs={12} md={6}>
