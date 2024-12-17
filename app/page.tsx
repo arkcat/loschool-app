@@ -17,6 +17,9 @@ import titleImage from "./res/title.png";
 import PartyListItem, { CombinedData } from "@/components/PartyListItem";
 import { getDayOfWeek } from "@/utils/DateUtils";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { getBase64Text, getPlainText } from "@/utils/TextUtils";
+import { MemberData } from "@/lib/database.types";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +28,15 @@ export default function Index() {
   const [userState, setUserState] = useRecoilState<any | null>(userAtom);
   const [mainComment, setMainComment] = useState<string>("");
   const [combinedData, setCombinedData] = useState<CombinedData[]>([]);
+  const [hasShowPopup, setShowPopup] = useState<Boolean>(false);
+  const [isChecked, setIsChecked] = useState<Boolean>(true);
+
+  const [user, setUser] = useState<any>(null);
+
+  const searchParams = useSearchParams();
+  const id = getPlainText(searchParams.get("id") || "");
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchMainComment = async () => {
@@ -43,6 +55,39 @@ export default function Index() {
         }
       } catch (error: any) {
         console.error("코멘트 불러오기 오류 : ", error);
+      }
+    };
+
+    const fetchUserAndMemberData = async () => {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        console.info("Error fetching user:", userError);
+        return;
+      }
+
+      setUser(user);
+
+      const { data: member, error: memberError } = await supabase
+        .from("Member")
+        .select("*")
+        .eq("uid", user.id)
+        .single();
+
+      if (memberError) {
+        console.error("Error fetching member data:", memberError);
+        return;
+      }
+
+      if (hasShowPopup === false) {
+        if (member.schedule_check === false) {
+          setShowPopup(true);
+          alert("스케쥴이 확정되지 않았습니다.");
+          router.push(`/members/schedule?id=${getBase64Text(user.id)}`);
+        }
       }
     };
 
@@ -103,6 +148,7 @@ export default function Index() {
 
     fetchMainComment();
     fetchPartyData();
+    fetchUserAndMemberData();
   }, []);
 
   const handleUpdateMember = async (uid: string) => {
