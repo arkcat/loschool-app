@@ -1,6 +1,7 @@
 'use client'
 
 import './globals.css'
+import { useEffect, useState } from "react";
 import { RecoilRoot } from 'recoil'
 import SwipeDrawer from '@/components/SwipeDrawer'
 import { Box, useMediaQuery } from '@mui/material'
