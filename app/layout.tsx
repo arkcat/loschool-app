@@ -1,8 +1,8 @@
 'use client'
 
+import RecoilProvider from './RecoilProvider';
 import './globals.css'
 import { useEffect, useState } from "react";
-import { RecoilRoot } from 'recoil'
 import SwipeDrawer from '@/components/SwipeDrawer'
 import { Box, useMediaQuery } from '@mui/material'
 import mokokoImage from "@/app/res/mokoko.png";
@@ -19,62 +19,81 @@ function getCookie(name: string): string | undefined {
   }
 }
 
+interface WebToAppMessage {
+  type: string;
+  url: string;
+  // 필요에 따라 다른 필드를 추가할 수 있습니다.
+  // timestamp?: string;
+}
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   useEffect(() => {
-    const handleNativeMessage = (event: MessageEvent) => {
-      console.log("앱에서 받은 메시지:", event.data);
 
-      if (event.data === "request_info") {
-        const sa_id = getCookie("sa_id");
-        const sa_state = getCookie("sa_state");
-        const latest_url = window.location.href;
+    window.addEventListener('message', (event: MessageEvent) => {
+      // 메시지를 보낸 출처(origin)를 확인하여 보안을 강화하는 것이 좋습니다.
+      // 예: TWA가 등록된 앱의 스킴과 호스트를 알고 있다면 해당 출처만 허용합니다.
+      // const trustedOrigin = "https://your-app-id.apps.googleusercontent.com"; // 또는 앱의 assetlinks.json에 있는 호스트
+      // if (event.origin !== trustedOrigin) {
+      //   console.warn(`Message from untrusted origin: ${event.origin}. Ignoring.`);
+      //   return;
+      // }
 
-        const payload = {
-          sa_id,
-          sa_state,
-          latest_url
+      if (event.data === 'request_current_url') {
+        const currentUrl = window.location.href;
+
+        const responsePayload: WebToAppMessage = {
+          type: 'CURRENT_URL_INFO', // 앱에서 이 type을 보고 메시지를 식별할 수 있습니다.
+          url: currentUrl
+          // timestamp: new Date().toISOString() // 필요시 타임스탬프 추가
         };
 
-        // 참고: navigator.postMessage는 표준 웹 API가 아닙니다.
-        if ('postMessage' in navigator) {
-          (navigator as any).postMessage(JSON.stringify(payload));
+        // 메시지를 보낸 TWA 호스트 앱으로 응답을 다시 보냅니다.
+        // event.source는 메시지를 보낸 window 객체이며, event.origin은 해당 window의 출처입니다.
+        if (event.source && typeof (event.source as Window).postMessage === 'function') {
+          try {
+            (event.source as Window).postMessage(JSON.stringify(responsePayload), event.origin);
+            console.log(`Sent message to TWA host: ${JSON.stringify(responsePayload)} (to origin ${event.origin})`);
+          } catch (e) {
+            console.error('Failed to post message to TWA host:', e);
+          }
         } else {
-          console.warn('navigator.postMessage is not available in this environment.');
+          console.warn(
+            "Could not send message back to TWA host: 'event.source' is not a valid window or 'postMessage' is not available."
+          );
+          // 대체: 만약 MessageChannel의 port가 `window.twaMessagePort`와 같이 전역적으로 설정되어 있다면,
+          // 해당 포트를 사용할 수 있습니다.
+          // if (window.twaMessagePort && typeof window.twaMessagePort.postMessage === 'function') {
+          //   window.twaMessagePort.postMessage(JSON.stringify(responsePayload));
+          // }
         }
       }
-    };
+    });
 
-    // 참고: navigator.onmessage 또한 표준 웹 API가 아닙니다.
-    (navigator as any).onmessage = handleNativeMessage;
-
-    // 컴포넌트가 언마운트될 때 핸들러를 정리합니다.
-    return () => {
-      (navigator as any).onmessage = null;
-    };
   }, []);
+
   const isMobile = useMediaQuery("(max-width:600px)");
   return (
     <html lang="en">
       <body>
-        <RecoilRoot>
+        <RecoilProvider>
           <Box>
             <main className="100dvh bg-background flex flex-col items-center"
               style={{ position: 'relative', backgroundColor: '#d1d7b1' }}>
-              <SwipeDrawer />
+              {/* <SwipeDrawer />
               <img
                 className='mokoko-image'
                 src={mokokoImage.src}
                 alt="mokoko"
-              />
-              <Box sx={{backgroundColor:'#7a6a58', width:'100%', height:'30px', position:'absolute', bottom:0}}></Box>
+              /> */}
+              <Box sx={{ backgroundColor: '#7a6a58', width: '100%', height: '30px', position: 'absolute', bottom: 0 }}></Box>
               {children}
             </main>
           </Box>
-        </RecoilRoot>
+        </RecoilProvider>
       </body>
     </html>
   )
